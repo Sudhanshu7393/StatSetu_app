@@ -1,0 +1,446 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  STUDENT
+  OWNER
+  ADMIN
+}
+
+enum GenderPreference {
+  BOYS
+  GIRLS
+  COED
+}
+
+enum SharingType {
+  SINGLE
+  DOUBLE
+  TRIPLE
+  FOUR_PLUS
+}
+
+enum PropertyType {
+  PG
+  HOSTEL
+  FLAT
+}
+
+enum VerificationStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum ListingStatus {
+  ACTIVE
+  PAUSED
+  FULL
+  INACTIVE
+}
+
+enum FoodAvailability {
+  INCLUDED
+  EXTRA_COST
+  NOT_AVAILABLE
+}
+
+enum FoodPreference {
+  VEGETARIAN
+  NON_VEGETARIAN
+  BOTH
+}
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  VISIT_SCHEDULED
+  INTERESTED
+  BOOKED
+  CLOSED
+  DECLINED
+}
+
+enum RoommateStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+model User {
+  id            String          @id @default(uuid())
+  name          String
+  email         String          @unique
+  phone         String?
+  avatar        String?
+  role          Role            @default(STUDENT)
+  emailVerified Boolean         @default(false)
+  phoneVerified Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  studentProfile StudentProfile?
+  ownerProfile   OwnerProfile?
+  properties     Property[]       @relation("OwnerProperties")
+  inquiries      Inquiry[]        @relation("StudentInquiries")
+  savedProperties SavedProperty[]
+  savedSearches  SavedSearch[]
+  reviews        Review[]
+  conversations  Conversation[]   @relation("StudentConversations")
+  messages       Message[]
+  bookings       Booking[]
+  notifications  Notification[]
+  verificationDocs VerificationDocument[]
+
+  roommateProfile RoommateProfile?
+  sentConnections RoommateConnection[] @relation("SentConnections")
+  receivedConnections RoommateConnection[] @relation("ReceivedConnections")
+  helperInquiries HelperInquiry[]
+}
+
+model StudentProfile {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  collegeId   String?
+  college     College? @relation(fields: [collegeId], references: [id])
+  course      String?
+  year        String?
+  budgetMin   Int?
+  budgetMax   Int?
+  moveInDate  String?
+  gender      String?
+}
+
+model OwnerProfile {
+  id                          String             @id @default(uuid())
+  userId                      String             @unique
+  user                        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  identityVerificationStatus VerificationStatus @default(UNVERIFIED)
+  createdAt                   DateTime           @default(now())
+}
+
+model College {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  city        String
+  state       String
+  latitude    Float
+  longitude   Float
+  logo        String?
+
+  studentProfiles StudentProfile[]
+  propertyColleges PropertyCollege[]
+  savedSearches SavedSearch[]
+  roommates     RoommateProfile[]
+}
+
+model Property {
+  id                 String             @id @default(uuid())
+  ownerId            String
+  owner              User               @relation("OwnerProperties", fields: [ownerId], references: [id], onDelete: Cascade)
+  name               String
+  slug               String             @unique
+  description        String
+  type               PropertyType       @default(PG)
+  genderPreference   GenderPreference   @default(COED)
+  address            String
+  locality           String
+  city               String
+  state              String
+  pincode            String
+  latitude           Float
+  longitude          Float
+  verificationStatus VerificationStatus @default(UNVERIFIED)
+  status             ListingStatus      @default(ACTIVE)
+  availableFrom      String             @default("Available Now")
+  featured           Boolean            @default(false)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  propertyColleges PropertyCollege[]
+  images           PropertyImage[]
+  rooms            Room[]
+  foodPlan         FoodPlan?
+  amenities        PropertyAmenity[]
+  houseRules       HouseRule[]
+  inquiries        Inquiry[]
+  conversations    Conversation[]
+  savedBy          SavedProperty[]
+  reviews          Review[]
+  bookings         Booking[]
+  documents        VerificationDocument[]
+}
+
+model PropertyCollege {
+  id                      String   @id @default(uuid())
+  propertyId              String
+  property                Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  collegeId               String
+  college                 College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  distanceMeters          Int
+  estimatedWalkingMinutes Int
+  estimatedDrivingMinutes Int
+
+  @@unique([propertyId, collegeId])
+}
+
+model PropertyImage {
+  id         String   @id @default(uuid())
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  url        String
+  order      Int      @default(0)
+}
+
+model Room {
+  id             String      @id @default(uuid())
+  propertyId     String
+  property       Property    @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  sharingType    SharingType
+  monthlyRent    Int
+  securityDeposit Int
+  brokerage      Int         @default(0)
+  availableBeds  Int         @default(1)
+  availableFrom  String      @default("Available Now")
+
+  inquiries      Inquiry[]
+  bookings       Booking[]
+}
+
+model Amenity {
+  id   String @id @default(uuid())
+  name String @unique
+  icon String
+
+  properties PropertyAmenity[]
+}
+
+model PropertyAmenity {
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  amenityId  String
+  amenity    Amenity  @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+
+  @@id([propertyId, amenityId])
+}
+
+model FoodPlan {
+  id               String           @id @default(uuid())
+  propertyId       String           @unique
+  property         Property         @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  availabilityType FoodAvailability @default(INCLUDED)
+  foodPreference   FoodPreference   @default(VEGETARIAN)
+  breakfast        Boolean          @default(true)
+  lunch            Boolean          @default(true)
+  dinner           Boolean          @default(true)
+  monthlyExtraCost Int              @default(0)
+  weeklyMenuJSON   String?
+}
+
+model HouseRule {
+  id         String   @id @default(uuid())
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  ruleType   String
+  value      String
+}
+
+model VerificationDocument {
+  id           String             @id @default(uuid())
+  userId       String
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  propertyId   String?
+  property     Property?          @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  documentType String
+  documentUrl  String
+  status       VerificationStatus @default(PENDING)
+  reviewedAt   DateTime?
+  createdAt    DateTime           @default(now())
+}
+
+model Inquiry {
+  id             String        @id @default(uuid())
+  studentId      String
+  student        User          @relation("StudentInquiries", fields: [studentId], references: [id], onDelete: Cascade)
+  propertyId     String
+  property       Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  roomId         String?
+  room           Room?         @relation(fields: [roomId], references: [id])
+  moveInDate     String
+  durationMonths Int           @default(6)
+  message        String
+  status         InquiryStatus @default(NEW)
+  createdAt      DateTime      @default(now())
+}
+
+model Conversation {
+  id         String   @id @default(uuid())
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  studentId  String
+  student    User     @relation("StudentConversations", fields: [studentId], references: [id], onDelete: Cascade)
+  ownerId    String
+  createdAt  DateTime @default(now())
+
+  messages Message[]
+
+  @@unique([propertyId, studentId, ownerId])
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  content        String
+  readAt         DateTime?
+  createdAt      DateTime     @default(now())
+}
+
+model SavedProperty {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  collection String   @default("Saved")
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, propertyId])
+}
+
+model SavedSearch {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  collegeId     String
+  college       College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  title         String
+  filtersJSON   String
+  alertsEnabled Boolean  @default(true)
+  createdAt     DateTime @default(now())
+}
+
+model Review {
+  id                String   @id @default(uuid())
+  propertyId        String
+  property          Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  studentId         String
+  student           User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  bookingId         String?
+  overallRating     Float
+  foodRating        Float
+  cleanlinessRating Float
+  locationRating    Float
+  managementRating  Float
+  valueRating       Float
+  comment           String
+  verifiedStay      Boolean  @default(true)
+  createdAt         DateTime @default(now())
+}
+
+model RoommateProfile {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  collegeId        String
+  college          College  @relation(fields: [collegeId], references: [id])
+  budgetMin        Int
+  budgetMax        Int
+  preferredArea    String
+  moveInDate       String
+  smoking          String   @default("No")
+  drinking         String   @default("No")
+  sleepSchedule    String   @default("Flexible")
+  cleanliness      String   @default("Average")
+  studyStyle       String   @default("Normal")
+  foodPreference   String   @default("No preference")
+  guestPreference  String   @default("Occasional")
+  acPreference     String   @default("Required")
+  sharingPreference String  @default("Double")
+  bio              String?
+  active           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+}
+
+model RoommateConnection {
+  id         String         @id @default(uuid())
+  senderId   String
+  sender     User           @relation("SentConnections", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User           @relation("ReceivedConnections", fields: [receiverId], references: [id], onDelete: Cascade)
+  status     RoommateStatus @default(PENDING)
+  message    String?
+  createdAt  DateTime       @default(now())
+}
+
+model DomesticHelper {
+  id                     String          @id @default(uuid())
+  name                   String
+  avatar                 String?
+  gender                 String
+  serviceArea            String
+  verificationStatus     VerificationStatus @default(VERIFIED)
+  backgroundCheckStatus  Boolean         @default(true)
+  rating                 Float           @default(4.8)
+  reviewCount            Int             @default(12)
+  phone                  String?
+  active                 Boolean         @default(true)
+
+  services HelperService[]
+  inquiries HelperInquiry[]
+}
+
+model HelperService {
+  id          String         @id @default(uuid())
+  helperId    String
+  helper      DomesticHelper @relation(fields: [helperId], references: [id], onDelete: Cascade)
+  serviceType String
+  priceMin    Int
+  priceMax    Int
+}
+
+model HelperInquiry {
+  id        String         @id @default(uuid())
+  studentId String
+  student   User           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  helperId  String
+  helper    DomesticHelper @relation(fields: [helperId], references: [id], onDelete: Cascade)
+  message   String
+  status    InquiryStatus  @default(NEW)
+  createdAt DateTime       @default(now())
+}
+
+model Booking {
+  id         String   @id @default(uuid())
+  studentId  String
+  student    User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  roomId     String
+  room       Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  status     String   @default("CONFIRMED")
+  moveInDate String
+  createdAt  DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

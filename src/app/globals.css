@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222 20% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 20% 12%;
+    --border: 220 14% 90%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 46%;
+    --brand: 224 71% 40%;
+    --brand-light: 224 71% 97%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222 28% 8%;
+    --foreground: 210 20% 95%;
+    --card: 222 28% 11%;
+    --card-foreground: 210 20% 95%;
+    --border: 220 20% 18%;
+    --muted: 222 20% 14%;
+    --muted-foreground: 220 14% 55%;
+    --brand: 224 71% 55%;
+    --brand-light: 224 71% 12%;
+  }
+
+  * {
+    @apply border-slate-200 dark:border-slate-800;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    @apply font-sans antialiased min-h-screen flex flex-col text-base leading-normal;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  ::selection {
+    @apply bg-brand-100 text-brand-900;
+  }
+
+  .dark ::selection {
+    @apply bg-brand-900 text-brand-100;
+  }
+}
+
+@layer components {
+  /* 3D Elevated Cards */
+  .card {
+    @apply bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 border-b-4 border-b-slate-300/80 dark:border-b-slate-800 rounded-2xl shadow-card transition-all duration-200;
+  }
+
+  .card-hover {
+    @apply hover:shadow-hover hover:border-b-brand-600 dark:hover:border-b-brand-500 hover:-translate-y-1 active:translate-y-0 active:border-b-2;
+  }
+
+  /* 3D Search Box */
+  .search-box-3d {
+    @apply bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 border-b-4 border-b-slate-300 dark:border-b-slate-700 rounded-2xl p-3.5 shadow-elevated transition-all;
+  }
+
+  /* Inputs */
+  .input-base {
+    @apply w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 border-b-2 border-b-slate-300/60 dark:border-b-slate-700 rounded-xl px-4 py-3 text-base text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:bg-white dark:focus:bg-slate-900 transition-colors;
+  }
+
+  .select-base {
+    @apply input-base appearance-none cursor-pointer;
+  }
+
+  /* 3D Tactile Buttons */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-bold text-base px-5 py-3 rounded-xl border-b-4 border-b-brand-800 active:border-b-0 active:translate-y-0.5 transition-all shadow-sm cursor-pointer;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-base px-5 py-3 rounded-xl border border-slate-200 dark:border-slate-700 border-b-4 border-b-slate-300 dark:border-b-slate-700 active:border-b-0 active:translate-y-0.5 transition-all cursor-pointer;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 border-2 border-brand-600 text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-950 font-bold text-base px-5 py-3 rounded-xl border-b-4 border-b-brand-700 active:border-b-0 active:translate-y-0.5 transition-all cursor-pointer;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-base px-4 py-2.5 rounded-xl transition-colors cursor-pointer;
+  }
+
+  /* Badges */
+  .badge-verified {
+    @apply inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/80 px-3 py-1 rounded-lg border border-emerald-300 dark:border-emerald-800 shadow-sm;
+  }
+
+  .badge-boys {
+    @apply inline-flex items-center text-xs font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/80 px-3 py-1 rounded-lg border border-blue-200 dark:border-blue-800 shadow-sm;
+  }
+
+  .badge-girls {
+    @apply inline-flex items-center text-xs font-bold text-pink-700 dark:text-pink-400 bg-pink-50 dark:bg-pink-950/80 px-3 py-1 rounded-lg border border-pink-200 dark:border-pink-800 shadow-sm;
+  }
+
+  .badge-coed {
+    @apply inline-flex items-center text-xs font-bold text-violet-700 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/80 px-3 py-1 rounded-lg border border-violet-200 dark:border-violet-800 shadow-sm;
+  }
+
+  .badge-food {
+    @apply inline-flex items-center text-xs font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/80 px-3 py-1 rounded-lg border border-amber-200 dark:border-amber-800 shadow-sm;
+  }
+
+  /* Section containers */
+  .container-page {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-heading {
+    @apply text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight;
+  }
+
+  .section-subheading {
+    @apply text-base text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed;
+  }
+
+  /* 3D Filter chip */
+  .filter-chip {
+    @apply inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 border-b-2 border-b-slate-300 dark:border-b-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-brand-500 hover:text-brand-600 dark:hover:text-brand-400 hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer shadow-sm;
+  }
+
+  .filter-chip-active {
+    @apply bg-brand-600 border-brand-600 border-b-brand-800 text-white hover:border-brand-700 hover:text-white dark:hover:text-white;
+  }
+}
+
+@layer utilities {
+  .bg-dot-pattern {
+    background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .dark .bg-dot-pattern {
+    background-image: radial-gradient(circle, #1e293b 1px, transparent 1px);
+  }
+
+  .text-brand-gradient {
+    @apply bg-gradient-to-r from-brand-700 to-brand-500 bg-clip-text text-transparent;
+  }
+}
+
+/* Leaflet Map overrides */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  z-index: 10;
+  font-family: inherit;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.12);
+  border: 1px solid #e2e8f0;
+  padding: 0;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  padding: 0;
+}
+
+.leaflet-popup-tip {
+  background: white;
+}
+
+.college-map-pin {
+  background: #1d4ed8;
+  color: white;
+  border-radius: 9999px;
+  padding: 6px 14px;
+  font-weight: 700;
+  font-size: 12px;
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.35);
+  border: 2px solid white;
+  white-space: nowrap;
+}
+
+.property-map-pin {
+  background: white;
+  color: #0f172a;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-weight: 700;
+  font-size: 12px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+  border: 1.5px solid #e2e8f0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.property-map-pin:hover {
+  background: #1d4ed8;
+  color: white;
+  border-color: #1d4ed8;
+}
+
+.dark .leaflet-popup-content-wrapper {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.dark .leaflet-popup-tip {
+  background: #1e293b;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
