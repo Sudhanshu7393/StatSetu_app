@@ -474,41 +474,33 @@ export default function CompleteEcosystemStaySetuPortal() {
       <section className="px-3.5 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-6">
         <div className="max-w-7xl mx-auto">
           
-          <div className="relative rounded-3xl sm:rounded-[36px] p-5 sm:p-10 lg:p-16 shadow-[0_16px_50px_rgba(15,23,42,0.12)] flex flex-col justify-between border border-[#1E293B]/20 sm:border-[#E2E8F0] min-h-[480px] sm:min-h-[560px] overflow-hidden">
-            {/* Background Image Layer with Mobile Dark Luxury Tint */}
+          <div className="relative rounded-3xl sm:rounded-[36px] p-5 sm:p-10 lg:p-16 shadow-[0_16px_50px_rgba(15,23,42,0.08)] flex flex-col justify-between border border-[#E2E8F0] min-h-[460px] sm:min-h-[560px]">
+            {/* Background Image Layer */}
             <div
-              className="absolute inset-0 rounded-3xl sm:rounded-[36px] overflow-hidden pointer-events-none z-0 bg-cover bg-center"
+              className="absolute inset-0 rounded-3xl sm:rounded-[36px] overflow-hidden pointer-events-none z-0"
               style={{
                 backgroundImage:
-                  "linear-gradient(180deg, rgba(15, 23, 42, 0.72) 0%, rgba(15, 23, 42, 0.88) 100%), url('/images/society-hero.jpg')",
-              }}
-            />
-            {/* Desktop lighter gradient overlay */}
-            <div
-              className="hidden sm:block absolute inset-0 rounded-[36px] overflow-hidden pointer-events-none z-0"
-              style={{
-                backgroundImage:
-                  "linear-gradient(90deg, rgba(248, 250, 252, 0.98) 0%, rgba(248, 250, 252, 0.92) 54%, rgba(248, 250, 252, 0.35) 100%), url('/images/society-hero.jpg')",
+                  "linear-gradient(90deg, rgba(248, 250, 252, 0.98) 0%, rgba(248, 250, 252, 0.94) 55%, rgba(248, 250, 252, 0.35) 100%), url('/images/society-hero.jpg')",
                 backgroundSize: 'cover',
                 backgroundPosition: 'center right',
               }}
             />
 
             <div className="max-w-2xl space-y-4 sm:space-y-6 relative z-30">
-              <div className="inline-flex items-center gap-1.5 bg-white/90 sm:bg-white/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 sm:border-[#E2E8F0] shadow-xs">
+              <div className="inline-flex items-center gap-1.5 bg-white/80 backdrop-blur-md px-3 py-1 rounded-full border border-[#E2E8F0] shadow-xs">
                 <Sparkle className="w-3 h-3 text-[#2563EB]" />
                 <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#0F172A]">
                   SMART GATED SOCIETY OPERATING SYSTEM
                 </span>
               </div>
 
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif text-white sm:text-[#0F172A] leading-[1.15] tracking-tight drop-shadow-xs sm:drop-shadow-none">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif text-[#0F172A] leading-[1.15] tracking-tight">
                 Your Entire Society <br />
-                <span className="italic font-normal text-[#38BDF8] sm:text-[#2563EB]">In A Single</span> <br />
+                <span className="italic font-normal text-[#2563EB]">In A Single</span> <br />
                 Super-App
               </h1>
 
-              <p className="text-xs sm:text-base text-slate-200 sm:text-[#475569] font-normal leading-relaxed max-w-xl">
+              <p className="text-xs sm:text-base text-[#475569] font-normal leading-relaxed max-w-xl">
                 Wrong Parking, Domestic Staff, Amenities &amp; RWA Accounts — Solved with persistent state engine, Voice Gate Passes, and 1-Click Auditable GST Ledgers.
               </p>
 
