@@ -11,6 +11,8 @@ import {
   ArrowRight,
   AlertCircle,
   UserPlus,
+  UserX,
+  X,
 } from 'lucide-react';
 import { OtpVerificationModal } from '@/components/auth/OtpVerificationModal';
 import { StaySetuLogo } from '@/components/brand/StaySetuLogo';
@@ -26,7 +28,10 @@ export default function SocietyLoginPage() {
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [otpModalOpen, setOtpModalOpen] = useState(false);
-  const [notRegisteredError, setNotRegisteredError] = useState<string | null>(null);
+  
+  // Dedicated "Number Not Registered" Popup Modal State
+  const [notRegisteredModalOpen, setNotRegisteredModalOpen] = useState(false);
+  const [unregisteredPhoneDisplay, setUnregisteredPhoneDisplay] = useState('');
 
   const handleSuccessLogin = () => {
     localStorage.setItem('staysetu-role', role.toUpperCase());
@@ -36,7 +41,6 @@ export default function SocietyLoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setNotRegisteredError(null);
 
     if (tab === 'phone') {
       const cleanPhone = phone.trim().replace(/\D/g, '');
@@ -55,9 +59,8 @@ export default function SocietyLoginPage() {
       const user = registeredList.find((u: { phone: string }) => u.phone === cleanPhone);
 
       if (!user) {
-        setNotRegisteredError(
-          `Mobile number +91 ${cleanPhone} is not registered yet. Please create your account first to access StaySetu.`
-        );
+        setUnregisteredPhoneDisplay(cleanPhone);
+        setNotRegisteredModalOpen(true);
         return;
       }
 
@@ -119,23 +122,6 @@ export default function SocietyLoginPage() {
             </div>
           </div>
 
-          {/* Not Registered Error Banner */}
-          {notRegisteredError && (
-            <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl text-xs text-rose-900 space-y-2.5 animate-in fade-in duration-200">
-              <div className="flex items-start gap-2">
-                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-                <p className="font-semibold leading-relaxed">{notRegisteredError}</p>
-              </div>
-              <Link
-                href="/auth/signup"
-                className="w-full bg-rose-700 hover:bg-rose-800 text-white font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 transition-colors"
-              >
-                <UserPlus className="w-3.5 h-3.5" />
-                <span>Register Account on StaySetu Now →</span>
-              </Link>
-            </div>
-          )}
-
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4 text-xs">
             <div>
@@ -150,10 +136,7 @@ export default function SocietyLoginPage() {
                   type="tel"
                   maxLength={10}
                   value={phone}
-                  onChange={e => {
-                    setPhone(e.target.value);
-                    setNotRegisteredError(null);
-                  }}
+                  onChange={e => setPhone(e.target.value)}
                   required
                   placeholder="73930 11350"
                   className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 text-xs font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
@@ -179,6 +162,52 @@ export default function SocietyLoginPage() {
           </div>
 
         </div>
+
+        {/* ── DEDICATED POPUP MODAL: NUMBER NOT REGISTERED ── */}
+        {notRegisteredModalOpen && (
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+            <div className="bg-white rounded-3xl border-2 border-rose-200 w-full max-w-md p-6 sm:p-8 space-y-5 shadow-2xl relative animate-in zoom-in-95 duration-150">
+              <button
+                onClick={() => setNotRegisteredModalOpen(false)}
+                className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="text-center space-y-3">
+                <div className="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto shadow-sm">
+                  <UserX className="w-7 h-7" />
+                </div>
+
+                <h3 className="font-serif font-bold text-xl text-slate-900">
+                  Mobile Number Not Registered!
+                </h3>
+
+                <p className="text-xs text-slate-600 leading-relaxed px-2">
+                  The mobile number <strong className="text-slate-900">+91 {unregisteredPhoneDisplay}</strong> is not registered with any flat or society on StaySetu yet.
+                </p>
+              </div>
+
+              <div className="space-y-2.5 pt-2">
+                <Link
+                  href="/auth/signup"
+                  className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-xs py-3.5 rounded-xl shadow-md flex items-center justify-center gap-2 transition-transform active:scale-95"
+                >
+                  <UserPlus className="w-4 h-4 text-[#38BDF8]" />
+                  <span>Register New Account (नया खाता बनाएं) →</span>
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={() => setNotRegisteredModalOpen(false)}
+                  className="w-full bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#E2E8F0] text-slate-700 font-bold text-xs py-3 rounded-xl cursor-pointer transition-colors"
+                >
+                  Try Another Mobile Number
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* OTP Modal */}
         <OtpVerificationModal
