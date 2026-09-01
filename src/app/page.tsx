@@ -772,7 +772,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                       {/* Direct WhatsApp Live Action Button */}
                       <div className="pt-1.5">
                         <a
-                          href={`https://api.whatsapp.com/send?phone=919871100222&text=${encodeURIComponent(
+                          href={`https://api.whatsapp.com/send?phone=917393011350&text=${encodeURIComponent(
                             `🚨 *StaySetu Smart Society Notice*\n\nHello *${activeParkingAlert?.ownerFlat || 'Tower C - Flat 402'}*,\n\nYour vehicle *${parkingCarNo}* is currently reported parked in reserved slot: *${parkingSlot}*.\n\n⏱️ Please move your vehicle within *10 minutes* to avoid an automatic ₹500 society penalty billed to your maintenance ledger.\n\n_Ref Ticket: ${activeParkingAlert?.id || 'PRK-8821'}_`
                           )}`}
                           target="_blank"
@@ -1499,7 +1499,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                     <p className="font-bold text-[#0F172A]">Daily Fresh Milk (Gate 1)</p>
                     <p className="text-[10px] text-emerald-700">Amul &amp; Mother Dairy</p>
                   </div>
-                  <a href="tel:+919871100222" className="bg-[#0F172A] hover:bg-[#1E293B] text-white p-2 rounded-lg text-xs flex items-center gap-1 font-bold">
+                  <a href="tel:+917393011350" className="bg-[#0F172A] hover:bg-[#1E293B] text-white p-2 rounded-lg text-xs flex items-center gap-1 font-bold">
                     <Phone className="w-3.5 h-3.5 text-[#38BDF8]" />
                     <span>Call</span>
                   </a>
@@ -1510,7 +1510,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                     <p className="font-bold text-[#0F172A]">Basement Car Wash (B1/B2)</p>
                     <p className="text-[10px] text-emerald-700">Daily Morning Wash</p>
                   </div>
-                  <a href="tel:+919871100333" className="bg-[#0F172A] hover:bg-[#1E293B] text-white p-2 rounded-lg text-xs flex items-center gap-1 font-bold">
+                  <a href="tel:+917393011350" className="bg-[#0F172A] hover:bg-[#1E293B] text-white p-2 rounded-lg text-xs flex items-center gap-1 font-bold">
                     <Phone className="w-3.5 h-3.5 text-[#38BDF8]" />
                     <span>Call</span>
                   </a>
@@ -1804,7 +1804,7 @@ export default function CompleteEcosystemStaySetuPortal() {
 
                 <div className="grid grid-cols-2 gap-2">
                   <a
-                    href={`https://api.whatsapp.com/send?phone=919871100222&text=${encodeURIComponent(
+                    href={`https://api.whatsapp.com/send?phone=917393011350&text=${encodeURIComponent(
                       `👋 *Hi ${selectedFlatDetail.residentName} (${selectedFlatDetail.tower} - Flat ${selectedFlatDetail.flatNo})*,\nConnecting with you regarding our StaySetu Smart Society.`
                     )}`}
                     target="_blank"

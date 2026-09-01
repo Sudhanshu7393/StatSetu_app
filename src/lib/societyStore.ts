@@ -80,10 +80,10 @@ export interface AGMPoll {
 
 // Initial Seed Dataset
 const SEED_FLATS: SocietyFlat[] = [
-  { id: 'f1', tower: 'Tower C', flatNo: '402', residentName: 'Ankit Sharma', residentPhone: '98711 00222', intercom: '1402', bhk: '3 BHK', carPlate: 'UP14 EX 9988', parkingSlot: 'Basement B1 - Slot #42', maintenanceStatus: 'DUE', maintenanceAmount: 3540 },
-  { id: 'f2', tower: 'Tower A', flatNo: '102', residentName: 'Sudhanshu Pandey', residentPhone: '98711 00111', intercom: '1102', bhk: '3 BHK', carPlate: 'DL8C AB 1234', parkingSlot: 'Basement B1 - Slot #12', maintenanceStatus: 'PAID', maintenanceAmount: 3540 },
-  { id: 'f3', tower: 'Tower B', flatNo: '204', residentName: 'Neha Kapoor', residentPhone: '98711 00333', intercom: '1204', bhk: '2 BHK', carPlate: 'HR26 DK 5544', parkingSlot: 'Basement B2 - Slot #18', maintenanceStatus: 'PAID', maintenanceAmount: 2850 },
-  { id: 'f4', tower: 'Tower D', flatNo: '801', residentName: 'Rajesh Verma', residentPhone: '98711 00444', intercom: '1801', bhk: '4 BHK Penthouse', carPlate: 'UP16 ZQ 7700', parkingSlot: 'Basement B1 - Slot #88', maintenanceStatus: 'DUE', maintenanceAmount: 4800 },
+  { id: 'f1', tower: 'Tower C', flatNo: '402', residentName: 'Ankit Sharma', residentPhone: '73930 11350', intercom: '1402', bhk: '3 BHK', carPlate: 'UP14 EX 9988', parkingSlot: 'Basement B1 - Slot #42', maintenanceStatus: 'DUE', maintenanceAmount: 3540 },
+  { id: 'f2', tower: 'Tower A', flatNo: '102', residentName: 'Sudhanshu Pandey', residentPhone: '73930 11350', intercom: '1102', bhk: '3 BHK', carPlate: 'DL8C AB 1234', parkingSlot: 'Basement B1 - Slot #12', maintenanceStatus: 'PAID', maintenanceAmount: 3540 },
+  { id: 'f3', tower: 'Tower B', flatNo: '204', residentName: 'Neha Kapoor', residentPhone: '73930 11350', intercom: '1204', bhk: '2 BHK', carPlate: 'HR26 DK 5544', parkingSlot: 'Basement B2 - Slot #18', maintenanceStatus: 'PAID', maintenanceAmount: 2850 },
+  { id: 'f4', tower: 'Tower D', flatNo: '801', residentName: 'Rajesh Verma', residentPhone: '73930 11350', intercom: '1801', bhk: '4 BHK Penthouse', carPlate: 'UP16 ZQ 7700', parkingSlot: 'Basement B1 - Slot #88', maintenanceStatus: 'DUE', maintenanceAmount: 4800 },
 ];
 
 const SEED_HELPERS: HelperStaff[] = [

@@ -9,6 +9,8 @@ import {
   Eye,
   EyeOff,
   ArrowRight,
+  AlertCircle,
+  UserPlus,
 } from 'lucide-react';
 import { OtpVerificationModal } from '@/components/auth/OtpVerificationModal';
 import { StaySetuLogo } from '@/components/brand/StaySetuLogo';
@@ -19,13 +21,12 @@ export default function SocietyLoginPage() {
   const router = useRouter();
   const [tab, setTab] = useState<'phone' | 'email'>('phone');
   const [role, setRole] = useState<SocietyRole>('resident');
-  const [phone, setPhone] = useState('98711 00222');
-  const [society, setSociety] = useState('Greenwood Grand Township, Gurugram');
-  const [flatNo, setFlatNo] = useState('A-102');
+  const [phone, setPhone] = useState('73930 11350');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [otpModalOpen, setOtpModalOpen] = useState(false);
+  const [notRegisteredError, setNotRegisteredError] = useState<string | null>(null);
 
   const handleSuccessLogin = () => {
     localStorage.setItem('staysetu-role', role.toUpperCase());
@@ -35,12 +36,32 @@ export default function SocietyLoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setNotRegisteredError(null);
+
     if (tab === 'phone') {
       const cleanPhone = phone.trim().replace(/\D/g, '');
       if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
         alert('Please enter a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9');
         return;
       }
+
+      // Check registered users list
+      const saved = localStorage.getItem('staysetu_registered_users');
+      const registeredList = saved ? JSON.parse(saved) : [
+        { phone: '7393011350', name: 'Sudhanshu Pandey', role: 'RESIDENT', flat: 'Tower A - Flat 102' },
+        { phone: '9871100222', name: 'Ankit Sharma', role: 'RESIDENT', flat: 'Tower C - Flat 402' },
+      ];
+
+      const user = registeredList.find((u: { phone: string }) => u.phone === cleanPhone);
+
+      if (!user) {
+        setNotRegisteredError(
+          `Mobile number +91 ${cleanPhone} is not registered yet. Please create your account first to access StaySetu.`
+        );
+        return;
+      }
+
+      // If registered, proceed to OTP verification
       setOtpModalOpen(true);
     } else {
       handleSuccessLogin();
@@ -98,145 +119,75 @@ export default function SocietyLoginPage() {
             </div>
           </div>
 
-          {/* Society Details (For Resident & Guard) */}
-          {role === 'resident' && (
-            <div className="grid grid-cols-12 gap-2 text-xs">
-              <div className="col-span-8 space-y-1">
-                <label className="text-[10px] font-bold text-[#64748B] uppercase">Society</label>
-                <select
-                  value={society}
-                  onChange={e => setSociety(e.target.value)}
-                  className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A]"
-                >
-                  <option>Greenwood Grand Township, Gurugram</option>
-                  <option>Palm Olympic High-Rise, Noida Extension</option>
-                  <option>Eldeco Utopia Township, Greater Noida</option>
-                </select>
+          {/* Not Registered Error Banner */}
+          {notRegisteredError && (
+            <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl text-xs text-rose-900 space-y-2.5 animate-in fade-in duration-200">
+              <div className="flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                <p className="font-semibold leading-relaxed">{notRegisteredError}</p>
               </div>
-
-              <div className="col-span-4 space-y-1">
-                <label className="text-[10px] font-bold text-[#64748B] uppercase">Flat No.</label>
-                <input
-                  type="text"
-                  value={flatNo}
-                  onChange={e => setFlatNo(e.target.value)}
-                  placeholder="A-102"
-                  className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A]"
-                />
-              </div>
+              <Link
+                href="/auth/signup"
+                className="w-full bg-rose-700 hover:bg-rose-800 text-white font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <UserPlus className="w-3.5 h-3.5" />
+                <span>Register Account on StaySetu Now →</span>
+              </Link>
             </div>
           )}
 
-          {/* Login Method Tabs */}
-          <div className="flex bg-[#F1F5F9] p-1 rounded-xl">
-            {(['phone', 'email'] as const).map(t => (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setTab(t)}
-                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all capitalize cursor-pointer ${
-                  tab === t
-                    ? 'bg-white text-[#0F172A] shadow-sm'
-                    : 'text-[#64748B] hover:text-[#0F172A]'
-                }`}
-              >
-                {t === 'phone' ? '📱 Mobile OTP / WhatsApp' : '📧 Email & Password'}
-              </button>
-            ))}
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {tab === 'phone' ? (
-              <div className="space-y-1 text-xs">
-                <label className="font-bold text-[#64748B] text-[10px] uppercase block">
-                  10-Digit Registered Mobile Number
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#64748B]">+91</span>
-                  <input
-                    type="tel"
-                    maxLength={10}
-                    value={phone}
-                    onChange={e => setPhone(e.target.value)}
-                    required
-                    placeholder="98711 00222"
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl pl-11 pr-4 py-3 text-sm font-bold text-[#0F172A] focus:outline-none focus:border-[#0F172A]"
-                  />
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+            <div>
+              <label className="font-bold text-[#64748B] text-[10px] uppercase block mb-1">
+                Registered Mobile Number
+              </label>
+              <div className="flex items-center gap-2">
+                <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3 py-2.5 text-xs font-bold text-[#0F172A] shrink-0">
+                  🇮🇳 +91
                 </div>
-                <p className="text-[11px] text-[#64748B] pt-0.5">
-                  Instant 6-digit OTP pass will be sent via SMS / WhatsApp.
-                </p>
+                <input
+                  type="tel"
+                  maxLength={10}
+                  value={phone}
+                  onChange={e => {
+                    setPhone(e.target.value);
+                    setNotRegisteredError(null);
+                  }}
+                  required
+                  placeholder="73930 11350"
+                  className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 text-xs font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
+                />
               </div>
-            ) : (
-              <div className="space-y-3 text-xs">
-                <div>
-                  <label className="font-bold text-[#64748B] text-[10px] uppercase block mb-1">Email Address</label>
-                  <div className="relative">
-                    <Mail className="w-4 h-4 text-[#64748B] absolute left-3 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      required
-                      placeholder="resident@staysetu.com"
-                      className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl pl-9 pr-4 py-2.5 text-xs font-bold text-[#0F172A]"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="font-bold text-[#64748B] text-[10px] uppercase block mb-1">Password</label>
-                  <div className="relative">
-                    <input
-                      type={showPass ? 'text' : 'password'}
-                      value={password}
-                      onChange={e => setPassword(e.target.value)}
-                      required
-                      placeholder="••••••••"
-                      className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl pl-3 pr-10 py-2.5 text-xs font-bold text-[#0F172A]"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPass(s => !s)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#0F172A]"
-                    >
-                      {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
+            </div>
 
             <button
               type="submit"
-              className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-xs py-3.5 rounded-xl shadow-md transition-transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-xs py-3.5 rounded-xl shadow-md cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-2"
             >
-              <span>{tab === 'phone' ? 'Send Mobile OTP Pass' : 'Sign In to Society'}</span>
+              <span>Get Verification OTP via SMS</span>
               <ArrowRight className="w-4 h-4 text-[#38BDF8]" />
             </button>
           </form>
 
-          <p className="text-center text-xs text-[#64748B]">
-            New to StaySetu?{' '}
-            <Link href="/auth/signup" className="text-[#2563EB] font-bold hover:underline">
-              Onboard Your Society / Register Flat
+          {/* Footer Navigation */}
+          <div className="text-center pt-2 border-t border-[#E2E8F0] text-xs text-[#64748B]">
+            Not registered yet?{' '}
+            <Link href="/auth/signup" className="font-bold text-[#2563EB] hover:underline">
+              Create New Resident Account →
             </Link>
-          </p>
+          </div>
 
         </div>
 
-        {/* OTP Verification Modal */}
+        {/* OTP Modal */}
         <OtpVerificationModal
-          phoneNumber={phone || '9871100222'}
+          phoneNumber={phone.replace(/\D/g, '') || '7393011350'}
           userRole={role.toUpperCase()}
           isOpen={otpModalOpen}
           onClose={() => setOtpModalOpen(false)}
           onSuccess={handleSuccessLogin}
         />
-
-        <p className="text-center text-xs text-[#64748B]">
-          SOC-2 Type II Certified &amp; 256-Bit Bank-Grade Encrypted.
-        </p>
 
       </div>
     </div>
