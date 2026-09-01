@@ -7,13 +7,13 @@ import { StaySetuLogo } from '@/components/brand/StaySetuLogo';
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-50 bg-[#F8FAFC]/90 backdrop-blur-md border-b border-[#E2E8F0] transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+    <header className="sticky top-0 z-50 bg-[#F8FAFC]/95 backdrop-blur-md border-b border-[#E2E8F0] transition-colors">
+      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 sm:h-20">
           
           {/* ── Official Brand Logo ── */}
-          <Link href="/" className="group flex items-center">
-            <StaySetuLogo variant="dark" size="md" />
+          <Link href="/" className="group flex items-center shrink-0">
+            <StaySetuLogo variant="dark" size="sm" />
           </Link>
 
           {/* ── Center Editorial Navigation ── */}
@@ -39,13 +39,13 @@ export function Navbar() {
           </nav>
 
           {/* ── Right Action Button (Muted Slate Pill) ── */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Link
               href="/auth/login"
-              className="bg-[#0F172A] hover:bg-[#1E293B] text-white font-semibold text-xs px-6 py-3 rounded-full shadow-md transition-all active:scale-95 flex items-center gap-2"
+              className="bg-[#0F172A] hover:bg-[#1E293B] text-white font-semibold text-[11px] sm:text-xs px-4 sm:px-6 py-2 sm:py-2.5 rounded-full shadow-md transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer"
             >
               <User className="w-3.5 h-3.5 text-[#94A3B8]" />
-              <span>Resident Login</span>
+              <span>Login</span>
             </Link>
           </div>
 

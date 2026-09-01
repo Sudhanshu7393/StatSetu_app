@@ -260,15 +260,15 @@ export default function CompleteEcosystemStaySetuPortal() {
   const yesPercentage = Math.round((forumPoll.yesVotes / (totalVotes || 1)) * 100);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] font-sans antialiased selection:bg-[#1E293B] selection:text-white relative bg-[radial-gradient(#CBD5E1_1px,transparent_1px)] [background-size:28px_28px]">
+    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] font-sans antialiased selection:bg-[#1E293B] selection:text-white relative bg-[radial-gradient(#CBD5E1_1px,transparent_1px)] [background-size:28px_28px] pb-28 lg:pb-12">
 
       {/* ── EMERGENCY SOS ALERT BANNER ── */}
       {sosActiveAlert && (
-        <div className="bg-rose-700 text-white py-3.5 px-4 shadow-2xl sticky top-20 z-50 animate-pulse">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-black">
-            <div className="flex items-center gap-2">
+        <div className="bg-rose-700 text-white py-3 px-4 shadow-2xl sticky top-16 sm:top-20 z-50 animate-pulse">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs font-black">
+            <div className="flex items-center gap-2 text-center sm:text-left">
               <ShieldAlert className="w-5 h-5 text-amber-300 animate-bounce shrink-0" />
-              <span>🚨 EMERGENCY SOS TRIGGERED! Live GPS (Tower C - Floor 4) dispatched to Main Gate Guard Post &amp; Ambulance.</span>
+              <span>🚨 EMERGENCY SOS TRIGGERED! Live GPS (Tower C - Floor 4) dispatched to Main Gate Guard Post.</span>
             </div>
             <button
               onClick={() => setSosActiveAlert(false)}
@@ -280,134 +280,125 @@ export default function CompleteEcosystemStaySetuPortal() {
         </div>
       )}
 
-      {/* ── DUAL TERMINAL MODE SWITCHER BANNER ── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div className="bg-white/95 backdrop-blur-md rounded-2xl p-2 shadow-[0_4px_25px_rgba(15,23,42,0.06)] flex flex-wrap items-center justify-between gap-3 border border-[#E2E8F0]">
-          <div className="flex items-center gap-2 pl-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
+      {/* ── DUAL TERMINAL MODE SWITCHER BANNER (RESPONSIVE) ── */}
+      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-3 sm:pt-4">
+        <div className="bg-white/95 backdrop-blur-md rounded-2xl p-2 sm:p-2.5 shadow-[0_4px_25px_rgba(15,23,42,0.06)] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 border border-[#E2E8F0]">
+          
+          <div className="flex items-center justify-between sm:justify-start gap-2 pl-1">
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-bold text-[#0F172A]">StaySetu 360° Society Ecosystem</span>
-              <span className="text-[10px] bg-[#E2E8F0] text-[#475569] font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
-                <MapPin className="w-3 h-3 text-[#2563EB]" /> Live Persistent Society Store
-              </span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
+              <span className="text-[11px] sm:text-xs font-bold text-[#0F172A]">StaySetu 360° Living</span>
             </div>
+            <span className="text-[9px] sm:text-[10px] bg-[#E2E8F0] text-[#475569] font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
+              <MapPin className="w-3 h-3 text-[#2563EB]" /> Live Cloud Sync
+            </span>
           </div>
 
-          <div className="flex items-center gap-1.5 bg-[#F1F5F9] p-1 rounded-xl">
+          <div className="flex items-center justify-center gap-1 bg-[#F1F5F9] p-1 rounded-xl">
             <button
               type="button"
               onClick={() => setActivePortalMode('RESIDENT')}
-              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all cursor-pointer ${
                 activePortalMode === 'RESIDENT'
                   ? 'bg-[#0F172A] text-white shadow-sm'
                   : 'text-[#64748B] hover:text-[#0F172A]'
               }`}
             >
-              <Smartphone className="w-3.5 h-3.5 text-[#94A3B8]" />
-              <span>📱 Resident Super-App</span>
+              <Smartphone className="w-3.5 h-3.5" />
+              <span>📱 Resident App</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActivePortalMode('GUARD')}
-              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all cursor-pointer ${
                 activePortalMode === 'GUARD'
                   ? 'bg-[#0F172A] text-white shadow-sm'
                   : 'text-[#64748B] hover:text-[#0F172A]'
               }`}
             >
-              <Shield className="w-3.5 h-3.5 text-[#94A3B8]" />
-              <span>🛡️ Guard Tablet Console</span>
+              <Shield className="w-3.5 h-3.5" />
+              <span>🛡️ Guard Console</span>
             </button>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={() => setNoticeModalOpen(true)}
-              className="bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#0F172A] text-[11px] font-bold px-3 py-1.5 rounded-xl flex items-center gap-1 cursor-pointer transition-colors"
+              className="flex-1 sm:flex-none justify-center bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#0F172A] text-[10px] sm:text-[11px] font-bold px-2.5 sm:px-3 py-1.5 rounded-xl flex items-center gap-1 cursor-pointer transition-colors"
             >
               <BellRing className="w-3.5 h-3.5 text-[#2563EB]" />
-              <span>Notices &amp; Directory</span>
+              <span>Notices</span>
             </button>
 
             <button
               type="button"
               onClick={() => setSosActiveAlert(true)}
-              className="bg-rose-100 hover:bg-rose-200 text-rose-800 text-[11px] font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="flex-1 sm:flex-none justify-center bg-rose-100 hover:bg-rose-200 text-rose-800 text-[10px] sm:text-[11px] font-bold px-2.5 sm:px-3 py-1.5 rounded-xl flex items-center gap-1 cursor-pointer transition-colors"
             >
               <ShieldAlert className="w-3.5 h-3.5 text-rose-600" />
-              <span>SOS Alarm</span>
+              <span>SOS</span>
             </button>
           </div>
+
         </div>
       </div>
 
       {/* ── IF GUARD TABLET CONSOLE ACTIVE ── */}
       {activePortalMode === 'GUARD' ? (
-        <section className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
-          <div className="bg-[#0F172A] text-white rounded-[36px] p-6 sm:p-10 shadow-[0_20px_50px_rgba(15,23,42,0.25)] space-y-6 border border-[#334155]">
+        <section className="px-3.5 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
+          <div className="bg-[#0F172A] text-white rounded-3xl sm:rounded-[36px] p-5 sm:p-10 shadow-[0_20px_50px_rgba(15,23,42,0.25)] space-y-6 border border-[#334155]">
             
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#334155] pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-[#1E293B] text-white flex items-center justify-center font-bold shadow-md border border-[#334155]">
-                  <Shield className="w-6 h-6 text-[#38BDF8]" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#1E293B] text-white flex items-center justify-center font-bold shadow-md border border-[#334155] shrink-0">
+                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-[#38BDF8]" />
                 </div>
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-serif font-bold text-white">
-                    Main Security Gate Terminal (गेट सुरक्षा कंसोल)
+                  <h2 className="text-lg sm:text-2xl font-serif font-bold text-white">
+                    Gate Security Terminal (सुरक्षा कंसोल)
                   </h2>
-                  <p className="text-xs text-[#94A3B8]">Gate #1 (Main Township Entrance) • Guard Chief: Vikram Singh</p>
+                  <p className="text-[11px] sm:text-xs text-[#94A3B8]">Gate #1 (Main Entrance) • Guard Chief: Vikram Singh</p>
                 </div>
               </div>
 
               {/* Network Status & Offline Simulator Toggle */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <button
                   type="button"
                   onClick={handleToggleNetwork}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition-all ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold cursor-pointer transition-all ${
                     isNetworkOnline
                       ? 'bg-emerald-950 text-emerald-300 border border-emerald-700'
                       : 'bg-amber-950 text-amber-300 border border-amber-600 animate-pulse'
                   }`}
-                  title="Click to simulate Wi-Fi disconnect/reconnect"
                 >
                   {isNetworkOnline ? <Wifi className="w-3.5 h-3.5 text-emerald-400" /> : <WifiOff className="w-3.5 h-3.5 text-amber-400" />}
-                  <span>{isNetworkOnline ? '🟢 Wi-Fi Online' : '🟠 Offline Mode (Local DB)'}</span>
+                  <span>{isNetworkOnline ? '🟢 Online' : '🟠 Offline Mode'}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={handleGuardOpenBoom}
-                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-5 py-2 rounded-xl cursor-pointer shadow-md transition-transform active:scale-95"
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] sm:text-xs px-4 sm:px-5 py-2 rounded-xl cursor-pointer shadow-md transition-transform active:scale-95"
                 >
-                  {guardBoomStatus === 'OPEN' ? 'बूम खुला है ✓' : 'बूम खोलें / Open Boom →'}
+                  {guardBoomStatus === 'OPEN' ? 'बूम खुला है ✓' : 'बूम खोलें / Boom →'}
                 </button>
               </div>
             </div>
 
-            {/* Offline Notification Toast */}
-            {syncNotification && (
-              <div className="p-3 bg-[#1E293B] border border-[#334155] rounded-xl text-xs flex items-center justify-between animate-in fade-in">
-                <div className="flex items-center gap-2">
-                  <Database className="w-4 h-4 text-[#38BDF8]" />
-                  <span>{syncNotification}</span>
-                </div>
-              </div>
-            )}
-
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               
               {/* Left Action Buttons */}
-              <div className="lg:col-span-4 space-y-3 text-xs">
+              <div className="lg:col-span-4 space-y-2.5 sm:space-y-3 text-xs">
                 <button
                   onClick={handleGuardScanANPR}
-                  className="w-full p-4 bg-[#1E293B] hover:bg-[#334155] rounded-2xl border border-[#334155] text-left flex items-center justify-between cursor-pointer transition-colors"
+                  className="w-full p-3.5 sm:p-4 bg-[#1E293B] hover:bg-[#334155] rounded-2xl border border-[#334155] text-left flex items-center justify-between cursor-pointer transition-colors"
                 >
                   <div className="space-y-0.5">
-                    <p className="font-bold text-white text-sm">📸 ANPR प्लेट स्कैन / Scan Plate</p>
-                    <p className="text-[#94A3B8] text-[11px]">0.4s FastTag Entry • Works Offline</p>
+                    <p className="font-bold text-white text-xs sm:text-sm">📸 ANPR प्लेट स्कैन / Scan Plate</p>
+                    <p className="text-[#94A3B8] text-[10px] sm:text-[11px]">0.4s FastTag Entry • Offline Ready</p>
                   </div>
                   <Car className="w-5 h-5 text-[#38BDF8]" />
                 </button>
@@ -417,11 +408,11 @@ export default function CompleteEcosystemStaySetuPortal() {
                     SocietyStore.addGateLog('DELIVERY', 'Delivery Rider OTP 7821 Verified for Flat A-102', 'Approved', isNetworkOnline);
                     alert('Delivery Guest OTP Verified for Tower A - Flat 102! Directing rider to Lift A.');
                   }}
-                  className="w-full p-4 bg-[#1E293B] hover:bg-[#334155] rounded-2xl border border-[#334155] text-left flex items-center justify-between cursor-pointer transition-colors"
+                  className="w-full p-3.5 sm:p-4 bg-[#1E293B] hover:bg-[#334155] rounded-2xl border border-[#334155] text-left flex items-center justify-between cursor-pointer transition-colors"
                 >
                   <div className="space-y-0.5">
-                    <p className="font-bold text-white text-sm">🎙️ वॉइस पास व OTP / Verify OTP</p>
-                    <p className="text-[#94A3B8] text-[11px]">Swiggy, Zomato &amp; Amazon Couriers</p>
+                    <p className="font-bold text-white text-xs sm:text-sm">🎙️ वॉइस पास व OTP / Verify OTP</p>
+                    <p className="text-[#94A3B8] text-[10px] sm:text-[11px]">Swiggy, Zomato &amp; Amazon Couriers</p>
                   </div>
                   <Mic className="w-5 h-5 text-[#38BDF8]" />
                 </button>
@@ -431,49 +422,43 @@ export default function CompleteEcosystemStaySetuPortal() {
                     SocietyStore.addGateLog('SHIFTING', '🚚 Shifting Truck Pass #MV-9921 Verified (Tower B Service Lift)', 'Lift Unlocked', isNetworkOnline);
                     alert('🚚 Shifting Truck Pass #MV-9921 verified! Tower B - Service Lift auto-unlocked for 2 hours.');
                   }}
-                  className="w-full p-4 bg-[#1E293B] hover:bg-[#334155] rounded-2xl border border-[#334155] text-left flex items-center justify-between cursor-pointer transition-colors"
+                  className="w-full p-3.5 sm:p-4 bg-[#1E293B] hover:bg-[#334155] rounded-2xl border border-[#334155] text-left flex items-center justify-between cursor-pointer transition-colors"
                 >
                   <div className="space-y-0.5">
-                    <p className="font-bold text-white text-sm">🚚 शिफ्टिंग ट्रक पास / Shifting Truck</p>
-                    <p className="text-[#94A3B8] text-[11px]">Unlocks Dedicated Service Lift</p>
+                    <p className="font-bold text-white text-xs sm:text-sm">🚚 शिफ्टिंग ट्रक पास / Shifting Truck</p>
+                    <p className="text-[#94A3B8] text-[10px] sm:text-[11px]">Unlocks Dedicated Service Lift</p>
                   </div>
                   <Truck className="w-5 h-5 text-[#38BDF8]" />
                 </button>
               </div>
 
               {/* Right Live Stream Logs */}
-              <div className="lg:col-span-8 bg-[#020617] rounded-2xl p-5 border border-[#334155] space-y-3">
+              <div className="lg:col-span-8 bg-[#020617] rounded-2xl p-4 sm:p-5 border border-[#334155] space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Database className="w-4 h-4 text-[#38BDF8]" />
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8]">
-                      GATE ENTRY LOGS ({isNetworkOnline ? 'CLOUD PERSISTENT' : 'OFFLINE LOCAL DB'})
+                      GATE ENTRY LOGS ({isNetworkOnline ? 'CLOUD' : 'OFFLINE LOCAL'})
                     </span>
                   </div>
                   <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                    Zero-Downtime Terminal
+                    Zero-Downtime
                   </span>
                 </div>
 
-                <div className="space-y-2 max-h-56 overflow-y-auto">
+                <div className="space-y-2 max-h-60 overflow-y-auto">
                   {guardLogs.map(log => (
-                    <div key={log.id} className="p-3 bg-[#0F172A] rounded-xl flex items-center justify-between text-xs border border-[#1E293B]">
-                      <div className="flex items-center gap-3">
-                        <span className="text-[10px] font-bold bg-[#1E293B] text-[#94A3B8] px-2 py-0.5 rounded">
+                    <div key={log.id} className="p-2.5 sm:p-3 bg-[#0F172A] rounded-xl flex items-center justify-between text-xs border border-[#1E293B]">
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <span className="text-[9px] sm:text-[10px] font-bold bg-[#1E293B] text-[#94A3B8] px-1.5 sm:px-2 py-0.5 rounded">
                           {log.timestamp}
                         </span>
-                        <span className="text-white font-medium">{log.detail}</span>
+                        <span className="text-white font-medium text-[11px] sm:text-xs">{log.detail}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
-                          log.synced
-                            ? 'text-emerald-300 bg-emerald-950/80 border-emerald-700'
-                            : 'text-amber-300 bg-amber-950/80 border-amber-700'
-                        }`}>
-                          {log.synced ? 'Synced ✓' : 'Offline (Queued)'}
-                        </span>
-                      </div>
+                      <span className="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded border text-emerald-300 bg-emerald-950/80 border-emerald-700 shrink-0">
+                        {log.synced ? 'Synced ✓' : 'Queued'}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -486,49 +471,49 @@ export default function CompleteEcosystemStaySetuPortal() {
       ) : null}
 
       {/* ── 1. ULTRA-LUXURY REAL ESTATE HERO BANNER ── */}
-      <section className="px-4 sm:px-6 lg:px-8 pt-4 pb-6">
+      <section className="px-3.5 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-6">
         <div className="max-w-7xl mx-auto">
           
-          <div className="relative rounded-[36px] p-8 sm:p-14 lg:p-16 shadow-[0_16px_50px_rgba(15,23,42,0.08)] flex flex-col justify-between border border-[#E2E8F0] min-h-[580px]">
-            {/* Background Image Layer (Isolated with overflow-hidden) */}
+          <div className="relative rounded-3xl sm:rounded-[36px] p-5 sm:p-10 lg:p-16 shadow-[0_16px_50px_rgba(15,23,42,0.08)] flex flex-col justify-between border border-[#E2E8F0] min-h-[460px] sm:min-h-[560px]">
+            {/* Background Image Layer */}
             <div
-              className="absolute inset-0 rounded-[36px] overflow-hidden pointer-events-none z-0"
+              className="absolute inset-0 rounded-3xl sm:rounded-[36px] overflow-hidden pointer-events-none z-0"
               style={{
                 backgroundImage:
-                  "linear-gradient(90deg, rgba(248, 250, 252, 0.98) 0%, rgba(248, 250, 252, 0.92) 48%, rgba(248, 250, 252, 0.3) 100%), url('/images/society-hero.jpg')",
+                  "linear-gradient(90deg, rgba(248, 250, 252, 0.98) 0%, rgba(248, 250, 252, 0.94) 55%, rgba(248, 250, 252, 0.35) 100%), url('/images/society-hero.jpg')",
                 backgroundSize: 'cover',
                 backgroundPosition: 'center right',
               }}
             />
 
-            <div className="max-w-2xl space-y-6 relative z-30">
-              <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-[#E2E8F0] shadow-xs">
-                <Sparkle className="w-3.5 h-3.5 text-[#2563EB]" />
-                <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0F172A]">
+            <div className="max-w-2xl space-y-4 sm:space-y-6 relative z-30">
+              <div className="inline-flex items-center gap-1.5 bg-white/80 backdrop-blur-md px-3 py-1 rounded-full border border-[#E2E8F0] shadow-xs">
+                <Sparkle className="w-3 h-3 text-[#2563EB]" />
+                <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#0F172A]">
                   SMART GATED SOCIETY OPERATING SYSTEM
                 </span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-[#0F172A] leading-[1.12] tracking-tight">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif text-[#0F172A] leading-[1.15] tracking-tight">
                 Your Entire Society <br />
                 <span className="italic font-normal text-[#2563EB]">In A Single</span> <br />
                 Super-App
               </h1>
 
-              <p className="text-sm sm:text-base text-[#475569] font-normal leading-relaxed max-w-xl">
-                Security, Staff, Wrong Parking, Amenities &amp; RWA Accounts — Solved with persistent state engine. Hands-free Voice Gate Passes, Live Domestic Helper Radar, and 1-Click Auditable GST Ledgers.
+              <p className="text-xs sm:text-base text-[#475569] font-normal leading-relaxed max-w-xl">
+                Wrong Parking, Domestic Staff, Amenities &amp; RWA Accounts — Solved with persistent state engine, Voice Gate Passes, and 1-Click Auditable GST Ledgers.
               </p>
 
               {/* Direct Quick Search Bar with Instant Results Overlay */}
               <div className="relative max-w-lg z-50">
-                <div className="bg-white/95 backdrop-blur-md p-2 rounded-2xl shadow-[0_4px_25px_rgba(15,23,42,0.08)] flex items-center gap-2 border border-[#E2E8F0]">
-                  <Search className="w-5 h-5 text-[#64748B] ml-2 shrink-0" />
+                <div className="bg-white/95 backdrop-blur-md p-1.5 sm:p-2 rounded-2xl shadow-[0_4px_25px_rgba(15,23,42,0.08)] flex items-center gap-2 border border-[#E2E8F0]">
+                  <Search className="w-4 h-4 sm:w-5 sm:h-5 text-[#64748B] ml-2 shrink-0" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    placeholder="Search Flat (e.g. Tower C-402), Helper, Amenity or Car No..."
-                    className="w-full bg-transparent text-xs font-semibold text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none"
+                    placeholder="Search Flat (e.g. Tower C-402), Helper, Car..."
+                    className="w-full bg-transparent text-xs font-semibold text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none py-1"
                   />
                   {searchQuery && (
                     <button
@@ -546,7 +531,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                         setSearchQuery('Tower C');
                       }
                     }}
-                    className="bg-[#0F172A] hover:bg-[#1E293B] text-white font-semibold text-xs px-5 py-2.5 rounded-xl transition-transform active:scale-95 cursor-pointer shrink-0"
+                    className="bg-[#0F172A] hover:bg-[#1E293B] text-white font-semibold text-xs px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl transition-transform active:scale-95 cursor-pointer shrink-0"
                   >
                     Search
                   </button>
@@ -554,34 +539,10 @@ export default function CompleteEcosystemStaySetuPortal() {
 
                 {/* Live Floating Instant Search Dropdown */}
                 {searchQuery.trim().length > 0 && (
-                  <div className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-[0_24px_60px_rgba(15,23,42,0.25)] border-2 border-[#94A3B8] p-3 space-y-2 max-h-80 overflow-y-auto z-[100] animate-in fade-in duration-150">
+                  <div className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-[0_24px_60px_rgba(15,23,42,0.25)] border-2 border-[#94A3B8] p-3 space-y-2 max-h-72 overflow-y-auto z-[100] animate-in fade-in duration-150">
                     <div className="flex items-center justify-between pb-1 border-b border-[#E2E8F0] text-[10px] font-bold text-[#64748B] uppercase tracking-wider">
                       <span>Instant Society Search Results</span>
-                      <span className="text-[#2563EB] font-bold">
-                        {
-                          [
-                            { title: 'Tower C - Flat 402', sub: 'Resident: Ankit Sharma • Intercom #1402 • 3 BHK', type: 'FLAT', tag: 'Flat', action: 'INTERCOM' },
-                            { title: 'Tower A - Flat 102', sub: 'Resident: Sudhanshu Pandey • Intercom #1102 • 3 BHK', type: 'FLAT', tag: 'Flat', action: 'INTERCOM' },
-                            { title: 'Tower B - Flat 204', sub: 'Resident: Neha Kapoor • Intercom #1204 • 2 BHK', type: 'FLAT', tag: 'Flat', action: 'INTERCOM' },
-                            { title: 'Tower D - Flat 801', sub: 'Resident: Rajesh Verma • Intercom #1801 • 4 BHK', type: 'FLAT', tag: 'Flat', action: 'INTERCOM' },
-                            { title: 'Sunita Devi (Cook & Maid)', sub: '🟢 Live: Inside Tower A • Rating: 4.9 ★ • ₹200/Day', type: 'HELPER', tag: 'Helper', action: 'BOOK_MAID' },
-                            { title: 'Ramesh Kumar (Deep Cleaning)', sub: '🟢 Live: Inside Tower D • Rating: 4.8 ★ • ₹250/Day', type: 'HELPER', tag: 'Helper', action: 'BOOK_MAID' },
-                            { title: 'UP14 EX 9988 (Honda City)', sub: 'Assigned: Basement B1 - Slot #42 (Tower C)', type: 'VEHICLE', tag: 'Parking', action: 'RESOLVE_PARKING' },
-                            { title: 'UP14 DK 8811 (Shifting Truck)', sub: 'Move-In Gate Pass #MV-9921 • Dedicated Service Lift', type: 'VEHICLE', tag: 'Shifting', action: 'MOVE_PASS' },
-                            { title: 'Badminton Court #1 & #2', sub: 'Slots open today: 05:00 PM - 08:00 PM • Free', type: 'AMENITY', tag: 'Amenity', action: 'BOOK_AMENITY' },
-                            { title: 'Swimming Pool (Lane 1-3)', sub: 'Morning: 06:00 AM - 08:00 AM • Open', type: 'AMENITY', tag: 'Amenity', action: 'BOOK_AMENITY' },
-                            { title: 'Clubhouse Grand Party Hall', sub: 'Capacity: 120 Guests • Ac Banquet', type: 'AMENITY', tag: 'Amenity', action: 'BOOK_AMENITY' },
-                            { title: 'Rakesh Sharma (Society Plumber)', sub: '🟢 Active in Tower C & D • 2-Hour SLA', type: 'HELPDESK', tag: 'Plumber', action: 'RAISE_TICKET' },
-                            { title: 'Vikas Verma (Society Electrician)', sub: '🟢 Active at Substation • 2-Hour SLA', type: 'HELPDESK', tag: 'Electrician', action: 'RAISE_TICKET' },
-                            { title: 'Otis Lift Maintenance & Jerk Issue', sub: 'Annual AMC Active for 14 Lifts • Instant Ticket', type: 'HELPDESK', tag: 'Lift', action: 'RAISE_TICKET' },
-                            { title: 'DG Power Backup Testing Circular', sub: 'Wednesday 11:00 AM - 11:30 AM • Towers A-G', type: 'NOTICE', tag: 'Notice', action: 'VIEW_NOTICES' },
-                          ].filter(item => 
-                            item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            item.sub.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            item.tag.toLowerCase().includes(searchQuery.toLowerCase())
-                          ).length
-                        } Found
-                      </span>
+                      <span className="text-[#2563EB] font-bold">Matching Results</span>
                     </div>
 
                     <div className="space-y-1.5">
@@ -670,46 +631,46 @@ export default function CompleteEcosystemStaySetuPortal() {
               </div>
             </div>
 
-            {/* Real-time Status Floating Bar */}
-            <div className="mt-10 bg-[#0F172A]/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 text-white grid grid-cols-2 md:grid-cols-4 gap-4 shadow-2xl border border-[#1E293B] relative z-10">
+            {/* Real-time Status Floating Bar (Mobile Grid) */}
+            <div className="mt-8 bg-[#0F172A]/95 backdrop-blur-md rounded-2xl p-3 sm:p-5 text-white grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 shadow-2xl border border-[#1E293B] relative z-10">
               
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#1E293B] flex items-center justify-center text-[#38BDF8] shrink-0 border border-[#334155]">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#1E293B] flex items-center justify-center text-[#38BDF8] shrink-0 border border-[#334155]">
                   <Car className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-serif text-xs font-bold text-white">Wrong Parking Alert</h4>
-                  <p className="text-[10px] text-[#94A3B8]">Basement B1/B2 auto-ping</p>
+                  <h4 className="font-serif text-[11px] sm:text-xs font-bold text-white">Wrong Parking</h4>
+                  <p className="text-[9px] sm:text-[10px] text-[#94A3B8]">B1/B2 auto-ping</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#1E293B] flex items-center justify-center text-[#38BDF8] shrink-0 border border-[#334155]">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#1E293B] flex items-center justify-center text-[#38BDF8] shrink-0 border border-[#334155]">
                   <Users className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-serif text-xs font-bold text-white">Helper Backup</h4>
-                  <p className="text-[10px] text-[#94A3B8]">1-Click morning cook</p>
+                  <h4 className="font-serif text-[11px] sm:text-xs font-bold text-white">Helper Backup</h4>
+                  <p className="text-[9px] sm:text-[10px] text-[#94A3B8]">1-Click cook</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#1E293B] flex items-center justify-center text-[#38BDF8] shrink-0 border border-[#334155]">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#1E293B] flex items-center justify-center text-[#38BDF8] shrink-0 border border-[#334155]">
                   <CreditCard className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-serif text-xs font-bold text-white">RWA GST Ledger</h4>
-                  <p className="text-[10px] text-[#94A3B8]">1-Click balance sheet</p>
+                  <h4 className="font-serif text-[11px] sm:text-xs font-bold text-white">RWA Ledger</h4>
+                  <p className="text-[9px] sm:text-[10px] text-[#94A3B8]">1-Click balance</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#1E293B] flex items-center justify-center text-[#38BDF8] shrink-0 border border-[#334155]">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#1E293B] flex items-center justify-center text-[#38BDF8] shrink-0 border border-[#334155]">
                   <CalendarDays className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-serif text-xs font-bold text-white">Amenity Booking</h4>
-                  <p className="text-[10px] text-[#94A3B8]">Clubhouse &amp; Court slots</p>
+                  <h4 className="font-serif text-[11px] sm:text-xs font-bold text-white">Amenities</h4>
+                  <p className="text-[9px] sm:text-[10px] text-[#94A3B8]">Court &amp; Pool slots</p>
                 </div>
               </div>
 
@@ -721,16 +682,16 @@ export default function CompleteEcosystemStaySetuPortal() {
       </section>
 
       {/* ── 2. SPOTLIGHT: WRONG PARKING NUMBER PLATE RESOLVER (OPTION 2) ── */}
-      <section id="wrong-parking-spotlight" className="px-4 sm:px-6 lg:px-8 py-8">
+      <section id="wrong-parking-spotlight" className="px-3.5 sm:px-6 lg:px-8 py-6">
         <div className="max-w-7xl mx-auto">
           
-          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-10 shadow-[0_10px_35px_rgba(15,23,42,0.05)] space-y-6 border border-[#E2E8F0]">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-10 shadow-[0_10px_35px_rgba(15,23,42,0.05)] space-y-5 border border-[#E2E8F0]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-[#F1F5F9] text-[#0F172A] px-3 py-1 rounded-full border border-[#E2E8F0]">
+                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#F1F5F9] text-[#0F172A] px-2.5 py-1 rounded-full border border-[#E2E8F0]">
                   🚗 FEATURE SPOTLIGHT • OPTION 2
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0F172A] mt-1.5">
+                <h2 className="text-xl sm:text-3xl font-serif font-bold text-[#0F172A] mt-1.5">
                   Wrong Parking &amp; Reserved Slot Protection
                 </h2>
               </div>
@@ -739,10 +700,10 @@ export default function CompleteEcosystemStaySetuPortal() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center pt-2">
               
               {/* Left Form */}
-              <div className="lg:col-span-6 space-y-4 text-xs">
+              <div className="lg:col-span-6 space-y-3.5 text-xs">
                 <div>
                   <label className="font-bold text-[#475569] text-[11px] block mb-1">
                     Enter Unauthorized Car Plate Number:
@@ -752,7 +713,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                     value={parkingCarNo}
                     onChange={e => setParkingCarNo(e.target.value)}
                     placeholder="e.g. UP14 EX 9988, DL8C AB 1234"
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
+                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
                   />
                 </div>
 
@@ -765,29 +726,29 @@ export default function CompleteEcosystemStaySetuPortal() {
                     value={parkingSlot}
                     onChange={e => setParkingSlot(e.target.value)}
                     placeholder="e.g. Basement B1 - Slot #42 (Tower C)"
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
+                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
                   />
                 </div>
 
                 <button
                   type="button"
                   onClick={handleSendParkingAlert}
-                  className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-xs py-3.5 rounded-xl shadow-md cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-2"
+                  className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-xs py-3 rounded-xl shadow-md cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-2"
                 >
                   <AlertTriangle className="w-4 h-4 text-[#38BDF8]" />
-                  <span>Send Anonymous Move-Car Alert (WhatsApp + App Ping)</span>
+                  <span>Send Anonymous Move-Car Alert</span>
                 </button>
               </div>
 
               {/* Right Live Simulation Output */}
-              <div className="lg:col-span-6 bg-[#F8FAFC] p-6 rounded-2xl space-y-3 border border-[#E2E8F0]">
+              <div className="lg:col-span-6 bg-[#F8FAFC] p-4 sm:p-6 rounded-2xl space-y-3 border border-[#E2E8F0]">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#64748B] block">
                   LIVE SYSTEM RESPONSE SIMULATOR
                 </span>
 
                 {parkingAlertSent ? (
                   <div className="space-y-3 animate-in fade-in duration-300">
-                    <div className="p-4 bg-emerald-50 rounded-xl text-emerald-900 text-xs space-y-1.5 shadow-xs border border-emerald-200">
+                    <div className="p-3.5 bg-emerald-50 rounded-xl text-emerald-900 text-xs space-y-1.5 shadow-xs border border-emerald-200">
                       <p className="font-bold flex items-center gap-1.5">
                         <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                         <span>Anonymous Alert Sent to Owner of {parkingCarNo}!</span>
@@ -799,7 +760,7 @@ export default function CompleteEcosystemStaySetuPortal() {
 
                     <div className="p-3 bg-white rounded-xl text-xs space-y-1.5 shadow-xs border border-[#E2E8F0]">
                       <div className="flex justify-between items-center font-bold text-[#0F172A]">
-                        <span>Move-Car Countdown Window:</span>
+                        <span>Move-Car Countdown:</span>
                         <span className="text-[#2563EB] font-mono text-xs font-black bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200">
                           ⏱️ {formatTimer(parkingSecondsLeft)} Mins Left
                         </span>
@@ -825,7 +786,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                     </div>
                   </div>
                 ) : (
-                  <div className="p-6 text-center space-y-2 text-xs text-[#64748B]">
+                  <div className="p-5 text-center space-y-2 text-xs text-[#64748B]">
                     <Car className="w-8 h-8 text-[#64748B] mx-auto" />
                     <p className="font-semibold text-[#0F172A]">Ready to Resolve Parking Blockages</p>
                     <p className="text-[11px]">Type car number on the left and tap Send Alert to see instant resolution.</p>
@@ -841,25 +802,25 @@ export default function CompleteEcosystemStaySetuPortal() {
       </section>
 
       {/* ── 3. STANDARD MUST-HAVES (AMENITY BOOKING & 2-HOUR HELPDESK) ── */}
-      <section className="px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-7xl mx-auto space-y-6">
+      <section className="px-3.5 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-7xl mx-auto space-y-5">
           
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#2563EB] block">
-              STANDARD SOCIETY ESSENTIALS (CLUBHOUSE &amp; HELPDESK)
+            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#2563EB] block">
+              STANDARD SOCIETY ESSENTIALS
             </span>
-            <h2 className="text-2xl sm:text-3xl font-serif text-[#0F172A] mt-1">
+            <h2 className="text-xl sm:text-3xl font-serif text-[#0F172A] mt-1">
               Clubhouse Amenities &amp; Time-Tracked Helpdesk
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             
             {/* Standard 1: Amenity & Clubhouse Booking */}
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
+            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
                     <CalendarDays className="w-5 h-5 text-[#2563EB]" />
                   </div>
                   <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
@@ -868,7 +829,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                 </div>
 
                 <div>
-                  <h3 className="font-serif text-lg font-bold text-[#0F172A]">Clubhouse &amp; Sports Amenity Booking</h3>
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">Clubhouse &amp; Sports Amenity Booking</h3>
                   <p className="text-xs text-[#64748B] mt-1">
                     Book Badminton Court, Swimming Pool, Tennis, or Grand Party Hall slots with instant QR passes and conflict prevention.
                   </p>
@@ -896,7 +857,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                       <span className="text-emerald-700 font-bold">Available Today</span>
                     </div>
                     <div className="flex justify-between text-[11px] text-[#64748B]">
-                      <span>Swimming Pool (Morning Slot):</span>
+                      <span>Swimming Pool:</span>
                       <span className="font-bold text-[#0F172A]">06:00 AM - 08:00 AM</span>
                     </div>
                   </div>
@@ -914,10 +875,10 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
 
             {/* Standard 2: 1-Click Helpdesk & SLA Tracker */}
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
+            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
                     <Wrench className="w-5 h-5 text-[#2563EB]" />
                   </div>
                   <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full">
@@ -926,7 +887,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                 </div>
 
                 <div>
-                  <h3 className="font-serif text-lg font-bold text-[#0F172A]">Digital Helpdesk &amp; SLA Ticket Tracker</h3>
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">Digital Helpdesk &amp; SLA Ticket Tracker</h3>
                   <p className="text-xs text-[#64748B] mt-1">
                     Raise plumbing, electrical, or lift tickets with 2-hour SLA. Assigned technician closes ticket only with your Resident OTP.
                   </p>
@@ -950,16 +911,16 @@ export default function CompleteEcosystemStaySetuPortal() {
                             <input
                               type="text"
                               maxLength={4}
-                              placeholder="Enter OTP to Close"
+                              placeholder="OTP to Close"
                               value={otpVerifyInput}
                               onChange={e => setOtpVerifyInput(e.target.value)}
-                              className="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold w-32"
+                              className="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold w-28"
                             />
                             <button
                               onClick={() => handleVerifyOtpTicket(ticket.id)}
                               className="bg-emerald-700 text-white text-[11px] font-bold px-3 py-1 rounded-lg cursor-pointer"
                             >
-                              Verify &amp; Close Ticket
+                              Verify &amp; Close
                             </button>
                           </div>
                         )}
@@ -973,8 +934,8 @@ export default function CompleteEcosystemStaySetuPortal() {
                       <span className="text-emerald-700 font-bold">🟢 Active (Tower C &amp; D)</span>
                     </div>
                     <div className="flex justify-between text-[11px] text-[#64748B]">
-                      <span>Electrician On-Duty:</span>
-                      <span className="text-emerald-700 font-bold">🟢 Active (Main Substation)</span>
+                      <span>Electrician:</span>
+                      <span className="text-emerald-700 font-bold">🟢 Active (Substation)</span>
                     </div>
                   </div>
                 )}
@@ -996,29 +957,29 @@ export default function CompleteEcosystemStaySetuPortal() {
       </section>
 
       {/* ── 4. THREE CORE GROUND REALITY PROBLEMS (OPTIONS 1, 6, 7) ── */}
-      <section id="society-modules" className="px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-7xl mx-auto space-y-6">
+      <section id="society-modules" className="px-3.5 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-7xl mx-auto space-y-5">
           
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#2563EB] block">
+            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#2563EB] block">
               PRACTICAL SOCIETY SUITE
             </span>
-            <h2 className="text-2xl sm:text-3xl font-serif text-[#0F172A] mt-1">
+            <h2 className="text-xl sm:text-3xl font-serif text-[#0F172A] mt-1">
               Real Solutions for Daily Community Living
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             
             {/* OPTION 1: Verified Society Helper & Backup Maid */}
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] hover:shadow-md transition-all space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
+            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] hover:shadow-md transition-all space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
                   <Users className="w-5 h-5 text-[#2563EB]" />
                 </div>
                 <div>
                   <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-wider">OPTION 1</span>
-                  <h3 className="font-serif text-lg font-bold text-[#0F172A]">Helper Radar &amp; Backup Maid</h3>
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">Helper Radar &amp; Backup Maid</h3>
                   <p className="text-xs text-[#64748B] mt-1">
                     Maid suddenly on leave? Check live biometric presence of verified cooks &amp; maids inside campus with 1-click morning backup.
                   </p>
@@ -1027,11 +988,11 @@ export default function CompleteEcosystemStaySetuPortal() {
                 <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#E2E8F0]">
                   <div className="flex justify-between font-semibold">
                     <span>Sunita Devi (Cook):</span>
-                    <span className="text-emerald-700 font-bold">{bookedMaid === 'Sunita Devi' ? 'Assigned to You ✓' : '🟢 Inside Tower A'}</span>
+                    <span className="text-emerald-700 font-bold">{bookedMaid === 'Sunita Devi' ? 'Assigned ✓' : '🟢 Inside Tower A'}</span>
                   </div>
                   <div className="flex justify-between font-semibold">
                     <span>Ramesh Kumar (Cleaning):</span>
-                    <span className="text-emerald-700 font-bold">{bookedMaid === 'Ramesh Kumar' ? 'Assigned to You ✓' : '🟢 Inside Tower D'}</span>
+                    <span className="text-emerald-700 font-bold">{bookedMaid === 'Ramesh Kumar' ? 'Assigned ✓' : '🟢 Inside Tower D'}</span>
                   </div>
                 </div>
               </div>
@@ -1047,26 +1008,26 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
 
             {/* OPTION 6: RWA Financial Transparency & GST Balance Sheet */}
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] hover:shadow-md transition-all space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
+            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] hover:shadow-md transition-all space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
                   <CreditCard className="w-5 h-5 text-[#2563EB]" />
                 </div>
                 <div>
                   <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-wider">OPTION 6</span>
-                  <h3 className="font-serif text-lg font-bold text-[#0F172A]">1-Click RWA GST Balance Sheet</h3>
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">1-Click RWA GST Balance Sheet</h3>
                   <p className="text-xs text-[#64748B] mt-1">
-                    Complete transparency on monthly maintenance expenses: Otis Lift AMC (14 Lifts), Guard Salaries (18 Staff), DG Diesel backup, and Sinking Fund.
+                    Complete transparency on monthly maintenance: Otis Lift AMC (14 Lifts), Guard Salaries (18 Staff), and Sinking Fund.
                   </p>
                 </div>
 
                 <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1.5 border border-[#E2E8F0]">
                   <div className="flex justify-between">
-                    <span className="text-[#64748B]">August Maintenance (Flat A-102):</span>
+                    <span className="text-[#64748B]">August Maintenance (A-102):</span>
                     <span className="font-bold text-[#0F172A]">₹3,540</span>
                   </div>
                   <div className="flex justify-between text-[11px] text-[#64748B]">
-                    <span>Society Sinking Fund (HDFC):</span>
+                    <span>Sinking Fund (HDFC):</span>
                     <span className="font-bold text-emerald-700">₹1.15 Crores</span>
                   </div>
                 </div>
@@ -1086,35 +1047,34 @@ export default function CompleteEcosystemStaySetuPortal() {
                   type="button"
                   onClick={() => setLedgerModalOpen(true)}
                   className="px-3.5 bg-[#F1F5F9] text-[#0F172A] rounded-xl text-xs font-bold hover:bg-[#E2E8F0] cursor-pointer flex items-center gap-1"
-                  title="View Audited GST Ledger"
                 >
                   <FileSpreadsheet className="w-4 h-4 text-[#2563EB]" />
-                  <span className="hidden sm:inline text-[11px]">Ledger</span>
+                  <span className="text-[11px]">Ledger</span>
                 </button>
               </div>
             </div>
 
             {/* OPTION 7: Digital Move-In / Out & Service Lift Booking */}
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] hover:shadow-md transition-all space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
+            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] hover:shadow-md transition-all space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
                   <Truck className="w-5 h-5 text-[#2563EB]" />
                 </div>
                 <div>
                   <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-wider">OPTION 7</span>
-                  <h3 className="font-serif text-lg font-bold text-[#0F172A]">Move-In Pass &amp; Service Lift</h3>
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">Move-In Pass &amp; Service Lift</h3>
                   <p className="text-xs text-[#64748B] mt-1">
-                    Pre-approved shifting truck gate pass + dedicated 2-hour service lift reservation so regular passenger lifts in Towers A-G remain unblocked.
+                    Pre-approved shifting truck gate pass + dedicated 2-hour service lift reservation so regular passenger lifts remain unblocked.
                   </p>
                 </div>
 
                 <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#E2E8F0]">
                   <div className="flex justify-between font-semibold">
-                    <span>Assigned Shifting Slot:</span>
+                    <span>Shifting Slot:</span>
                     <span className="font-bold text-[#0F172A]">{movingSlot}</span>
                   </div>
                   <div className="flex justify-between text-[11px] text-[#64748B]">
-                    <span>Service Lift Status:</span>
+                    <span>Service Lift:</span>
                     <span className="text-emerald-700 font-bold">{generatedMovingPass ? 'Pass Generated ✓' : 'Padded & Reserved'}</span>
                   </div>
                 </div>
@@ -1126,7 +1086,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                 className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-semibold text-xs py-3 rounded-xl cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
               >
                 <FileText className="w-3.5 h-3.5 text-[#38BDF8]" />
-                <span>{generatedMovingPass ? 'View Pass #MV-9921' : 'Book Move-In / Shifting Slot'}</span>
+                <span>{generatedMovingPass ? 'View Pass #MV-9921' : 'Book Shifting Slot'}</span>
               </button>
             </div>
 
@@ -1136,26 +1096,26 @@ export default function CompleteEcosystemStaySetuPortal() {
       </section>
 
       {/* ── 5. RWA FINANCIAL DESK & RESIDENT COMMUNITY FORUM ── */}
-      <section id="rwa-dues" className="px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <section id="rwa-dues" className="px-3.5 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
           
           {/* Left Column: Voice Pass & FastTag Gate Test */}
-          <div className="lg:col-span-6 bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgba(15,23,42,0.05)] space-y-5 border border-[#E2E8F0]">
+          <div className="lg:col-span-6 bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-8 shadow-[0_8px_30px_rgba(15,23,42,0.05)] space-y-4 sm:space-y-5 border border-[#E2E8F0]">
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB]">
                   GATE ACCESS CONTROLS
                 </span>
-                <h3 className="font-serif text-xl font-bold text-[#0F172A] mt-0.5">
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A] mt-0.5">
                   Voice Gate Pass &amp; ANPR FastTag
                 </h3>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-4 bg-[#F8FAFC] rounded-2xl space-y-2 border border-[#E2E8F0]">
-                <span className="text-[10px] font-bold text-[#2563EB]">🎙️ VOICE GATE PASS</span>
-                <p className="text-[11px] text-[#64748B]">Hands-free resident speech approval</p>
+              <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2 border border-[#E2E8F0]">
+                <span className="text-[10px] font-bold text-[#2563EB]">🎙️ VOICE PASS</span>
+                <p className="text-[10px] sm:text-[11px] text-[#64748B]">Hands-free resident approval</p>
                 <button
                   type="button"
                   onClick={handleVoiceRecord}
@@ -1165,9 +1125,9 @@ export default function CompleteEcosystemStaySetuPortal() {
                 </button>
               </div>
 
-              <div className="p-4 bg-[#F8FAFC] rounded-2xl space-y-2 border border-[#E2E8F0]">
-                <span className="text-[10px] font-bold text-[#2563EB]">🚗 ANPR FASTTAG BOOM</span>
-                <p className="text-[11px] text-[#64748B]">0.5s auto license clearance</p>
+              <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2 border border-[#E2E8F0]">
+                <span className="text-[10px] font-bold text-[#2563EB]">🚗 FASTTAG BOOM</span>
+                <p className="text-[10px] sm:text-[11px] text-[#64748B]">0.5s auto license clearance</p>
                 <button
                   type="button"
                   onClick={handleGuardOpenBoom}
@@ -1179,9 +1139,9 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
 
             {/* Smart Meter Topup */}
-            <div className="p-4 bg-[#F8FAFC] rounded-2xl flex items-center justify-between text-xs border border-[#E2E8F0]">
+            <div className="p-3.5 bg-[#F8FAFC] rounded-2xl flex items-center justify-between text-xs border border-[#E2E8F0]">
               <div>
-                <span className="text-[#64748B] font-semibold text-[10px]">PREPAID SMART METER (MTR-882190)</span>
+                <span className="text-[#64748B] font-semibold text-[10px]">SMART METER (MTR-882190)</span>
                 <p className="font-bold text-[#0F172A] text-sm">Balance: ₹{meterBalance}</p>
               </div>
               <button
@@ -1191,7 +1151,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                   setMeterBalance(updated);
                   alert('⚡ Smart Meter MTR-882190 recharged with ₹500 via UPI!');
                 }}
-                className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs px-4 py-2 rounded-xl cursor-pointer"
+                className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs px-3.5 py-2 rounded-xl cursor-pointer"
               >
                 + Topup ₹500
               </button>
@@ -1199,13 +1159,13 @@ export default function CompleteEcosystemStaySetuPortal() {
           </div>
 
           {/* Right Column: Resident AGM Poll & Notice Board */}
-          <div id="community" className="lg:col-span-6 bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgba(15,23,42,0.05)] space-y-5 border border-[#E2E8F0]">
+          <div id="community" className="lg:col-span-6 bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-8 shadow-[0_8px_30px_rgba(15,23,42,0.05)] space-y-4 sm:space-y-5 border border-[#E2E8F0]">
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB]">
                   RESIDENT COMMUNITY FORUM
                 </span>
-                <h3 className="font-serif text-xl font-bold text-[#0F172A] mt-0.5">
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A] mt-0.5">
                   Live AGM Voting Poll &amp; Notices
                 </h3>
               </div>
@@ -1213,17 +1173,17 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
 
             {/* AGM Poll */}
-            <div className="p-4 bg-[#F8FAFC] rounded-2xl space-y-3 border border-[#E2E8F0]">
-              <h4 className="font-serif text-sm font-bold text-[#0F172A]">
+            <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2.5 border border-[#E2E8F0]">
+              <h4 className="font-serif text-xs sm:text-sm font-bold text-[#0F172A]">
                 {forumPoll.title}
               </h4>
 
               <div className="space-y-1">
-                <div className="flex justify-between text-[11px] font-bold">
+                <div className="flex justify-between text-[10px] sm:text-[11px] font-bold">
                   <span className="text-emerald-700">👍 YES ({forumPoll.yesVotes} Votes - {yesPercentage}%)</span>
                   <span className="text-rose-700">👎 NO ({forumPoll.noVotes} Votes - {100 - yesPercentage}%)</span>
                 </div>
-                <div className="w-full bg-[#E2E8F0] rounded-full h-2.5 overflow-hidden flex">
+                <div className="w-full bg-[#E2E8F0] rounded-full h-2 overflow-hidden flex">
                   <div className="bg-emerald-600 h-full transition-all duration-500" style={{ width: `${yesPercentage}%` }} />
                   <div className="bg-rose-600 h-full transition-all duration-500" style={{ width: `${100 - yesPercentage}%` }} />
                 </div>
@@ -1254,10 +1214,10 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
 
             {/* Buy & Sell Link */}
-            <div className="p-4 bg-[#F8FAFC] rounded-2xl flex items-center justify-between text-xs border border-[#E2E8F0]">
+            <div className="p-3.5 bg-[#F8FAFC] rounded-2xl flex items-center justify-between text-xs border border-[#E2E8F0]">
               <div>
-                <span className="text-[#64748B] font-semibold text-[10px]">RESIDENT PRE-OWNED MARKETPLACE</span>
-                <p className="font-bold text-[#0F172A] text-sm">Solid Wood Dining Table (₹9,500)</p>
+                <span className="text-[#64748B] font-semibold text-[10px]">RESIDENT MARKETPLACE</span>
+                <p className="font-bold text-[#0F172A] text-xs sm:text-sm">Solid Wood Dining Table (₹9,500)</p>
               </div>
               <button
                 type="button"
@@ -1270,7 +1230,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                   });
                   setChatModalOpen(true);
                 }}
-                className="bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-xs px-4 py-2 rounded-xl cursor-pointer"
+                className="bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-xs px-3.5 py-2 rounded-xl cursor-pointer"
               >
                 Chat Seller
               </button>
@@ -1281,25 +1241,25 @@ export default function CompleteEcosystemStaySetuPortal() {
       </section>
 
       {/* ── 6. LEADERSHIP & FOUNDERS ── */}
-      <section id="leadership" className="px-4 sm:px-6 lg:px-8 py-12 max-w-7xl mx-auto space-y-8">
+      <section id="leadership" className="px-3.5 sm:px-6 lg:px-8 py-8 sm:py-12 max-w-7xl mx-auto space-y-6">
         
-        <div className="text-center space-y-2">
-          <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#2563EB] block">
+        <div className="text-center space-y-1.5">
+          <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#2563EB] block">
             STAYSETU LEADERSHIP
           </span>
-          <h2 className="text-3xl sm:text-4xl font-serif text-[#0F172A]">
+          <h2 className="text-2xl sm:text-4xl font-serif text-[#0F172A]">
             Meet Our Founders
           </h2>
           <p className="text-xs text-[#64748B] max-w-lg mx-auto">
-            Pioneering next-generation smart gated community technology &amp; automated township management across India.
+            Pioneering smart gated community technology &amp; automated township management across India.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           
           {/* Founder - Sudhanshu Pandey */}
-          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-[0_8px_30px_rgba(15,23,42,0.05)] flex flex-col sm:flex-row items-center gap-6 group hover:shadow-md transition-all border border-[#E2E8F0]">
-            <div className="w-32 h-32 rounded-2xl overflow-hidden shadow-md shrink-0">
+          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgba(15,23,42,0.05)] flex flex-col sm:flex-row items-center gap-5 group hover:shadow-md transition-all border border-[#E2E8F0]">
+            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-md shrink-0">
               <Image
                 src="/images/founders/sudhanshu-pandey.jpg"
                 alt="Sudhanshu Pandey - Founder"
@@ -1309,11 +1269,11 @@ export default function CompleteEcosystemStaySetuPortal() {
                 unoptimized
               />
             </div>
-            <div className="space-y-2 text-center sm:text-left">
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-[#0F172A] text-white px-3 py-1 rounded-full">
+            <div className="space-y-1.5 text-center sm:text-left">
+              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#0F172A] text-white px-3 py-0.5 rounded-full">
                 FOUNDER &amp; CEO
               </span>
-              <h3 className="text-2xl font-serif font-bold text-[#0F172A]">Sudhanshu Pandey</h3>
+              <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#0F172A]">Sudhanshu Pandey</h3>
               <p className="text-xs text-[#475569] leading-relaxed">
                 Driving StaySetu&apos;s vision for next-generation smart gated societies, AI security terminals, and automated township living.
               </p>
@@ -1321,8 +1281,8 @@ export default function CompleteEcosystemStaySetuPortal() {
           </div>
 
           {/* Co-Founder - Ayushi Singh */}
-          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-[0_8px_30px_rgba(15,23,42,0.05)] flex flex-col sm:flex-row items-center gap-6 group hover:shadow-md transition-all border border-[#E2E8F0]">
-            <div className="w-32 h-32 rounded-2xl overflow-hidden shadow-md shrink-0">
+          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgba(15,23,42,0.05)] flex flex-col sm:flex-row items-center gap-5 group hover:shadow-md transition-all border border-[#E2E8F0]">
+            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-md shrink-0">
               <Image
                 src="/images/founders/ayushi-singh.jpg"
                 alt="Ayushi Singh - Co-Founder"
@@ -1332,15 +1292,15 @@ export default function CompleteEcosystemStaySetuPortal() {
                 unoptimized
               />
             </div>
-            <div className="space-y-2 text-center sm:text-left">
+            <div className="space-y-1.5 text-center sm:text-left">
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-[#0F172A] text-white px-3 py-1 rounded-full">
+                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#0F172A] text-white px-3 py-0.5 rounded-full">
                   CO-FOUNDER &amp; COO
                 </span>
               </div>
-              <h3 className="text-2xl font-serif font-bold text-[#0F172A]">Ayushi Singh</h3>
+              <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#0F172A]">Ayushi Singh</h3>
               <p className="text-xs text-[#475569] leading-relaxed">
-                Co-Founder steering product innovation, resident operations, helper attendance radars, and StaySetu&apos;s smart society ecosystem. Bringing valuable real estate domain &amp; community management expertise.
+                Co-Founder steering product innovation, resident operations, helper attendance radars, and StaySetu&apos;s smart society ecosystem.
               </p>
             </div>
           </div>
@@ -1349,15 +1309,15 @@ export default function CompleteEcosystemStaySetuPortal() {
       </section>
 
       {/* ── 7. FLOATING CURVED ISLAND CTA ── */}
-      <section className="px-4 sm:px-6 lg:px-8 py-10">
-        <div className="max-w-7xl mx-auto rounded-[36px] bg-[#0F172A] p-10 sm:p-14 text-center text-white shadow-[0_20px_50px_rgba(15,23,42,0.25)] space-y-6 relative overflow-hidden border border-[#334155]">
+      <section className="px-3.5 sm:px-6 lg:px-8 py-6 sm:py-10">
+        <div className="max-w-7xl mx-auto rounded-3xl sm:rounded-[36px] bg-[#0F172A] p-6 sm:p-14 text-center text-white shadow-[0_20px_50px_rgba(15,23,42,0.25)] space-y-4 sm:space-y-6 relative overflow-hidden border border-[#334155]">
           
-          <div className="max-w-3xl mx-auto space-y-4 relative z-10">
-            <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#38BDF8]">
+          <div className="max-w-3xl mx-auto space-y-3 sm:space-y-4 relative z-10">
+            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#38BDF8]">
               JOIN THE MOVEMENT
             </span>
-            <h2 className="text-3xl sm:text-5xl font-serif text-white leading-tight">
-              Ready to upgrade your Gated Society to StaySetu?
+            <h2 className="text-2xl sm:text-5xl font-serif text-white leading-tight">
+              Ready to upgrade your Gated Society?
             </h2>
             <p className="text-xs sm:text-sm text-[#94A3B8] max-w-xl mx-auto leading-relaxed">
               Join 50+ gated townships using StaySetu for wrong parking alerts, live helper radar, amenity booking, and 100% auditable RWA accounting.
@@ -1365,7 +1325,7 @@ export default function CompleteEcosystemStaySetuPortal() {
             <div className="pt-2 flex justify-center">
               <Link
                 href="/auth/signup"
-                className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs px-8 py-4 rounded-full shadow-lg transition-transform active:scale-95 flex items-center gap-2"
+                className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-lg transition-transform active:scale-95 flex items-center gap-2"
               >
                 <span>Get Started for Your Society</span>
                 <ArrowRight className="w-4 h-4" />
@@ -1376,15 +1336,15 @@ export default function CompleteEcosystemStaySetuPortal() {
         </div>
       </section>
 
-      {/* ── ALL MODALS ── */}
+      {/* ── ALL MODALS (MOBILE NATIVE BOTTOM ACTION SHEET / DIALOG) ── */}
 
       {/* 1. Amenity Booking Modal */}
       {amenityModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#F8FAFC] rounded-3xl border-2 border-[#0F172A] w-full max-w-md p-6 space-y-4 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3.5 sm:p-4">
+          <div className="bg-[#F8FAFC] rounded-3xl border-2 border-[#0F172A] w-full max-w-md p-5 sm:p-6 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3">
               <h3 className="font-serif font-bold text-[#0F172A] text-base">Book Society Amenity</h3>
-              <button onClick={() => setAmenityModalOpen(false)} className="p-2 text-[#64748B] hover:text-[#0F172A] cursor-pointer">
+              <button onClick={() => setAmenityModalOpen(false)} className="p-1.5 text-[#64748B] hover:text-[#0F172A] cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -1400,7 +1360,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                   <option value="Badminton Court #1">🏸 Badminton Court #1</option>
                   <option value="Badminton Court #2">🏸 Badminton Court #2</option>
                   <option value="Swimming Pool (Lane 1-3)">🏊 Swimming Pool (Lane 1-3)</option>
-                  <option value="Clubhouse Grand Party Hall">🎉 Clubhouse Grand Party Hall (Capacity: 120 Guests)</option>
+                  <option value="Clubhouse Grand Party Hall">🎉 Clubhouse Grand Party Hall (120 Guests)</option>
                   <option value="Tennis Court (Synthetic Turf)">🎾 Tennis Court</option>
                 </select>
               </div>
@@ -1434,11 +1394,11 @@ export default function CompleteEcosystemStaySetuPortal() {
 
       {/* 2. Helpdesk Ticket Modal */}
       {helpdeskModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#F8FAFC] rounded-3xl border-2 border-[#2563EB] w-full max-w-md p-6 space-y-4 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3.5 sm:p-4">
+          <div className="bg-[#F8FAFC] rounded-3xl border-2 border-[#2563EB] w-full max-w-md p-5 sm:p-6 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3">
               <h3 className="font-serif font-bold text-[#0F172A] text-base">Raise Helpdesk Ticket</h3>
-              <button onClick={() => setHelpdeskModalOpen(false)} className="p-2 text-[#64748B] hover:text-[#0F172A] cursor-pointer">
+              <button onClick={() => setHelpdeskModalOpen(false)} className="p-1.5 text-[#64748B] hover:text-[#0F172A] cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -1451,11 +1411,11 @@ export default function CompleteEcosystemStaySetuPortal() {
                   onChange={e => setHelpdeskCategory(e.target.value)}
                   className="w-full bg-white border border-[#E2E8F0] rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A]"
                 >
-                  <option value="Plumbing & Water Seepage">🚰 Plumbing &amp; Water Seepage (Basement/Flat)</option>
+                  <option value="Plumbing & Water Seepage">🚰 Plumbing &amp; Water Seepage</option>
                   <option value="Elevator Jerk / Stuck Alert">🛗 Elevator Jerk / Maintenance</option>
                   <option value="Electrical MCB / Short Circuit">⚡ Electrical MCB / Power Backup</option>
                   <option value="Carpentry & Door Lock">🪚 Carpentry &amp; Door Lock</option>
-                  <option value="Common Area Cleaning & Waste">🧹 Common Area Cleaning &amp; Waste</option>
+                  <option value="Common Area Cleaning & Waste">🧹 Common Area Cleaning</option>
                 </select>
               </div>
 
@@ -1465,7 +1425,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                   rows={2}
                   value={helpdeskDescription}
                   onChange={e => setHelpdeskDescription(e.target.value)}
-                  placeholder="e.g. Master bathroom tap leaking continuously since morning..."
+                  placeholder="e.g. Master bathroom tap leaking continuously..."
                   className="w-full bg-white border border-[#E2E8F0] rounded-xl p-3 text-xs text-[#0F172A]"
                 />
               </div>
@@ -1488,29 +1448,29 @@ export default function CompleteEcosystemStaySetuPortal() {
 
       {/* 3. Notice Board & Vendor Directory Modal */}
       {noticeModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl w-full max-w-2xl p-6 sm:p-8 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto border border-[#E2E8F0]">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3.5 sm:p-4">
+          <div className="bg-white rounded-3xl w-full max-w-2xl p-5 sm:p-8 space-y-4 sm:space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto border border-[#E2E8F0]">
             <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB]">
                   OFFICIAL COMMUNITY BOARD
                 </span>
-                <h3 className="font-serif font-bold text-[#0F172A] text-lg">
-                  Society Notices &amp; Verified Vendor Directory
+                <h3 className="font-serif font-bold text-[#0F172A] text-base sm:text-lg">
+                  Society Notices &amp; Vendor Directory
                 </h3>
               </div>
-              <button onClick={() => setNoticeModalOpen(false)} className="p-2 text-[#64748B] hover:text-[#0F172A] cursor-pointer">
+              <button onClick={() => setNoticeModalOpen(false)} className="p-1.5 text-[#64748B] hover:text-[#0F172A] cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Official Notices */}
-            <div className="space-y-3">
+            <div className="space-y-2.5 sm:space-y-3">
               <span className="text-xs font-bold text-[#0F172A] block">📢 Active Society Circulars:</span>
               
-              <div className="p-3.5 bg-amber-50 rounded-2xl border border-amber-200 text-xs space-y-1">
+              <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200 text-xs space-y-1">
                 <div className="flex justify-between font-bold text-amber-950">
-                  <span>⚠️ DG Backup Testing in Towers A-G on Wednesday (11:00 AM - 11:30 AM)</span>
+                  <span>⚠️ DG Backup Testing on Wednesday (11:00 AM - 11:30 AM)</span>
                   <span className="text-[10px] text-amber-700">Urgent</span>
                 </div>
                 <p className="text-[11px] text-amber-900">
@@ -1518,7 +1478,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                 </p>
               </div>
 
-              <div className="p-3.5 bg-[#F8FAFC] rounded-2xl border border-[#E2E8F0] text-xs space-y-1">
+              <div className="p-3 bg-[#F8FAFC] rounded-2xl border border-[#E2E8F0] text-xs space-y-1">
                 <div className="flex justify-between font-bold text-[#0F172A]">
                   <span>🏊 Swimming Pool Deep Cleaning on Friday</span>
                   <span className="text-[10px] text-[#64748B]">General</span>
@@ -1530,14 +1490,14 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
 
             {/* Verified Vendor Directory */}
-            <div className="space-y-3 pt-2 border-t border-[#E2E8F0]">
+            <div className="space-y-2.5 sm:space-y-3 pt-2 border-t border-[#E2E8F0]">
               <span className="text-xs font-bold text-[#0F172A] block">📞 Verified Society Vendors:</span>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
                 <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] flex items-center justify-between">
                   <div>
-                    <p className="font-bold text-[#0F172A]">Daily Fresh Milk (Main Gate)</p>
-                    <p className="text-[10px] text-emerald-700">Amul &amp; Mother Dairy Partner</p>
+                    <p className="font-bold text-[#0F172A]">Daily Fresh Milk (Gate 1)</p>
+                    <p className="text-[10px] text-emerald-700">Amul &amp; Mother Dairy</p>
                   </div>
                   <a href="tel:+919871100222" className="bg-[#0F172A] hover:bg-[#1E293B] text-white p-2 rounded-lg text-xs flex items-center gap-1 font-bold">
                     <Phone className="w-3.5 h-3.5 text-[#38BDF8]" />
@@ -1548,7 +1508,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                 <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] flex items-center justify-between">
                   <div>
                     <p className="font-bold text-[#0F172A]">Basement Car Wash (B1/B2)</p>
-                    <p className="text-[10px] text-emerald-700">Daily Morning Wash Service</p>
+                    <p className="text-[10px] text-emerald-700">Daily Morning Wash</p>
                   </div>
                   <a href="tel:+919871100333" className="bg-[#0F172A] hover:bg-[#1E293B] text-white p-2 rounded-lg text-xs flex items-center gap-1 font-bold">
                     <Phone className="w-3.5 h-3.5 text-[#38BDF8]" />
@@ -1564,11 +1524,11 @@ export default function CompleteEcosystemStaySetuPortal() {
 
       {/* 4. Backup Maid Request Modal */}
       {maidModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#F8FAFC] rounded-3xl border-2 border-[#0F172A] w-full max-w-md p-6 space-y-4 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3.5 sm:p-4">
+          <div className="bg-[#F8FAFC] rounded-3xl border-2 border-[#0F172A] w-full max-w-md p-5 sm:p-6 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3">
               <h3 className="font-serif font-bold text-[#0F172A] text-base">Request Backup Maid / Cook</h3>
-              <button onClick={() => setMaidModalOpen(false)} className="p-2 text-[#64748B] hover:text-[#0F172A] cursor-pointer">
+              <button onClick={() => setMaidModalOpen(false)} className="p-1.5 text-[#64748B] hover:text-[#0F172A] cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -1594,82 +1554,72 @@ export default function CompleteEcosystemStaySetuPortal() {
 
       {/* 5. RWA GST Balance Sheet & Audited Ledger Modal */}
       {ledgerModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl w-full max-w-2xl p-6 sm:p-8 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto border border-[#E2E8F0]">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3.5 sm:p-4">
+          <div className="bg-white rounded-3xl w-full max-w-2xl p-5 sm:p-8 space-y-4 sm:space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto border border-[#E2E8F0]">
             <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB]">
                   OFFICIAL AUDITED STATEMENT
                 </span>
-                <h3 className="font-serif font-bold text-[#0F172A] text-lg">
-                  RWA Maintenance Fund &amp; GST Balance Sheet (Aug 2026)
+                <h3 className="font-serif font-bold text-[#0F172A] text-base sm:text-lg">
+                  RWA Maintenance &amp; GST Balance Sheet
                 </h3>
               </div>
-              <button onClick={() => setLedgerModalOpen(false)} className="p-2 text-[#64748B] hover:text-[#0F172A] cursor-pointer">
+              <button onClick={() => setLedgerModalOpen(false)} className="p-1.5 text-[#64748B] hover:text-[#0F172A] cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-4 text-xs">
-              <div className="grid grid-cols-3 gap-3">
-                <div className="p-3 bg-emerald-50 rounded-2xl border border-emerald-200">
-                  <span className="text-[10px] text-emerald-800 font-bold block">TOTAL COLLECTION</span>
-                  <span className="font-serif text-base font-bold text-emerald-900">₹38,42,000</span>
+            <div className="space-y-3.5 text-xs">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                <div className="p-2.5 sm:p-3 bg-emerald-50 rounded-2xl border border-emerald-200">
+                  <span className="text-[9px] sm:text-[10px] text-emerald-800 font-bold block">COLLECTION</span>
+                  <span className="font-serif text-xs sm:text-base font-bold text-emerald-900">₹38,42,000</span>
                 </div>
-                <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200">
-                  <span className="text-[10px] text-amber-800 font-bold block">TOTAL EXPENSES</span>
-                  <span className="font-serif text-base font-bold text-amber-900">₹24,18,000</span>
+                <div className="p-2.5 sm:p-3 bg-amber-50 rounded-2xl border border-amber-200">
+                  <span className="text-[9px] sm:text-[10px] text-amber-800 font-bold block">EXPENSES</span>
+                  <span className="font-serif text-xs sm:text-base font-bold text-amber-900">₹24,18,000</span>
                 </div>
-                <div className="p-3 bg-blue-50 rounded-2xl border border-blue-200">
-                  <span className="text-[10px] text-blue-800 font-bold block">SINKING FUND (HDFC FD)</span>
-                  <span className="font-serif text-base font-bold text-blue-900">₹1,15,40,000</span>
+                <div className="p-2.5 sm:p-3 bg-blue-50 rounded-2xl border border-blue-200">
+                  <span className="text-[9px] sm:text-[10px] text-blue-800 font-bold block">SINKING FUND</span>
+                  <span className="font-serif text-xs sm:text-base font-bold text-blue-900">₹1.15 Cr</span>
                 </div>
               </div>
 
-              <div className="border border-[#E2E8F0] rounded-2xl overflow-hidden">
-                <table className="w-full text-left text-xs">
+              <div className="border border-[#E2E8F0] rounded-2xl overflow-x-auto">
+                <table className="w-full text-left text-xs min-w-[320px]">
                   <thead className="bg-[#F8FAFC] font-bold text-[#0F172A] border-b border-[#E2E8F0]">
                     <tr>
-                      <th className="p-3">Expense Head</th>
-                      <th className="p-3">Vendor / Recipient</th>
-                      <th className="p-3">GST Input (18%)</th>
-                      <th className="p-3 text-right">Amount</th>
+                      <th className="p-2.5 sm:p-3">Expense Head</th>
+                      <th className="p-2.5 sm:p-3">Vendor</th>
+                      <th className="p-2.5 sm:p-3 text-right">Amount</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E2E8F0] text-[#475569]">
                     <tr>
-                      <td className="p-3 font-semibold text-[#0F172A]">Lift AMC (14 Elevators)</td>
-                      <td className="p-3">Otis Elevators Pvt Ltd</td>
-                      <td className="p-3 text-emerald-700">₹25,200</td>
-                      <td className="p-3 text-right font-bold">₹1,40,000</td>
+                      <td className="p-2.5 sm:p-3 font-semibold text-[#0F172A]">Lift AMC (14 Lifts)</td>
+                      <td className="p-2.5 sm:p-3">Otis Elevators</td>
+                      <td className="p-2.5 sm:p-3 text-right font-bold">₹1,40,000</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-semibold text-[#0F172A]">Security Agency (18 Guards - Gates 1 &amp; 2)</td>
-                      <td className="p-3">SIS Security Services</td>
-                      <td className="p-3 text-emerald-700">₹48,600</td>
-                      <td className="p-3 text-right font-bold">₹2,70,000</td>
+                      <td className="p-2.5 sm:p-3 font-semibold text-[#0F172A]">Security (18 Staff)</td>
+                      <td className="p-2.5 sm:p-3">SIS Security</td>
+                      <td className="p-2.5 sm:p-3 text-right font-bold">₹2,70,000</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-semibold text-[#0F172A]">DG Generator Power Fuel</td>
-                      <td className="p-3">Indian Oil Corporation</td>
-                      <td className="p-3 text-emerald-700">₹33,300</td>
-                      <td className="p-3 text-right font-bold">₹1,85,000</td>
-                    </tr>
-                    <tr>
-                      <td className="p-3 font-semibold text-[#0F172A]">Central Park &amp; Horticulture</td>
-                      <td className="p-3">Green Flora Care</td>
-                      <td className="p-3 text-emerald-700">₹13,500</td>
-                      <td className="p-3 text-right font-bold">₹75,000</td>
+                      <td className="p-2.5 sm:p-3 font-semibold text-[#0F172A]">DG Power Backup</td>
+                      <td className="p-2.5 sm:p-3">Indian Oil</td>
+                      <td className="p-2.5 sm:p-3 text-right font-bold">₹1,85,000</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
 
-              <div className="flex gap-2 pt-2">
+              <div className="pt-2">
                 <button
                   type="button"
                   onClick={() => alert('📥 Downloading Verified GST Audited Balance Sheet (PDF)...')}
-                  className="flex-1 bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Download className="w-4 h-4 text-[#38BDF8]" />
                   <span>Download Verified Audit PDF</span>
@@ -1682,11 +1632,11 @@ export default function CompleteEcosystemStaySetuPortal() {
 
       {/* 6. Move-In Shifting Pass Modal */}
       {movingPassModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#F8FAFC] rounded-3xl border-2 border-[#0F172A] w-full max-w-md p-6 space-y-4 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3.5 sm:p-4">
+          <div className="bg-[#F8FAFC] rounded-3xl border-2 border-[#0F172A] w-full max-w-md p-5 sm:p-6 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3">
               <h3 className="font-serif font-bold text-[#0F172A] text-base">Book Shifting &amp; Service Lift</h3>
-              <button onClick={() => setMovingPassModalOpen(false)} className="p-2 text-[#64748B] hover:text-[#0F172A] cursor-pointer">
+              <button onClick={() => setMovingPassModalOpen(false)} className="p-1.5 text-[#64748B] hover:text-[#0F172A] cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -1695,13 +1645,10 @@ export default function CompleteEcosystemStaySetuPortal() {
               <div>
                 <label className="font-bold text-[#64748B] text-[10px] uppercase block mb-1">Select Tower</label>
                 <select className="w-full bg-white border border-[#E2E8F0] rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A]">
-                  <option>Tower A (High-Rise)</option>
-                  <option>Tower B (High-Rise)</option>
-                  <option selected>Tower C (High-Rise)</option>
-                  <option>Tower D (High-Rise)</option>
-                  <option>Tower E (High-Rise)</option>
-                  <option>Tower F (High-Rise)</option>
-                  <option>Tower G (High-Rise)</option>
+                  <option>Tower A</option>
+                  <option>Tower B</option>
+                  <option selected>Tower C</option>
+                  <option>Tower D</option>
                 </select>
               </div>
 
@@ -1729,7 +1676,7 @@ export default function CompleteEcosystemStaySetuPortal() {
               </div>
 
               <div>
-                <label className="font-bold text-[#64748B] text-[10px] uppercase block mb-1">Packers &amp; Movers Truck Number</label>
+                <label className="font-bold text-[#64748B] text-[10px] uppercase block mb-1">Truck Number</label>
                 <input
                   type="text"
                   defaultValue="UP14 DK 8811"
@@ -1765,14 +1712,14 @@ export default function CompleteEcosystemStaySetuPortal() {
 
       {/* 8. Society Flat Directory & Intercom Calling Modal */}
       {flatDirectoryModalOpen && selectedFlatDetail && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#F8FAFC] rounded-3xl border-2 border-[#0F172A] w-full max-w-md p-6 space-y-5 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3.5 sm:p-4">
+          <div className="bg-[#F8FAFC] rounded-3xl border-2 border-[#0F172A] w-full max-w-md p-5 sm:p-6 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB]">
                   SOCIETY RESIDENT DIRECTORY
                 </span>
-                <h3 className="font-serif font-bold text-[#0F172A] text-lg">
+                <h3 className="font-serif font-bold text-[#0F172A] text-base sm:text-lg">
                   {selectedFlatDetail.tower} - Flat {selectedFlatDetail.flatNo}
                 </h3>
               </div>
@@ -1782,14 +1729,14 @@ export default function CompleteEcosystemStaySetuPortal() {
                   setIsIntercomCalling(false);
                   setIntercomConnected(false);
                 }}
-                className="p-2 text-[#64748B] hover:text-[#0F172A] cursor-pointer"
+                className="p-1.5 text-[#64748B] hover:text-[#0F172A] cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Flat & Owner Info Card */}
-            <div className="bg-white rounded-2xl p-4 border border-[#E2E8F0] space-y-2 text-xs">
+            <div className="bg-white rounded-2xl p-3.5 sm:p-4 border border-[#E2E8F0] space-y-2 text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-[#64748B]">Primary Resident:</span>
                 <span className="font-bold text-[#0F172A]">{selectedFlatDetail.residentName}</span>
@@ -1804,7 +1751,7 @@ export default function CompleteEcosystemStaySetuPortal() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-[#64748B]">Assigned Parking:</span>
-                <span className="font-semibold text-[#0F172A]">{selectedFlatDetail.parkingSlot}</span>
+                <span className="font-semibold text-[#0F172A] text-[11px]">{selectedFlatDetail.parkingSlot}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-[#64748B]">Registered Vehicle:</span>
@@ -1816,7 +1763,7 @@ export default function CompleteEcosystemStaySetuPortal() {
             {isIntercomCalling ? (
               <div className="p-4 bg-[#0F172A] text-white rounded-2xl text-center space-y-3 shadow-md animate-in fade-in">
                 <div className="flex items-center justify-center gap-2">
-                  <span className={`w-3 h-3 rounded-full ${intercomConnected ? 'bg-emerald-400' : 'bg-amber-400 animate-ping'}`} />
+                  <span className={`w-2.5 h-2.5 rounded-full ${intercomConnected ? 'bg-emerald-400' : 'bg-amber-400 animate-ping'}`} />
                   <span className="text-xs font-bold font-mono">
                     {intercomConnected ? '🟢 Call Connected (HD Voice)' : '📞 Ringing Flat Intercom # ' + selectedFlatDetail.intercom + '...'}
                   </span>
