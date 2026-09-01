@@ -2,13 +2,13 @@ import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'StaySetu — Smart Gated Societies & Rent Dream Homes',
+    name: 'StaySetu — Smart Gated Community Super-App',
     short_name: 'StaySetu',
-    description: 'India\'s #1 Super-App for Smart Gated Society Management, Voice Gate Passes, Live Maid Attendance Radar, and Verified Rental Homes.',
+    description: 'The intelligent operating system for smart gated societies, wrong parking resolution, live helper radar, and RWA management.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#FFFFFF',
-    theme_color: '#1E1B4B',
+    background_color: '#F8FAFC',
+    theme_color: '#0F172A',
     icons: [
       {
         src: '/favicon.ico',

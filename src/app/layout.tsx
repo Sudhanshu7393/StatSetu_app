@@ -18,29 +18,30 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#1E1B4B",
+  themeColor: "#0F172A",
 };
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://staysetu.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://stat-setu-app.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "StaySetu — India's #1 Smart Gated Society Super-App",
+    default: "StaySetu — Smart Gated Community & Society Super-App",
     template: "%s | StaySetu",
   },
   description:
-    "India's #1 Super-App for Smart Gated Society Management, Hands-Free Voice Gate Passes, Live Domestic Staff Biometric Radar, ANPR FastTag Gate Entry, EV Charging Hub, Prepaid Smart Meter Recharges, and RWA GST Ledgers.",
+    "The intelligent operating system for smart gated communities and residential townships. Hands-free voice gate passes, live domestic helper biometric radar, ANPR FastTag gate entry, 2-hour SLA helpdesk, and auditable RWA GST ledgers.",
   keywords: [
     "StaySetu",
     "smart society app",
-    "gated community management India",
+    "gated community management",
+    "wrong parking resolver",
     "voice gate pass",
     "maid attendance radar",
     "society maintenance payment",
-    "prepaid smart meter recharge",
+    "clubhouse amenity booking",
+    "2-hour SLA helpdesk",
     "ANPR fasttag gate entry",
-    "EV charging slot reservation society",
     "RWA GST ledger audit",
   ],
   authors: [
@@ -58,30 +59,28 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "StaySetu — India's #1 Smart Gated Society Super-App",
+    title: "StaySetu — Smart Gated Community & Society Super-App",
     description:
-      "Voice Gate Passes, Live Maid Attendance Radar, ANPR FastTag Entry, EV Charging Hub, and RWA Financial Ledgers.",
+      "Voice Gate Passes, Live Maid Attendance Radar, Wrong Parking Resolver, 2-Hour SLA Helpdesk, and Auditable RWA Financial Ledgers.",
     url: siteUrl,
     siteName: "StaySetu",
     locale: "en_IN",
     type: "website",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&h=630&q=80",
+        url: "/images/society-hero.jpg",
         width: 1200,
         height: 630,
-        alt: "StaySetu — Smart Gated Societies & Rent Dream Homes",
+        alt: "StaySetu — Smart Gated Society Operating System",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "StaySetu — Smart Gated Societies & Rent Dream Homes",
+    title: "StaySetu — Smart Gated Community & Society Super-App",
     description:
-      "India's #1 Super-App for Smart Gated Communities & Verified Rental Housing.",
-    images: [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&h=630&q=80",
-    ],
+      "Voice Gate Passes, Live Maid Attendance Radar, Wrong Parking Resolver, 2-Hour SLA Helpdesk, and Auditable RWA Financial Ledgers.",
+    images: ["/images/society-hero.jpg"],
   },
   robots: {
     index: true,
@@ -123,6 +122,21 @@ export default function RootLayout({
     sameAs: [],
   };
 
+  const softwareAppSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "StaySetu",
+    operatingSystem: "Web, iOS, Android",
+    applicationCategory: "BusinessApplication",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "INR",
+    },
+    description:
+      "Operating system for smart gated communities, residential townships, wrong parking resolution, helper radar, and RWA governance.",
+  };
+
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -141,6 +155,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }}
         />
         <script
           type="application/ld+json"
