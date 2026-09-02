@@ -165,7 +165,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
       </head>
-      <body className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans antialiased">
+      <body className="flex flex-col min-h-screen bg-[#EEF2F6] text-slate-900 font-sans antialiased">
         <SavedStaysProvider>
           <CompareProvider>
             <Navbar />

@@ -260,7 +260,7 @@ export default function CompleteEcosystemStaySetuPortal() {
   const yesPercentage = Math.round((forumPoll.yesVotes / (totalVotes || 1)) * 100);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] font-sans antialiased selection:bg-[#1E293B] selection:text-white relative bg-[radial-gradient(#CBD5E1_1px,transparent_1px)] [background-size:28px_28px] pb-28 lg:pb-12">
+    <div className="min-h-screen bg-[#EEF2F6] text-[#0F172A] font-sans antialiased selection:bg-[#0F172A] selection:text-white relative bg-[radial-gradient(#94A3B8_1.2px,transparent_1.2px)] [background-size:28px_28px] pb-28 lg:pb-12">
 
       {/* ── EMERGENCY SOS ALERT BANNER ── */}
       {sosActiveAlert && (
@@ -282,14 +282,14 @@ export default function CompleteEcosystemStaySetuPortal() {
 
       {/* ── DUAL TERMINAL MODE SWITCHER BANNER (RESPONSIVE) ── */}
       <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-3 sm:pt-4">
-        <div className="bg-white/95 backdrop-blur-md rounded-2xl p-2 sm:p-2.5 shadow-[0_4px_25px_rgba(15,23,42,0.06)] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 border border-[#E2E8F0]">
+        <div className="bg-white rounded-2xl p-2 sm:p-2.5 shadow-[0_8px_30px_rgba(15,23,42,0.08)] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 border-2 border-[#CBD5E1]">
           
           <div className="flex items-center justify-between sm:justify-start gap-2 pl-1">
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
               <span className="text-[11px] sm:text-xs font-bold text-[#0F172A]">StaySetu 360° Living</span>
             </div>
-            <span className="text-[9px] sm:text-[10px] bg-[#E2E8F0] text-[#475569] font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
+            <span className="text-[9px] sm:text-[10px] bg-[#E2E8F0] text-[#0F172A] font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
               <MapPin className="w-3 h-3 text-[#2563EB]" /> Live Cloud Sync
             </span>
           </div>
@@ -474,7 +474,7 @@ export default function CompleteEcosystemStaySetuPortal() {
       <section className="px-3.5 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-6">
         <div className="max-w-7xl mx-auto">
           
-          <div className="relative rounded-3xl sm:rounded-[36px] p-5 sm:p-10 lg:p-16 shadow-[0_16px_50px_rgba(15,23,42,0.08)] flex flex-col justify-between border border-[#E2E8F0] min-h-[460px] sm:min-h-[560px]">
+          <div className="relative rounded-3xl sm:rounded-[36px] p-5 sm:p-10 lg:p-16 shadow-[0_20px_50px_rgba(15,23,42,0.12)] flex flex-col justify-between border-2 border-[#CBD5E1] min-h-[460px] sm:min-h-[560px]">
             {/* Background Image Layer */}
             <div
               className="absolute inset-0 rounded-3xl sm:rounded-[36px] overflow-hidden pointer-events-none z-0"
@@ -487,7 +487,7 @@ export default function CompleteEcosystemStaySetuPortal() {
             />
 
             <div className="max-w-2xl space-y-4 sm:space-y-6 relative z-30">
-              <div className="inline-flex items-center gap-1.5 bg-white/80 backdrop-blur-md px-3 py-1 rounded-full border border-[#E2E8F0] shadow-xs">
+              <div className="inline-flex items-center gap-1.5 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full border border-[#CBD5E1] shadow-xs">
                 <Sparkle className="w-3 h-3 text-[#2563EB]" />
                 <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#0F172A]">
                   SMART GATED SOCIETY OPERATING SYSTEM
@@ -500,13 +500,13 @@ export default function CompleteEcosystemStaySetuPortal() {
                 Super-App
               </h1>
 
-              <p className="text-xs sm:text-base text-[#475569] font-normal leading-relaxed max-w-xl">
+              <p className="text-xs sm:text-base text-[#334155] font-normal leading-relaxed max-w-xl">
                 Wrong Parking, Domestic Staff, Amenities &amp; RWA Accounts — Solved with persistent state engine, Voice Gate Passes, and 1-Click Auditable GST Ledgers.
               </p>
 
               {/* Direct Quick Search Bar with Instant Results Overlay */}
               <div className="relative max-w-lg z-50">
-                <div className="bg-white/95 backdrop-blur-md p-1.5 sm:p-2 rounded-2xl shadow-[0_4px_25px_rgba(15,23,42,0.08)] flex items-center gap-2 border border-[#E2E8F0]">
+                <div className="bg-white p-1.5 sm:p-2 rounded-2xl shadow-[0_4px_25px_rgba(15,23,42,0.12)] flex items-center gap-2 border-2 border-[#CBD5E1]">
                   <Search className="w-4 h-4 sm:w-5 sm:h-5 text-[#64748B] ml-2 shrink-0" />
                   <input
                     type="text"
@@ -550,7 +550,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                         { title: 'Tower C - Flat 402', sub: 'Resident: Ankit Sharma • Intercom #1402 • 3 BHK', type: 'FLAT', tag: 'Flat', action: 'INTERCOM' },
                         { title: 'Tower A - Flat 102', sub: 'Resident: Sudhanshu Pandey • Intercom #1102 • 3 BHK', type: 'FLAT', tag: 'Flat', action: 'INTERCOM' },
                         { title: 'Tower B - Flat 204', sub: 'Resident: Neha Kapoor • Intercom #1204 • 2 BHK', type: 'FLAT', tag: 'Flat', action: 'INTERCOM' },
-                        { title: 'Tower D - Flat 801', sub: 'Resident: Rajesh Verma • Intercom #1801 • 4 BHK', type: 'FLAT', tag: 'Flat', action: 'INTERCOM' },
+                        { title: 'Tower D - Flat 801', sub: 'Resident: Rajesh Verma • Intercom #1801 • 4 BHK Penthouse', type: 'FLAT', tag: 'Flat', action: 'INTERCOM' },
                         { title: 'Sunita Devi (Cook & Maid)', sub: '🟢 Live: Inside Tower A • Rating: 4.9 ★ • ₹200/Day', type: 'HELPER', tag: 'Helper', action: 'BOOK_MAID' },
                         { title: 'Ramesh Kumar (Deep Cleaning)', sub: '🟢 Live: Inside Tower D • Rating: 4.8 ★ • ₹250/Day', type: 'HELPER', tag: 'Helper', action: 'BOOK_MAID' },
                         { title: 'UP14 EX 9988 (Honda City)', sub: 'Assigned: Basement B1 - Slot #42 (Tower C)', type: 'VEHICLE', tag: 'Parking', action: 'RESOLVE_PARKING' },
@@ -632,7 +632,7 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
 
             {/* Real-time Status Floating Bar (Mobile Grid) */}
-            <div className="mt-8 bg-[#0F172A]/95 backdrop-blur-md rounded-2xl p-3 sm:p-5 text-white grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 shadow-2xl border border-[#1E293B] relative z-10">
+            <div className="mt-8 bg-[#0F172A] rounded-2xl p-3 sm:p-5 text-white grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 shadow-2xl border border-[#334155] relative z-10">
               
               <div className="flex items-center gap-2.5 sm:gap-3">
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#1E293B] flex items-center justify-center text-[#38BDF8] shrink-0 border border-[#334155]">
@@ -685,10 +685,10 @@ export default function CompleteEcosystemStaySetuPortal() {
       <section id="wrong-parking-spotlight" className="px-3.5 sm:px-6 lg:px-8 py-6">
         <div className="max-w-7xl mx-auto">
           
-          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-10 shadow-[0_10px_35px_rgba(15,23,42,0.05)] space-y-5 border border-[#E2E8F0]">
+          <div className="bg-white rounded-3xl p-5 sm:p-10 shadow-[0_16px_45px_rgba(15,23,42,0.08)] space-y-5 border-2 border-[#CBD5E1]">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#F1F5F9] text-[#0F172A] px-2.5 py-1 rounded-full border border-[#E2E8F0]">
+                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#F1F5F9] text-[#0F172A] px-2.5 py-1 rounded-full border border-[#CBD5E1]">
                   🚗 FEATURE SPOTLIGHT • OPTION 2
                 </span>
                 <h2 className="text-xl sm:text-3xl font-serif font-bold text-[#0F172A] mt-1.5">
@@ -713,7 +713,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                     value={parkingCarNo}
                     onChange={e => setParkingCarNo(e.target.value)}
                     placeholder="e.g. UP14 EX 9988, DL8C AB 1234"
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
+                    className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
                   />
                 </div>
 
@@ -726,7 +726,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                     value={parkingSlot}
                     onChange={e => setParkingSlot(e.target.value)}
                     placeholder="e.g. Basement B1 - Slot #42 (Tower C)"
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
+                    className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
                   />
                 </div>
 
@@ -741,7 +741,7 @@ export default function CompleteEcosystemStaySetuPortal() {
               </div>
 
               {/* Right Live Simulation Output */}
-              <div className="lg:col-span-6 bg-[#F8FAFC] p-4 sm:p-6 rounded-2xl space-y-3 border border-[#E2E8F0]">
+              <div className="lg:col-span-6 bg-[#F8FAFC] p-4 sm:p-6 rounded-2xl space-y-3 border-2 border-[#CBD5E1]">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#64748B] block">
                   LIVE SYSTEM RESPONSE SIMULATOR
                 </span>
@@ -758,7 +758,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                       </p>
                     </div>
 
-                    <div className="p-3 bg-white rounded-xl text-xs space-y-1.5 shadow-xs border border-[#E2E8F0]">
+                    <div className="p-3 bg-white rounded-xl text-xs space-y-1.5 shadow-xs border border-[#CBD5E1]">
                       <div className="flex justify-between items-center font-bold text-[#0F172A]">
                         <span>Move-Car Countdown:</span>
                         <span className="text-[#2563EB] font-mono text-xs font-black bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200">
@@ -817,7 +817,7 @@ export default function CompleteEcosystemStaySetuPortal() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             
             {/* Standard 1: Amenity & Clubhouse Booking */}
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
+            <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
@@ -875,7 +875,7 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
 
             {/* Standard 2: 1-Click Helpdesk & SLA Tracker */}
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
+            <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
@@ -928,7 +928,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                     ))}
                   </div>
                 ) : (
-                  <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#E2E8F0]">
+                  <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#CBD5E1]">
                     <div className="flex justify-between font-semibold">
                       <span>Plumber On-Duty:</span>
                       <span className="text-emerald-700 font-bold">🟢 Active (Tower C &amp; D)</span>
@@ -972,7 +972,7 @@ export default function CompleteEcosystemStaySetuPortal() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             
             {/* OPTION 1: Verified Society Helper & Backup Maid */}
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] hover:shadow-md transition-all space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
+            <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] hover:shadow-xl transition-all space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
               <div className="space-y-3">
                 <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
                   <Users className="w-5 h-5 text-[#2563EB]" />
@@ -985,7 +985,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                   </p>
                 </div>
 
-                <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#E2E8F0]">
+                <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#CBD5E1]">
                   <div className="flex justify-between font-semibold">
                     <span>Sunita Devi (Cook):</span>
                     <span className="text-emerald-700 font-bold">{bookedMaid === 'Sunita Devi' ? 'Assigned ✓' : '🟢 Inside Tower A'}</span>
@@ -1008,7 +1008,7 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
 
             {/* OPTION 6: RWA Financial Transparency & GST Balance Sheet */}
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] hover:shadow-md transition-all space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
+            <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] hover:shadow-xl transition-all space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
               <div className="space-y-3">
                 <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
                   <CreditCard className="w-5 h-5 text-[#2563EB]" />
@@ -1021,7 +1021,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                   </p>
                 </div>
 
-                <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1.5 border border-[#E2E8F0]">
+                <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1.5 border border-[#CBD5E1]">
                   <div className="flex justify-between">
                     <span className="text-[#64748B]">August Maintenance (A-102):</span>
                     <span className="font-bold text-[#0F172A]">₹3,540</span>
@@ -1046,7 +1046,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                 <button
                   type="button"
                   onClick={() => setLedgerModalOpen(true)}
-                  className="px-3.5 bg-[#F1F5F9] text-[#0F172A] rounded-xl text-xs font-bold hover:bg-[#E2E8F0] cursor-pointer flex items-center gap-1"
+                  className="px-3.5 bg-[#F1F5F9] text-[#0F172A] rounded-xl text-xs font-bold hover:bg-[#E2E8F0] cursor-pointer flex items-center gap-1 border border-[#CBD5E1]"
                 >
                   <FileSpreadsheet className="w-4 h-4 text-[#2563EB]" />
                   <span className="text-[11px]">Ledger</span>
@@ -1055,7 +1055,7 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
 
             {/* OPTION 7: Digital Move-In / Out & Service Lift Booking */}
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] hover:shadow-md transition-all space-y-4 flex flex-col justify-between border border-[#E2E8F0]">
+            <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] hover:shadow-xl transition-all space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
               <div className="space-y-3">
                 <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
                   <Truck className="w-5 h-5 text-[#2563EB]" />
@@ -1068,7 +1068,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                   </p>
                 </div>
 
-                <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#E2E8F0]">
+                <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#CBD5E1]">
                   <div className="flex justify-between font-semibold">
                     <span>Shifting Slot:</span>
                     <span className="font-bold text-[#0F172A]">{movingSlot}</span>
@@ -1100,7 +1100,7 @@ export default function CompleteEcosystemStaySetuPortal() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
           
           {/* Left Column: Voice Pass & FastTag Gate Test */}
-          <div className="lg:col-span-6 bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-8 shadow-[0_8px_30px_rgba(15,23,42,0.05)] space-y-4 sm:space-y-5 border border-[#E2E8F0]">
+          <div className="lg:col-span-6 bg-white rounded-3xl p-5 sm:p-8 shadow-[0_14px_38px_rgba(15,23,42,0.07)] space-y-4 sm:space-y-5 border-2 border-[#CBD5E1]">
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB]">
@@ -1113,7 +1113,7 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2 border border-[#E2E8F0]">
+              <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2 border border-[#CBD5E1]">
                 <span className="text-[10px] font-bold text-[#2563EB]">🎙️ VOICE PASS</span>
                 <p className="text-[10px] sm:text-[11px] text-[#64748B]">Hands-free resident approval</p>
                 <button
@@ -1125,7 +1125,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                 </button>
               </div>
 
-              <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2 border border-[#E2E8F0]">
+              <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2 border border-[#CBD5E1]">
                 <span className="text-[10px] font-bold text-[#2563EB]">🚗 FASTTAG BOOM</span>
                 <p className="text-[10px] sm:text-[11px] text-[#64748B]">0.5s auto license clearance</p>
                 <button
@@ -1139,7 +1139,7 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
 
             {/* Smart Meter Topup */}
-            <div className="p-3.5 bg-[#F8FAFC] rounded-2xl flex items-center justify-between text-xs border border-[#E2E8F0]">
+            <div className="p-3.5 bg-[#F8FAFC] rounded-2xl flex items-center justify-between text-xs border border-[#CBD5E1]">
               <div>
                 <span className="text-[#64748B] font-semibold text-[10px]">SMART METER (MTR-882190)</span>
                 <p className="font-bold text-[#0F172A] text-sm">Balance: ₹{meterBalance}</p>
@@ -1159,7 +1159,7 @@ export default function CompleteEcosystemStaySetuPortal() {
           </div>
 
           {/* Right Column: Resident AGM Poll & Notice Board */}
-          <div id="community" className="lg:col-span-6 bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-8 shadow-[0_8px_30px_rgba(15,23,42,0.05)] space-y-4 sm:space-y-5 border border-[#E2E8F0]">
+          <div id="community" className="lg:col-span-6 bg-white rounded-3xl p-5 sm:p-8 shadow-[0_14px_38px_rgba(15,23,42,0.07)] space-y-4 sm:space-y-5 border-2 border-[#CBD5E1]">
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB]">
@@ -1173,7 +1173,7 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
 
             {/* AGM Poll */}
-            <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2.5 border border-[#E2E8F0]">
+            <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2.5 border border-[#CBD5E1]">
               <h4 className="font-serif text-xs sm:text-sm font-bold text-[#0F172A]">
                 {forumPoll.title}
               </h4>
@@ -1195,7 +1195,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                   onClick={() => handleVote('YES')}
                   disabled={forumPoll.userVoted !== null}
                   className={`flex-1 py-2 rounded-xl text-xs font-bold cursor-pointer ${
-                    forumPoll.userVoted === 'YES' ? 'bg-emerald-700 text-white' : 'bg-white text-[#0F172A] shadow-xs border border-[#E2E8F0]'
+                    forumPoll.userVoted === 'YES' ? 'bg-emerald-700 text-white' : 'bg-white text-[#0F172A] shadow-xs border border-[#CBD5E1]'
                   }`}
                 >
                   Vote YES
@@ -1205,7 +1205,7 @@ export default function CompleteEcosystemStaySetuPortal() {
                   onClick={() => handleVote('NO')}
                   disabled={forumPoll.userVoted !== null}
                   className={`flex-1 py-2 rounded-xl text-xs font-bold cursor-pointer ${
-                    forumPoll.userVoted === 'NO' ? 'bg-rose-700 text-white' : 'bg-white text-[#0F172A] shadow-xs border border-[#E2E8F0]'
+                    forumPoll.userVoted === 'NO' ? 'bg-rose-700 text-white' : 'bg-white text-[#0F172A] shadow-xs border border-[#CBD5E1]'
                   }`}
                 >
                   Vote NO
@@ -1214,7 +1214,7 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
 
             {/* Buy & Sell Link */}
-            <div className="p-3.5 bg-[#F8FAFC] rounded-2xl flex items-center justify-between text-xs border border-[#E2E8F0]">
+            <div className="p-3.5 bg-[#F8FAFC] rounded-2xl flex items-center justify-between text-xs border border-[#CBD5E1]">
               <div>
                 <span className="text-[#64748B] font-semibold text-[10px]">RESIDENT MARKETPLACE</span>
                 <p className="font-bold text-[#0F172A] text-xs sm:text-sm">Solid Wood Dining Table (₹9,500)</p>
@@ -1258,7 +1258,7 @@ export default function CompleteEcosystemStaySetuPortal() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           
           {/* Founder - Sudhanshu Pandey */}
-          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgba(15,23,42,0.05)] flex flex-col sm:flex-row items-center gap-5 group hover:shadow-md transition-all border border-[#E2E8F0]">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_14px_38px_rgba(15,23,42,0.07)] flex flex-col sm:flex-row items-center gap-5 group hover:shadow-xl transition-all border-2 border-[#CBD5E1]">
             <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-md shrink-0">
               <Image
                 src="/images/founders/sudhanshu-pandey.jpg"
@@ -1281,7 +1281,7 @@ export default function CompleteEcosystemStaySetuPortal() {
           </div>
 
           {/* Co-Founder - Ayushi Singh */}
-          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgba(15,23,42,0.05)] flex flex-col sm:flex-row items-center gap-5 group hover:shadow-md transition-all border border-[#E2E8F0]">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_14px_38px_rgba(15,23,42,0.07)] flex flex-col sm:flex-row items-center gap-5 group hover:shadow-xl transition-all border-2 border-[#CBD5E1]">
             <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-md shrink-0">
               <Image
                 src="/images/founders/ayushi-singh.jpg"
