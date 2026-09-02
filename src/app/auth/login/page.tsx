@@ -54,8 +54,8 @@ const DEFAULT_USERS = [
 export default function SocietyLoginPage() {
   const router = useRouter();
   const [role, setRole] = useState<SocietyRole>('resident');
-  const [identifier, setIdentifier] = useState('staysetu26@gmail.com');
-  const [password, setPassword] = useState('Staysetu@255');
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -150,7 +150,6 @@ export default function SocietyLoginPage() {
       setErrorMessage(null);
 
       const provider = new GoogleAuthProvider();
-      // Forces device Google Account Picker modal to appear
       provider.setCustomParameters({
         prompt: 'select_account',
       });
@@ -166,7 +165,7 @@ export default function SocietyLoginPage() {
       if (!user) {
         user = {
           email: googleUser.email || 'user@gmail.com',
-          phone: googleUser.phoneNumber || '7393011350',
+          phone: googleUser.phoneNumber || '',
           name: googleUser.displayName || 'Google Resident',
           role: role.toUpperCase(),
           flat: 'Tower A - Flat 102',
@@ -314,19 +313,16 @@ export default function SocietyLoginPage() {
                     setErrorMessage(null);
                   }}
                   required
-                  placeholder="e.g. staysetu26@gmail.com or 7393011350"
+                  placeholder="Enter registered email or mobile number"
                   className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl pl-10 pr-3.5 py-2.5 text-xs font-bold text-[#0F172A] focus:outline-none focus:border-[#0F172A]"
                 />
               </div>
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="font-bold text-[#64748B] text-[10px] uppercase">
-                  Password
-                </label>
-                <span className="text-[10px] text-[#2563EB] font-bold">Default: Staysetu@255</span>
-              </div>
+              <label className="font-bold text-[#64748B] text-[10px] uppercase block mb-1">
+                Password
+              </label>
               <div className="relative">
                 <Lock className="w-4 h-4 text-[#64748B] absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input

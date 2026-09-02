@@ -21,6 +21,15 @@ const DEFAULT_USERS = [
     society: 'Greenwood Grand Township, Gurugram',
   },
   {
+    email: 'sudhanshupandey7393@gmail.com',
+    phone: '7393011350',
+    password: 'Staysetu@255',
+    name: 'Sudhanshu Pandey',
+    role: 'RESIDENT',
+    flat: 'Tower A - Flat 102',
+    society: 'Greenwood Grand Township, Gurugram',
+  },
+  {
     email: 'ankit.sharma@staysetu.com',
     phone: '9871100222',
     password: 'Staysetu@255',
@@ -36,12 +45,12 @@ export default function SocietySignupPage() {
   const [role, setRole] = useState<SocietyRole>('resident');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('73930 11350');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [societyName, setSocietyName] = useState('Greenwood Grand Township, Gurugram');
-  const [towerWing, setTowerWing] = useState('Tower A');
-  const [flatNo, setFlatNo] = useState('Flat 102');
-  const [unitsCount, setUnitsCount] = useState('250 Flats');
+  const [towerWing, setTowerWing] = useState('');
+  const [flatNo, setFlatNo] = useState('');
+  const [unitsCount, setUnitsCount] = useState('150 - 500 Flats');
   const [success, setSuccess] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
@@ -87,7 +96,7 @@ export default function SocietySignupPage() {
       password: password,
       name: name.trim(),
       role: role.toUpperCase(),
-      flat: `${towerWing} - ${flatNo}`,
+      flat: towerWing && flatNo ? `${towerWing} - ${flatNo}` : 'Tower A - Flat 102',
       society: societyName,
     };
 
@@ -111,6 +120,10 @@ export default function SocietySignupPage() {
     try {
       setIsGoogleLoading(true);
       const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({
+        prompt: 'select_account',
+      });
+
       const result = await signInWithPopup(firebaseAuth, provider);
       const googleUser = result.user;
 
@@ -120,7 +133,7 @@ export default function SocietySignupPage() {
       if (!user) {
         user = {
           email: googleUser.email || 'user@gmail.com',
-          phone: '7393011350',
+          phone: '',
           name: googleUser.displayName || 'Google Resident',
           role: role.toUpperCase(),
           flat: 'Tower A - Flat 102',
@@ -179,7 +192,7 @@ export default function SocietySignupPage() {
                 type="button"
                 onClick={handleGoogleSignUp}
                 disabled={isGoogleLoading}
-                className="w-full bg-white hover:bg-[#F8FAFC] border-2 border-[#CBD5E1] text-[#0F172A] font-bold text-xs py-3 rounded-2xl shadow-xs flex items-center justify-center gap-2.5 transition-transform active:scale-95 cursor-pointer"
+                className="w-full bg-white hover:bg-[#F8FAFC] border-2 border-[#CBD5E1] text-[#0F172A] font-bold text-xs py-3.5 rounded-2xl shadow-xs flex items-center justify-center gap-2.5 transition-transform active:scale-95 cursor-pointer"
               >
                 {isGoogleLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin text-[#2563EB]" />
@@ -263,7 +276,7 @@ export default function SocietySignupPage() {
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       required
-                      placeholder="name@gmail.com"
+                      placeholder="name@example.com"
                       className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3.5 py-2 text-xs font-bold text-[#0F172A]"
                     />
                   </div>
@@ -276,7 +289,7 @@ export default function SocietySignupPage() {
                       value={phone}
                       onChange={e => setPhone(e.target.value)}
                       required
-                      placeholder="73930 11350"
+                      placeholder="e.g. 98765 43210"
                       className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3.5 py-2 text-xs font-bold text-[#0F172A]"
                     />
                   </div>
@@ -315,7 +328,7 @@ export default function SocietySignupPage() {
                         value={towerWing}
                         onChange={e => setTowerWing(e.target.value)}
                         required
-                        placeholder="Tower A"
+                        placeholder="e.g. Tower A"
                         className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A]"
                       />
                     </div>
@@ -326,7 +339,7 @@ export default function SocietySignupPage() {
                         value={flatNo}
                         onChange={e => setFlatNo(e.target.value)}
                         required
-                        placeholder="Flat 102"
+                        placeholder="e.g. Flat 102"
                         className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A]"
                       />
                     </div>
