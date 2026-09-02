@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import {
   Building2,
   ShieldCheck,
@@ -50,11 +51,27 @@ import {
   Database,
   Sparkle,
   MapPin,
+  Loader2,
 } from 'lucide-react';
 import { InAppChatModal } from '@/components/chat/InAppChatModal';
 import { SocietyStore, HelperStaff, AmenityBooking, HelpdeskTicket, ParkingAlert, GateLog, AGMPoll } from '@/lib/societyStore';
 
 export default function CompleteEcosystemStaySetuPortal() {
+  const router = useRouter();
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+
+  // ── MANDATORY AUTHENTICATION GATE ──
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const userRaw = localStorage.getItem('staysetu-current-user');
+    const roleRaw = localStorage.getItem('staysetu-role');
+    if (!userRaw && !roleRaw) {
+      router.replace('/auth/login');
+    } else {
+      setIsAuthChecking(false);
+    }
+  }, [router]);
+
   // ── DUAL TERMINAL SWITCHER (RESIDENT VS GUARD) ──
   const [activePortalMode, setActivePortalMode] = useState<'RESIDENT' | 'GUARD'>('RESIDENT');
 
@@ -258,6 +275,25 @@ export default function CompleteEcosystemStaySetuPortal() {
 
   const totalVotes = forumPoll.yesVotes + forumPoll.noVotes;
   const yesPercentage = Math.round((forumPoll.yesVotes / (totalVotes || 1)) * 100);
+
+  if (isAuthChecking) {
+    return (
+      <div className="min-h-screen bg-[#EEF2F6] flex flex-col items-center justify-center space-y-4 font-sans antialiased relative bg-[radial-gradient(#94A3B8_1.2px,transparent_1.2px)] [background-size:28px_28px]">
+        <div className="w-14 h-14 rounded-3xl bg-[#0F172A] text-[#38BDF8] flex items-center justify-center shadow-2xl border border-[#334155] animate-pulse">
+          <Building2 className="w-7 h-7 text-[#38BDF8]" />
+        </div>
+        <div className="text-center space-y-1">
+          <p className="text-xs font-bold text-[#0F172A] uppercase tracking-[0.2em]">
+            StaySetu Smart Operating System
+          </p>
+          <p className="text-[11px] text-[#64748B] flex items-center justify-center gap-1.5 font-medium">
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-[#2563EB]" />
+            <span>Verifying Society Access &amp; Redirecting...</span>
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#EEF2F6] text-[#0F172A] font-sans antialiased selection:bg-[#0F172A] selection:text-white relative bg-[radial-gradient(#94A3B8_1.2px,transparent_1.2px)] [background-size:28px_28px] pb-28 lg:pb-12">
