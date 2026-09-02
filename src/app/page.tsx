@@ -52,13 +52,20 @@ import {
   Sparkle,
   MapPin,
   Loader2,
+  Camera,
+  Layers,
 } from 'lucide-react';
 import { InAppChatModal } from '@/components/chat/InAppChatModal';
 import { SocietyStore, HelperStaff, AmenityBooking, HelpdeskTicket, ParkingAlert, GateLog, AGMPoll } from '@/lib/societyStore';
 
+type CategoryTab = 'ALL' | 'PARKING' | 'ESSENTIALS' | 'RWA' | 'MARKETPLACE';
+
 export default function CompleteEcosystemStaySetuPortal() {
   const router = useRouter();
   const [isAuthChecking, setIsAuthChecking] = useState(true);
+
+  // ── CATEGORY TAB SWITCHER (FOR UNCLUTTERED, FOCUSED VIEW) ──
+  const [activeCategoryTab, setActiveCategoryTab] = useState<CategoryTab>('ALL');
 
   // ── MANDATORY AUTHENTICATION GATE ──
   useEffect(() => {
@@ -95,12 +102,24 @@ export default function CompleteEcosystemStaySetuPortal() {
   // Sync notification toast
   const [syncNotification, setSyncNotification] = useState<string | null>(null);
 
-  // ── 1. SPOTLIGHT: WRONG PARKING RESOLVER (OPTION 2) ──
+  // ── 1. SPOTLIGHT: WRONG PARKING RESOLVER WITH LIVE PHOTO (OPTION 2) ──
   const [parkingCarNo, setParkingCarNo] = useState('UP14 EX 9988');
   const [parkingSlot, setParkingSlot] = useState('Basement B1 - Slot #42');
+  const [parkingPhoto, setParkingPhoto] = useState<string | null>(null);
   const [parkingAlertSent, setParkingAlertSent] = useState(false);
   const [activeParkingAlert, setActiveParkingAlert] = useState<ParkingAlert | null>(null);
   const [parkingSecondsLeft, setParkingSecondsLeft] = useState(600); // 10 minutes = 600s
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setParkingPhoto(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const formatTimer = (totalSeconds: number) => {
     const mins = Math.floor(totalSeconds / 60);
@@ -717,564 +736,778 @@ export default function CompleteEcosystemStaySetuPortal() {
         </div>
       </section>
 
-      {/* ── 2. SPOTLIGHT: WRONG PARKING NUMBER PLATE RESOLVER (OPTION 2) ── */}
-      <section id="wrong-parking-spotlight" className="px-3.5 sm:px-6 lg:px-8 py-6">
+      {/* ── UNCLUTTERED CATEGORY NAVIGATION BAR (CLEAN APPLE/AIRBNB STYLE TABS) ── */}
+      <section className="px-3.5 sm:px-6 lg:px-8 py-2 sticky top-16 sm:top-20 z-40">
         <div className="max-w-7xl mx-auto">
-          
-          <div className="bg-white rounded-3xl p-5 sm:p-10 shadow-[0_16px_45px_rgba(15,23,42,0.08)] space-y-5 border-2 border-[#CBD5E1]">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#F1F5F9] text-[#0F172A] px-2.5 py-1 rounded-full border border-[#CBD5E1]">
-                  🚗 FEATURE SPOTLIGHT • OPTION 2
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl p-1.5 sm:p-2 shadow-[0_8px_30px_rgba(15,23,42,0.08)] border-2 border-[#CBD5E1] flex items-center justify-start sm:justify-center gap-1.5 overflow-x-auto no-scrollbar">
+            {([
+              { id: 'ALL', label: '🌟 All Modules', desc: 'Full Overview' },
+              { id: 'PARKING', label: '🚗 Parking & Gate', desc: 'Photo Alert & FastTag' },
+              { id: 'ESSENTIALS', label: '🏡 Daily Living', desc: 'Helpers, Helpdesk & Club' },
+              { id: 'RWA', label: '🏛️ RWA & Dues', desc: 'GST Ledger & Move-In' },
+              { id: 'MARKETPLACE', label: '🛍️ Marketplace', desc: 'Resident Buy & Sell' },
+            ] as { id: CategoryTab; label: string; desc: string }[]).map(tab => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveCategoryTab(tab.id)}
+                className={`px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                  activeCategoryTab === tab.id
+                    ? 'bg-[#0F172A] text-white shadow-md'
+                    : 'bg-[#F8FAFC] text-[#475569] hover:bg-[#F1F5F9] border border-[#CBD5E1]'
+                }`}
+              >
+                <span>{tab.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 2. SPOTLIGHT: WRONG PARKING NUMBER PLATE RESOLVER WITH LIVE PHOTO (OPTION 2) ── */}
+      {(activeCategoryTab === 'ALL' || activeCategoryTab === 'PARKING') && (
+        <section id="wrong-parking-spotlight" className="px-3.5 sm:px-6 lg:px-8 py-6">
+          <div className="max-w-7xl mx-auto">
+            
+            <div className="bg-white rounded-3xl p-5 sm:p-10 shadow-[0_16px_45px_rgba(15,23,42,0.08)] space-y-5 border-2 border-[#CBD5E1]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#F1F5F9] text-[#0F172A] px-2.5 py-1 rounded-full border border-[#CBD5E1]">
+                    🚗 FEATURE SPOTLIGHT • OPTION 2
+                  </span>
+                  <h2 className="text-xl sm:text-3xl font-serif font-bold text-[#0F172A] mt-1.5">
+                    Wrong Parking &amp; Live Photo Proof Resolver
+                  </h2>
+                </div>
+                <p className="text-xs text-[#475569] max-w-sm">
+                  Someone parked in your reserved slot? Snap a live photo and send an instant anonymous alert to the car owner with zero neighbor disputes.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center pt-2">
+                
+                {/* Left Form with Live Photo Attachment */}
+                <div className="lg:col-span-6 space-y-3.5 text-xs">
+                  <div>
+                    <label className="font-bold text-[#475569] text-[11px] block mb-1">
+                      Enter Unauthorized Car Plate Number:
+                    </label>
+                    <input
+                      type="text"
+                      value={parkingCarNo}
+                      onChange={e => setParkingCarNo(e.target.value)}
+                      placeholder="e.g. UP14 EX 9988, DL8C AB 1234"
+                      className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-[#475569] text-[11px] block mb-1">
+                      Your Blocked Parking Slot:
+                    </label>
+                    <input
+                      type="text"
+                      value={parkingSlot}
+                      onChange={e => setParkingSlot(e.target.value)}
+                      placeholder="e.g. Basement B1 - Slot #42 (Tower C)"
+                      className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
+                    />
+                  </div>
+
+                  {/* 📷 Live Photo Proof Upload Box */}
+                  <div>
+                    <label className="font-bold text-[#475569] text-[11px] block mb-1">
+                      Attach Live Photo of Blocked Vehicle (Proof):
+                    </label>
+                    
+                    {parkingPhoto ? (
+                      <div className="relative rounded-2xl overflow-hidden border-2 border-[#CBD5E1] max-h-48 bg-slate-900 group">
+                        <img
+                          src={parkingPhoto}
+                          alt="Wrongly Parked Vehicle Proof"
+                          className="w-full h-44 object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-between p-3 text-white">
+                          <span className="text-[10px] bg-emerald-700 font-bold px-2 py-1 rounded-md flex items-center gap-1">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            <span>Photo Attached</span>
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setParkingPhoto(null)}
+                            className="bg-rose-700 hover:bg-rose-800 text-white text-[10px] font-bold px-2.5 py-1 rounded-md cursor-pointer"
+                          >
+                            Remove Photo
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <label className="w-full p-3.5 bg-[#F8FAFC] hover:bg-[#F1F5F9] border-2 border-dashed border-[#CBD5E1] rounded-2xl flex items-center justify-center gap-2 cursor-pointer transition-colors text-slate-700 font-bold text-xs">
+                        <Camera className="w-4 h-4 text-[#2563EB]" />
+                        <span>📷 Take / Upload Live Photo of Blocked Vehicle</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          capture="environment"
+                          onChange={handlePhotoUpload}
+                          className="hidden"
+                        />
+                      </label>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleSendParkingAlert}
+                    className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-xs py-3 rounded-xl shadow-md cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-2"
+                  >
+                    <AlertTriangle className="w-4 h-4 text-[#38BDF8]" />
+                    <span>Send Anonymous Move-Car Alert {parkingPhoto ? '(With Photo Proof)' : ''}</span>
+                  </button>
+                </div>
+
+                {/* Right Live Simulation Output */}
+                <div className="lg:col-span-6 bg-[#F8FAFC] p-4 sm:p-6 rounded-2xl space-y-3 border-2 border-[#CBD5E1]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#64748B] block">
+                    LIVE SYSTEM RESPONSE SIMULATOR
+                  </span>
+
+                  {parkingAlertSent ? (
+                    <div className="space-y-3 animate-in fade-in duration-300">
+                      <div className="p-3.5 bg-emerald-50 rounded-xl text-emerald-900 text-xs space-y-1.5 shadow-xs border border-emerald-200">
+                        <p className="font-bold flex items-center gap-1.5">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <span>Anonymous Alert Sent to Owner of {parkingCarNo}!</span>
+                        </p>
+                        <p className="text-[11px] text-emerald-800">
+                          Owner Flat identified as <strong>{activeParkingAlert?.ownerFlat || 'Tower C - Flat 402'}</strong>. WhatsApp notice, photo proof &amp; high-priority push notification delivered.
+                        </p>
+                      </div>
+
+                      {/* Photo Thumbnail in Simulator if Uploaded */}
+                      {parkingPhoto && (
+                        <div className="p-2 bg-white rounded-xl border border-[#CBD5E1] flex items-center gap-3">
+                          <img
+                            src={parkingPhoto}
+                            alt="Attached Proof"
+                            className="w-14 h-14 rounded-lg object-cover border border-[#CBD5E1] shrink-0"
+                          />
+                          <div className="text-xs">
+                            <span className="text-[9px] font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">
+                              ATTACHED PHOTO PROOF
+                            </span>
+                            <p className="text-[11px] font-bold text-[#0F172A] mt-0.5">
+                              Snapshot shared with vehicle owner on WhatsApp
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="p-3 bg-white rounded-xl text-xs space-y-1.5 shadow-xs border border-[#CBD5E1]">
+                        <div className="flex justify-between items-center font-bold text-[#0F172A]">
+                          <span>Move-Car Countdown:</span>
+                          <span className="text-[#2563EB] font-mono text-xs font-black bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200">
+                            ⏱️ {formatTimer(parkingSecondsLeft)} Mins Left
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-[#64748B]">
+                          Guard Chief Terminal on standby. If not moved within 10 mins, parking fine of ₹500 will be billed to {activeParkingAlert?.ownerFlat || 'Tower C - Flat 402'} maintenance ledger.
+                        </p>
+
+                        {/* Direct WhatsApp Live Action Button */}
+                        <div className="pt-1.5">
+                          <a
+                            href={`https://api.whatsapp.com/send?phone=917393011350&text=${encodeURIComponent(
+                              `🚨 *StaySetu Smart Society Notice*\n\nHello *${activeParkingAlert?.ownerFlat || 'Tower C - Flat 402'}*,\n\nYour vehicle *${parkingCarNo}* is currently reported parked in reserved slot: *${parkingSlot}*.\n\n📷 *Photo Proof Attached by Resident.*\n\n⏱️ Please move your vehicle within *10 minutes* to avoid an automatic ₹500 society penalty billed to your maintenance ledger.\n\n_Ref Ticket: ${activeParkingAlert?.id || 'PRK-8821'}_`
+                            )}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 shadow-xs transition-transform active:scale-95"
+                          >
+                            <MessageCircle className="w-4 h-4 fill-white text-[#25D366]" />
+                            <span>Send Live WhatsApp Notice with Photo →</span>
+                          </a>
+</div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-5 text-center space-y-2 text-xs text-[#64748B]">
+                      <Car className="w-8 h-8 text-[#64748B] mx-auto" />
+                      <p className="font-semibold text-[#0F172A]">Ready to Resolve Parking Blockages</p>
+                      <p className="text-[11px]">Type car number on the left and tap Send Alert to see instant resolution.</p>
+                    </div>
+                  )}
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+      )}
+
+      {/* ── 3. STANDARD MUST-HAVES (AMENITY BOOKING & 2-HOUR HELPDESK) ── */}
+      {(activeCategoryTab === 'ALL' || activeCategoryTab === 'ESSENTIALS') && (
+        <section className="px-3.5 sm:px-6 lg:px-8 py-6">
+          <div className="max-w-7xl mx-auto space-y-5">
+            
+            <div>
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#2563EB] block">
+                STANDARD SOCIETY ESSENTIALS
+              </span>
+              <h2 className="text-xl sm:text-3xl font-serif text-[#0F172A] mt-1">
+                Clubhouse Amenities &amp; Time-Tracked Helpdesk
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              
+              {/* Standard 1: Amenity & Clubhouse Booking */}
+              <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
+                      <CalendarDays className="w-5 h-5 text-[#2563EB]" />
+                    </div>
+                    <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
+                      {amenityBookings.length > 0 ? `${amenityBookings.length} Active Pass` : 'Instant Slot Reserve'}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">Clubhouse &amp; Sports Amenity Booking</h3>
+                    <p className="text-xs text-[#64748B] mt-1">
+                      Book Badminton Court, Swimming Pool, Tennis, or Grand Party Hall slots with instant QR passes and conflict prevention.
+                    </p>
+                  </div>
+
+                  {amenityBookings.length > 0 ? (
+                    <div className="space-y-2">
+                      {amenityBookings.slice(0, 2).map(booking => (
+                        <div key={booking.id} className="p-3 bg-emerald-50 rounded-xl text-xs space-y-1 border border-emerald-200">
+                          <div className="flex justify-between font-bold text-emerald-900">
+                            <span>{booking.amenityName}</span>
+                            <span className="text-[#2563EB]">{booking.slot}</span>
+                          </div>
+                          <div className="flex justify-between text-[11px] text-emerald-800">
+                            <span>Booked for: {booking.bookedByFlat}</span>
+                            <span className="font-mono font-bold bg-white px-1.5 py-0.5 rounded text-emerald-950">{booking.qrPassCode}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#E2E8F0]">
+                      <div className="flex justify-between font-semibold">
+                        <span>Badminton Court #2:</span>
+                        <span className="text-emerald-700 font-bold">Available Today</span>
+                      </div>
+                      <div className="flex justify-between text-[11px] text-[#64748B]">
+                        <span>Swimming Pool:</span>
+                        <span className="font-bold text-[#0F172A]">06:00 AM - 08:00 AM</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setAmenityModalOpen(true)}
+                  className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-semibold text-xs py-3 rounded-xl cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+                >
+                  <CalendarDays className="w-3.5 h-3.5 text-[#38BDF8]" />
+                  <span>Book Amenity Slot (Free)</span>
+                </button>
+              </div>
+
+              {/* Standard 2: 1-Click Helpdesk & SLA Tracker */}
+              <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
+                      <Wrench className="w-5 h-5 text-[#2563EB]" />
+                    </div>
+                    <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full">
+                      2-Hour SLA Timer
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">Digital Helpdesk &amp; SLA Ticket Tracker</h3>
+                    <p className="text-xs text-[#64748B] mt-1">
+                      Raise plumbing, electrical, or lift tickets with 2-hour SLA. Assigned technician closes ticket only with your Resident OTP.
+                    </p>
+                  </div>
+
+                  {helpdeskTickets.length > 0 ? (
+                    <div className="space-y-2">
+                      {helpdeskTickets.slice(0, 1).map(ticket => (
+                        <div key={ticket.id} className="p-3 bg-amber-50 rounded-xl text-xs space-y-1.5 border border-amber-200">
+                          <div className="flex justify-between font-bold text-amber-950">
+                            <span>Ticket #{ticket.id}: {ticket.category}</span>
+                            <span className={ticket.status === 'RESOLVED' ? 'text-emerald-700' : 'text-[#2563EB]'}>
+                              {ticket.status === 'RESOLVED' ? 'RESOLVED ✓' : `OTP: ${ticket.otpToClose}`}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-amber-900">
+                            Assigned: {ticket.assignedTechnician} ({ticket.technicianPhone})
+                          </p>
+                          {ticket.status !== 'RESOLVED' && (
+                            <div className="pt-1 flex gap-2">
+                              <input
+                                type="text"
+                                maxLength={4}
+                                placeholder="OTP to Close"
+                                value={otpVerifyInput}
+                                onChange={e => setOtpVerifyInput(e.target.value)}
+                                className="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold w-28"
+                              />
+                              <button
+                                onClick={() => handleVerifyOtpTicket(ticket.id)}
+                                className="bg-emerald-700 text-white text-[11px] font-bold px-3 py-1 rounded-lg cursor-pointer"
+                              >
+                                Verify &amp; Close
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#CBD5E1]">
+                      <div className="flex justify-between font-semibold">
+                        <span>Plumber On-Duty:</span>
+                        <span className="text-emerald-700 font-bold">🟢 Active (Tower C &amp; D)</span>
+                      </div>
+                      <div className="flex justify-between text-[11px] text-[#64748B]">
+                        <span>Electrician:</span>
+                        <span className="text-emerald-700 font-bold">🟢 Active (Substation)</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setHelpdeskModalOpen(true)}
+                  className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-semibold text-xs py-3 rounded-xl cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+                >
+                  <Wrench className="w-3.5 h-3.5 text-[#38BDF8]" />
+                  <span>Raise Helpdesk Ticket (2-Hr SLA)</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+      )}
+
+      {/* ── 4. THREE CORE GROUND REALITY PROBLEMS (OPTIONS 1, 6, 7) ── */}
+      {(activeCategoryTab === 'ALL' || activeCategoryTab === 'ESSENTIALS' || activeCategoryTab === 'RWA') && (
+        <section id="society-modules" className="px-3.5 sm:px-6 lg:px-8 py-6">
+          <div className="max-w-7xl mx-auto space-y-5">
+            
+            <div>
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#2563EB] block">
+                PRACTICAL SOCIETY SUITE
+              </span>
+              <h2 className="text-xl sm:text-3xl font-serif text-[#0F172A] mt-1">
+                Real Solutions for Daily Community Living
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              
+              {/* OPTION 1: Verified Society Helper & Backup Maid */}
+              <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] hover:shadow-xl transition-all space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
+                <div className="space-y-3">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
+                    <Users className="w-5 h-5 text-[#2563EB]" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-wider">OPTION 1</span>
+                    <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">Helper Radar &amp; Backup Maid</h3>
+                    <p className="text-xs text-[#64748B] mt-1">
+                      Maid suddenly on leave? Check live biometric presence of verified cooks &amp; maids inside campus with 1-click morning backup.
+                    </p>
+                  </div>
+
+                  <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#CBD5E1]">
+                    <div className="flex justify-between font-semibold">
+                      <span>Sunita Devi (Cook):</span>
+                      <span className="text-emerald-700 font-bold">{bookedMaid === 'Sunita Devi' ? 'Assigned ✓' : '🟢 Inside Tower A'}</span>
+                    </div>
+                    <div className="flex justify-between font-semibold">
+                      <span>Ramesh Kumar (Cleaning):</span>
+                      <span className="text-emerald-700 font-bold">{bookedMaid === 'Ramesh Kumar' ? 'Assigned ✓' : '🟢 Inside Tower D'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setMaidModalOpen(true)}
+                  className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-semibold text-xs py-3 rounded-xl cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+                >
+                  <Users className="w-3.5 h-3.5 text-[#38BDF8]" />
+                  <span>{bookedMaid ? `Backup Assigned: ${bookedMaid}` : 'Find Backup Maid (1-Click)'}</span>
+                </button>
+              </div>
+
+              {/* OPTION 6: 100% Auditable RWA Financial Ledger */}
+              <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] hover:shadow-xl transition-all space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
+                <div className="space-y-3">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
+                    <FileSpreadsheet className="w-5 h-5 text-[#2563EB]" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-wider">OPTION 6</span>
+                    <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">RWA Financial Ledger &amp; Dues</h3>
+                    <p className="text-xs text-[#64748B] mt-1">
+                      Zero corruption doubts. Every rupee of monthly maintenance and DG diesel bill published with downloadable GST invoice bills.
+                    </p>
+                  </div>
+
+                  <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#CBD5E1]">
+                    <div className="flex justify-between font-semibold">
+                      <span>Society Sinking Fund:</span>
+                      <span className="font-bold text-[#0F172A]">₹42,80,000</span>
+                    </div>
+                    <div className="flex justify-between text-[11px] text-[#64748B]">
+                      <span>Tower A Maintenance:</span>
+                      <span className={maintenancePaid ? 'text-emerald-700 font-bold' : 'text-amber-700 font-bold'}>
+                        {maintenancePaid ? 'Paid (₹3,540) ✓' : 'Due: ₹3,540 / Mo'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setLedgerModalOpen(true)}
+                    className="flex-1 bg-[#0F172A] hover:bg-[#1E293B] text-white font-semibold text-xs py-3 rounded-xl cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-[#38BDF8]" />
+                    <span>View Ledger</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handlePayMaintenance}
+                    disabled={maintenancePaid}
+                    className={`px-4 py-3 rounded-xl font-bold text-xs cursor-pointer shadow-sm transition-all ${
+                      maintenancePaid ? 'bg-emerald-700 text-white' : 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white'
+                    }`}
+                  >
+                    {maintenancePaid ? 'Paid ✓' : 'Pay UPI'}
+                  </button>
+                </div>
+              </div>
+
+              {/* OPTION 7: Digital Move-In / Out & Service Lift Booking */}
+              <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] hover:shadow-xl transition-all space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
+                <div className="space-y-3">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
+                    <Truck className="w-5 h-5 text-[#2563EB]" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-wider">OPTION 7</span>
+                    <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">Move-In Pass &amp; Service Lift</h3>
+                    <p className="text-xs text-[#64748B] mt-1">
+                      Pre-approved shifting truck gate pass + dedicated 2-hour service lift reservation so regular passenger lifts remain unblocked.
+                    </p>
+                  </div>
+
+                  <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#CBD5E1]">
+                    <div className="flex justify-between font-semibold">
+                      <span>Shifting Slot:</span>
+                      <span className="font-bold text-[#0F172A]">{movingSlot}</span>
+                    </div>
+                    <div className="flex justify-between text-[11px] text-[#64748B]">
+                      <span>Service Lift:</span>
+                      <span className="text-emerald-700 font-bold">{generatedMovingPass ? 'Pass Generated ✓' : 'Padded & Reserved'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setMovingPassModalOpen(true)}
+                  className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-semibold text-xs py-3 rounded-xl cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+                >
+                  <FileText className="w-3.5 h-3.5 text-[#38BDF8]" />
+                  <span>{generatedMovingPass ? 'View Pass #MV-9921' : 'Book Shifting Slot'}</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+      )}
+
+      {/* ── 5. GATE ACCESS & COMMUNITY FORUM (RWA POLL) ── */}
+      {(activeCategoryTab === 'ALL' || activeCategoryTab === 'PARKING' || activeCategoryTab === 'RWA') && (
+        <section id="rwa-dues" className="px-3.5 sm:px-6 lg:px-8 py-6">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            {/* Left Column: Voice Pass & FastTag Gate Test */}
+            <div className="lg:col-span-6 bg-white rounded-3xl p-5 sm:p-8 shadow-[0_14px_38px_rgba(15,23,42,0.07)] space-y-4 sm:space-y-5 border-2 border-[#CBD5E1]">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB]">
+                    GATE ACCESS CONTROLS
+                  </span>
+                  <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A] mt-0.5">
+                    Voice Gate Pass &amp; ANPR FastTag
+                  </h3>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2 border border-[#CBD5E1]">
+                  <span className="text-[10px] font-bold text-[#2563EB]">🎙️ VOICE PASS</span>
+                  <p className="text-[10px] sm:text-[11px] text-[#64748B]">Hands-free resident approval</p>
+                  <button
+                    type="button"
+                    onClick={handleVoiceRecord}
+                    className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-2 rounded-xl text-[10px] cursor-pointer"
+                  >
+                    {isRecording ? 'Recording...' : voiceApproved ? 'Voice Sent ✓' : 'Speak Pass →'}
+                  </button>
+                </div>
+
+                <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2 border border-[#CBD5E1]">
+                  <span className="text-[10px] font-bold text-[#2563EB]">🚗 FASTTAG BOOM</span>
+                  <p className="text-[10px] sm:text-[11px] text-[#64748B]">0.5s auto license clearance</p>
+                  <button
+                    type="button"
+                    onClick={handleGuardOpenBoom}
+                    className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-2 rounded-xl text-[10px] cursor-pointer"
+                  >
+                    {guardBoomStatus === 'OPEN' ? 'Boom Open ✓' : 'Test Gate →'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Smart Meter Topup */}
+              <div className="p-3.5 bg-[#F8FAFC] rounded-2xl flex items-center justify-between text-xs border border-[#CBD5E1]">
+                <div>
+                  <span className="text-[#64748B] font-semibold text-[10px]">SMART METER (MTR-882190)</span>
+                  <p className="font-bold text-[#0F172A] text-sm">Balance: ₹{meterBalance}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const updated = SocietyStore.rechargeSmartMeter(500);
+                    setMeterBalance(updated);
+                    alert('⚡ Smart Meter MTR-882190 recharged with ₹500 via UPI!');
+                  }}
+                  className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs px-3.5 py-2 rounded-xl cursor-pointer"
+                >
+                  + Topup ₹500
+                </button>
+              </div>
+            </div>
+
+            {/* Right Column: Resident AGM Poll */}
+            <div id="community" className="lg:col-span-6 bg-white rounded-3xl p-5 sm:p-8 shadow-[0_14px_38px_rgba(15,23,42,0.07)] space-y-4 sm:space-y-5 border-2 border-[#CBD5E1]">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB]">
+                    RESIDENT COMMUNITY FORUM
+                  </span>
+                  <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A] mt-0.5">
+                    Live AGM Voting Poll &amp; Governance
+                  </h3>
+                </div>
+                <span className="text-xs font-bold text-[#64748B]">{totalVotes} Votes</span>
+              </div>
+
+              {/* AGM Poll */}
+              <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2.5 border border-[#CBD5E1]">
+                <h4 className="font-serif text-xs sm:text-sm font-bold text-[#0F172A]">
+                  {forumPoll.title}
+                </h4>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between text-[10px] sm:text-[11px] font-bold">
+                    <span className="text-emerald-700">👍 YES ({forumPoll.yesVotes} Votes - {yesPercentage}%)</span>
+                    <span className="text-rose-700">👎 NO ({forumPoll.noVotes} Votes - {100 - yesPercentage}%)</span>
+                  </div>
+                  <div className="w-full bg-[#E2E8F0] rounded-full h-2 overflow-hidden flex">
+                    <div className="bg-emerald-600 h-full transition-all duration-500" style={{ width: `${yesPercentage}%` }} />
+                    <div className="bg-rose-600 h-full transition-all duration-500" style={{ width: `${100 - yesPercentage}%` }} />
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => handleVote('YES')}
+                    disabled={forumPoll.userVoted !== null}
+                    className={`flex-1 py-2 rounded-xl text-xs font-bold cursor-pointer ${
+                      forumPoll.userVoted === 'YES' ? 'bg-emerald-700 text-white' : 'bg-white text-[#0F172A] shadow-xs border border-[#CBD5E1]'
+                    }`}
+                  >
+                    Vote YES
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleVote('NO')}
+                    disabled={forumPoll.userVoted !== null}
+                    className={`flex-1 py-2 rounded-xl text-xs font-bold cursor-pointer ${
+                      forumPoll.userVoted === 'NO' ? 'bg-rose-700 text-white' : 'bg-white text-[#0F172A] shadow-xs border border-[#CBD5E1]'
+                    }`}
+                  >
+                    Vote NO
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-3 bg-emerald-50 rounded-2xl border border-emerald-200 text-xs text-emerald-900 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Vote className="w-4 h-4 text-emerald-700 shrink-0" />
+                  <span className="font-semibold text-[11px]">100% Cryptographic Resident-Only Ballots</span>
+                </div>
+                <span className="text-[10px] font-bold bg-white text-emerald-900 px-2 py-0.5 rounded-full border border-emerald-200">
+                  Verified
                 </span>
-                <h2 className="text-xl sm:text-3xl font-serif font-bold text-[#0F172A] mt-1.5">
-                  Wrong Parking &amp; Reserved Slot Protection
+              </div>
+            </div>
+
+          </div>
+        </section>
+      )}
+
+      {/* ── 6. DEDICATED RESIDENT MARKETPLACE & CLASSIFIEDS SECTION ── */}
+      {(activeCategoryTab === 'ALL' || activeCategoryTab === 'MARKETPLACE') && (
+        <section id="marketplace-section" className="px-3.5 sm:px-6 lg:px-8 py-6">
+          <div className="max-w-7xl mx-auto space-y-5">
+            
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#2563EB] block">
+                  RESIDENT CLASSIFIEDS &amp; BAZAAR
+                </span>
+                <h2 className="text-xl sm:text-3xl font-serif text-[#0F172A] mt-1">
+                  Community Marketplace (Buy &amp; Sell Locally)
                 </h2>
               </div>
-              <p className="text-xs text-[#475569] max-w-sm">
-                Someone parked in your reserved basement slot? Send an instant anonymous alert to the car owner with zero neighbor arguments.
+              <p className="text-xs text-[#64748B] max-w-sm">
+                Sell pre-loved furniture, kids bicycles, electronics &amp; books directly to neighbors inside your own society campus with 0 brokerage.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center pt-2">
-              
-              {/* Left Form */}
-              <div className="lg:col-span-6 space-y-3.5 text-xs">
-                <div>
-                  <label className="font-bold text-[#475569] text-[11px] block mb-1">
-                    Enter Unauthorized Car Plate Number:
-                  </label>
-                  <input
-                    type="text"
-                    value={parkingCarNo}
-                    onChange={e => setParkingCarNo(e.target.value)}
-                    placeholder="e.g. UP14 EX 9988, DL8C AB 1234"
-                    className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
-                  />
-                </div>
-
-                <div>
-                  <label className="font-bold text-[#475569] text-[11px] block mb-1">
-                    Your Blocked Parking Slot:
-                  </label>
-                  <input
-                    type="text"
-                    value={parkingSlot}
-                    onChange={e => setParkingSlot(e.target.value)}
-                    placeholder="e.g. Basement B1 - Slot #42 (Tower C)"
-                    className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10"
-                  />
-                </div>
-
-                <button
-                  type="button"
-                  onClick={handleSendParkingAlert}
-                  className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-xs py-3 rounded-xl shadow-md cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-2"
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {[
+                {
+                  id: 'item-1',
+                  title: 'Solid Sheesham Wood Dining Table',
+                  sub: '4-Seater with cushioned chairs • 1.5 yrs old',
+                  price: '₹9,500',
+                  originalPrice: '₹22,000',
+                  sellerName: 'Ankit Sharma',
+                  sellerFlat: 'Tower B - Flat 402',
+                  image: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=600&q=80',
+                  tag: 'Furniture',
+                },
+                {
+                  id: 'item-2',
+                  title: 'Hero Sprint 26T Mountain Bicycle',
+                  sub: 'Dual disc brakes, 21-speed Shimano gears',
+                  price: '₹3,200',
+                  originalPrice: '₹7,800',
+                  sellerName: 'Sudhanshu Pandey',
+                  sellerFlat: 'Tower A - Flat 102',
+                  image: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80',
+                  tag: 'Sports & Cycles',
+                },
+                {
+                  id: 'item-3',
+                  title: 'PowerMax 2.5HP Motorized Treadmill',
+                  sub: 'Foldable with LCD display, 12 presets',
+                  price: '₹18,500',
+                  originalPrice: '₹38,000',
+                  sellerName: 'Priya Narang',
+                  sellerFlat: 'Tower C - Flat 301',
+                  image: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&w=600&q=80',
+                  tag: 'Fitness',
+                },
+                {
+                  id: 'item-4',
+                  title: 'Ergonomic Solid Oak Study Table',
+                  sub: 'With 3 storage drawers & cable organizer',
+                  price: '₹4,500',
+                  originalPrice: '₹11,500',
+                  sellerName: 'Rajesh Verma',
+                  sellerFlat: 'Tower D - Flat 801',
+                  image: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=600&q=80',
+                  tag: 'Study & Work',
+                },
+              ].map(item => (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-3xl p-4 shadow-[0_14px_38px_rgba(15,23,42,0.07)] hover:shadow-xl transition-all border-2 border-[#CBD5E1] flex flex-col justify-between space-y-3 group"
                 >
-                  <AlertTriangle className="w-4 h-4 text-[#38BDF8]" />
-                  <span>Send Anonymous Move-Car Alert</span>
-                </button>
-              </div>
+                  <div className="space-y-2.5">
+                    <div className="relative h-40 rounded-2xl overflow-hidden bg-slate-100">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <span className="absolute top-2.5 left-2.5 text-[9px] font-bold bg-[#0F172A]/90 text-white px-2 py-0.5 rounded-md backdrop-blur-xs">
+                        {item.tag}
+                      </span>
+                    </div>
 
-              {/* Right Live Simulation Output */}
-              <div className="lg:col-span-6 bg-[#F8FAFC] p-4 sm:p-6 rounded-2xl space-y-3 border-2 border-[#CBD5E1]">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#64748B] block">
-                  LIVE SYSTEM RESPONSE SIMULATOR
-                </span>
-
-                {parkingAlertSent ? (
-                  <div className="space-y-3 animate-in fade-in duration-300">
-                    <div className="p-3.5 bg-emerald-50 rounded-xl text-emerald-900 text-xs space-y-1.5 shadow-xs border border-emerald-200">
-                      <p className="font-bold flex items-center gap-1.5">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                        <span>Anonymous Alert Sent to Owner of {parkingCarNo}!</span>
+                    <div>
+                      <h4 className="font-serif font-bold text-sm text-[#0F172A] line-clamp-1">
+                        {item.title}
+                      </h4>
+                      <p className="text-[11px] text-[#64748B] line-clamp-1 mt-0.5">
+                        {item.sub}
                       </p>
-                      <p className="text-[11px] text-emerald-800">
-                        Owner Flat identified as <strong>{activeParkingAlert?.ownerFlat || 'Tower C - Flat 402'}</strong>. WhatsApp notice &amp; high-priority push notification delivered.
-                      </p>
                     </div>
 
-                    <div className="p-3 bg-white rounded-xl text-xs space-y-1.5 shadow-xs border border-[#CBD5E1]">
-                      <div className="flex justify-between items-center font-bold text-[#0F172A]">
-                        <span>Move-Car Countdown:</span>
-                        <span className="text-[#2563EB] font-mono text-xs font-black bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200">
-                          ⏱️ {formatTimer(parkingSecondsLeft)} Mins Left
-                        </span>
-                      </div>
-                      <p className="text-[10px] text-[#64748B]">
-                        Guard Chief Terminal on standby. If not moved within 10 mins, parking fine of ₹500 will be billed to {activeParkingAlert?.ownerFlat || 'Tower C - Flat 402'} maintenance ledger.
-                      </p>
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-bold text-base text-[#0F172A]">{item.price}</span>
+                      <span className="text-[11px] text-[#94A3B8] line-through">{item.originalPrice}</span>
+                    </div>
 
-                      {/* Direct WhatsApp Live Action Button */}
-                      <div className="pt-1.5">
-                        <a
-                          href={`https://api.whatsapp.com/send?phone=917393011350&text=${encodeURIComponent(
-                            `🚨 *StaySetu Smart Society Notice*\n\nHello *${activeParkingAlert?.ownerFlat || 'Tower C - Flat 402'}*,\n\nYour vehicle *${parkingCarNo}* is currently reported parked in reserved slot: *${parkingSlot}*.\n\n⏱️ Please move your vehicle within *10 minutes* to avoid an automatic ₹500 society penalty billed to your maintenance ledger.\n\n_Ref Ticket: ${activeParkingAlert?.id || 'PRK-8821'}_`
-                          )}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 shadow-xs transition-transform active:scale-95"
-                        >
-                          <MessageCircle className="w-4 h-4 fill-white text-[#25D366]" />
-                          <span>Send Live WhatsApp Notice to Car Owner →</span>
-                        </a>
-                      </div>
+                    <div className="p-2 bg-[#F8FAFC] rounded-xl border border-[#CBD5E1] text-[10px] text-[#475569] flex items-center justify-between">
+                      <span className="font-semibold">{item.sellerName}</span>
+                      <span className="text-[#2563EB] font-bold">{item.sellerFlat}</span>
                     </div>
                   </div>
-                ) : (
-                  <div className="p-5 text-center space-y-2 text-xs text-[#64748B]">
-                    <Car className="w-8 h-8 text-[#64748B] mx-auto" />
-                    <p className="font-semibold text-[#0F172A]">Ready to Resolve Parking Blockages</p>
-                    <p className="text-[11px]">Type car number on the left and tap Send Alert to see instant resolution.</p>
-                  </div>
-                )}
-              </div>
 
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedSeller({
+                        name: item.title,
+                        price: item.price,
+                        ownerName: `${item.sellerFlat} (${item.sellerName})`,
+                        ownerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+                      });
+                      setChatModalOpen(true);
+                    }}
+                    className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-xs py-2.5 rounded-xl shadow-xs transition-transform active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <ShoppingBag className="w-3.5 h-3.5 text-[#38BDF8]" />
+                    <span>Chat with Neighbor</span>
+                  </button>
+                </div>
+              ))}
             </div>
 
           </div>
-
-        </div>
-      </section>
-
-      {/* ── 3. STANDARD MUST-HAVES (AMENITY BOOKING & 2-HOUR HELPDESK) ── */}
-      <section className="px-3.5 sm:px-6 lg:px-8 py-6">
-        <div className="max-w-7xl mx-auto space-y-5">
-          
-          <div>
-            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#2563EB] block">
-              STANDARD SOCIETY ESSENTIALS
-            </span>
-            <h2 className="text-xl sm:text-3xl font-serif text-[#0F172A] mt-1">
-              Clubhouse Amenities &amp; Time-Tracked Helpdesk
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            
-            {/* Standard 1: Amenity & Clubhouse Booking */}
-            <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
-                    <CalendarDays className="w-5 h-5 text-[#2563EB]" />
-                  </div>
-                  <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
-                    {amenityBookings.length > 0 ? `${amenityBookings.length} Active Pass` : 'Instant Slot Reserve'}
-                  </span>
-                </div>
-
-                <div>
-                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">Clubhouse &amp; Sports Amenity Booking</h3>
-                  <p className="text-xs text-[#64748B] mt-1">
-                    Book Badminton Court, Swimming Pool, Tennis, or Grand Party Hall slots with instant QR passes and conflict prevention.
-                  </p>
-                </div>
-
-                {amenityBookings.length > 0 ? (
-                  <div className="space-y-2">
-                    {amenityBookings.slice(0, 2).map(booking => (
-                      <div key={booking.id} className="p-3 bg-emerald-50 rounded-xl text-xs space-y-1 border border-emerald-200">
-                        <div className="flex justify-between font-bold text-emerald-900">
-                          <span>{booking.amenityName}</span>
-                          <span className="text-[#2563EB]">{booking.slot}</span>
-                        </div>
-                        <div className="flex justify-between text-[11px] text-emerald-800">
-                          <span>Booked for: {booking.bookedByFlat}</span>
-                          <span className="font-mono font-bold bg-white px-1.5 py-0.5 rounded text-emerald-950">{booking.qrPassCode}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#E2E8F0]">
-                    <div className="flex justify-between font-semibold">
-                      <span>Badminton Court #2:</span>
-                      <span className="text-emerald-700 font-bold">Available Today</span>
-                    </div>
-                    <div className="flex justify-between text-[11px] text-[#64748B]">
-                      <span>Swimming Pool:</span>
-                      <span className="font-bold text-[#0F172A]">06:00 AM - 08:00 AM</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setAmenityModalOpen(true)}
-                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-semibold text-xs py-3 rounded-xl cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
-              >
-                <CalendarDays className="w-3.5 h-3.5 text-[#38BDF8]" />
-                <span>Book Amenity Slot (Free)</span>
-              </button>
-            </div>
-
-            {/* Standard 2: 1-Click Helpdesk & SLA Tracker */}
-            <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
-                    <Wrench className="w-5 h-5 text-[#2563EB]" />
-                  </div>
-                  <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full">
-                    2-Hour SLA Timer
-                  </span>
-                </div>
-
-                <div>
-                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">Digital Helpdesk &amp; SLA Ticket Tracker</h3>
-                  <p className="text-xs text-[#64748B] mt-1">
-                    Raise plumbing, electrical, or lift tickets with 2-hour SLA. Assigned technician closes ticket only with your Resident OTP.
-                  </p>
-                </div>
-
-                {helpdeskTickets.length > 0 ? (
-                  <div className="space-y-2">
-                    {helpdeskTickets.slice(0, 1).map(ticket => (
-                      <div key={ticket.id} className="p-3 bg-amber-50 rounded-xl text-xs space-y-1.5 border border-amber-200">
-                        <div className="flex justify-between font-bold text-amber-950">
-                          <span>Ticket #{ticket.id}: {ticket.category}</span>
-                          <span className={ticket.status === 'RESOLVED' ? 'text-emerald-700' : 'text-[#2563EB]'}>
-                            {ticket.status === 'RESOLVED' ? 'RESOLVED ✓' : `OTP: ${ticket.otpToClose}`}
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-amber-900">
-                          Assigned: {ticket.assignedTechnician} ({ticket.technicianPhone})
-                        </p>
-                        {ticket.status !== 'RESOLVED' && (
-                          <div className="pt-1 flex gap-2">
-                            <input
-                              type="text"
-                              maxLength={4}
-                              placeholder="OTP to Close"
-                              value={otpVerifyInput}
-                              onChange={e => setOtpVerifyInput(e.target.value)}
-                              className="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold w-28"
-                            />
-                            <button
-                              onClick={() => handleVerifyOtpTicket(ticket.id)}
-                              className="bg-emerald-700 text-white text-[11px] font-bold px-3 py-1 rounded-lg cursor-pointer"
-                            >
-                              Verify &amp; Close
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#CBD5E1]">
-                    <div className="flex justify-between font-semibold">
-                      <span>Plumber On-Duty:</span>
-                      <span className="text-emerald-700 font-bold">🟢 Active (Tower C &amp; D)</span>
-                    </div>
-                    <div className="flex justify-between text-[11px] text-[#64748B]">
-                      <span>Electrician:</span>
-                      <span className="text-emerald-700 font-bold">🟢 Active (Substation)</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setHelpdeskModalOpen(true)}
-                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-semibold text-xs py-3 rounded-xl cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
-              >
-                <Wrench className="w-3.5 h-3.5 text-[#38BDF8]" />
-                <span>Raise Helpdesk Ticket (2-Hr SLA)</span>
-              </button>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* ── 4. THREE CORE GROUND REALITY PROBLEMS (OPTIONS 1, 6, 7) ── */}
-      <section id="society-modules" className="px-3.5 sm:px-6 lg:px-8 py-6">
-        <div className="max-w-7xl mx-auto space-y-5">
-          
-          <div>
-            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#2563EB] block">
-              PRACTICAL SOCIETY SUITE
-            </span>
-            <h2 className="text-xl sm:text-3xl font-serif text-[#0F172A] mt-1">
-              Real Solutions for Daily Community Living
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            
-            {/* OPTION 1: Verified Society Helper & Backup Maid */}
-            <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] hover:shadow-xl transition-all space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
-              <div className="space-y-3">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
-                  <Users className="w-5 h-5 text-[#2563EB]" />
-                </div>
-                <div>
-                  <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-wider">OPTION 1</span>
-                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">Helper Radar &amp; Backup Maid</h3>
-                  <p className="text-xs text-[#64748B] mt-1">
-                    Maid suddenly on leave? Check live biometric presence of verified cooks &amp; maids inside campus with 1-click morning backup.
-                  </p>
-                </div>
-
-                <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#CBD5E1]">
-                  <div className="flex justify-between font-semibold">
-                    <span>Sunita Devi (Cook):</span>
-                    <span className="text-emerald-700 font-bold">{bookedMaid === 'Sunita Devi' ? 'Assigned ✓' : '🟢 Inside Tower A'}</span>
-                  </div>
-                  <div className="flex justify-between font-semibold">
-                    <span>Ramesh Kumar (Cleaning):</span>
-                    <span className="text-emerald-700 font-bold">{bookedMaid === 'Ramesh Kumar' ? 'Assigned ✓' : '🟢 Inside Tower D'}</span>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setMaidModalOpen(true)}
-                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-semibold text-xs py-3 rounded-xl cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
-              >
-                <UserPlus className="w-3.5 h-3.5 text-[#38BDF8]" />
-                <span>{bookedMaid ? `Assigned: ${bookedMaid} ✓` : 'Book Backup Maid (₹200/Day)'}</span>
-              </button>
-            </div>
-
-            {/* OPTION 6: RWA Financial Transparency & GST Balance Sheet */}
-            <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] hover:shadow-xl transition-all space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
-              <div className="space-y-3">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
-                  <CreditCard className="w-5 h-5 text-[#2563EB]" />
-                </div>
-                <div>
-                  <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-wider">OPTION 6</span>
-                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">1-Click RWA GST Balance Sheet</h3>
-                  <p className="text-xs text-[#64748B] mt-1">
-                    Complete transparency on monthly maintenance: Otis Lift AMC (14 Lifts), Guard Salaries (18 Staff), and Sinking Fund.
-                  </p>
-                </div>
-
-                <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1.5 border border-[#CBD5E1]">
-                  <div className="flex justify-between">
-                    <span className="text-[#64748B]">August Maintenance (A-102):</span>
-                    <span className="font-bold text-[#0F172A]">₹3,540</span>
-                  </div>
-                  <div className="flex justify-between text-[11px] text-[#64748B]">
-                    <span>Sinking Fund (HDFC):</span>
-                    <span className="font-bold text-emerald-700">₹1.15 Crores</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={handlePayMaintenance}
-                  className={`flex-1 py-3 rounded-xl text-xs font-bold cursor-pointer ${
-                    maintenancePaid ? 'bg-emerald-700 text-white' : 'bg-[#0F172A] text-white hover:bg-[#1E293B]'
-                  }`}
-                >
-                  {maintenancePaid ? 'Paid via UPI ✓' : 'Pay ₹3,540'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLedgerModalOpen(true)}
-                  className="px-3.5 bg-[#F1F5F9] text-[#0F172A] rounded-xl text-xs font-bold hover:bg-[#E2E8F0] cursor-pointer flex items-center gap-1 border border-[#CBD5E1]"
-                >
-                  <FileSpreadsheet className="w-4 h-4 text-[#2563EB]" />
-                  <span className="text-[11px]">Ledger</span>
-                </button>
-              </div>
-            </div>
-
-            {/* OPTION 7: Digital Move-In / Out & Service Lift Booking */}
-            <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_14px_38px_rgba(15,23,42,0.07)] hover:shadow-xl transition-all space-y-4 flex flex-col justify-between border-2 border-[#CBD5E1]">
-              <div className="space-y-3">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#F1F5F9] text-[#0F172A] flex items-center justify-center font-bold">
-                  <Truck className="w-5 h-5 text-[#2563EB]" />
-                </div>
-                <div>
-                  <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-wider">OPTION 7</span>
-                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">Move-In Pass &amp; Service Lift</h3>
-                  <p className="text-xs text-[#64748B] mt-1">
-                    Pre-approved shifting truck gate pass + dedicated 2-hour service lift reservation so regular passenger lifts remain unblocked.
-                  </p>
-                </div>
-
-                <div className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#CBD5E1]">
-                  <div className="flex justify-between font-semibold">
-                    <span>Shifting Slot:</span>
-                    <span className="font-bold text-[#0F172A]">{movingSlot}</span>
-                  </div>
-                  <div className="flex justify-between text-[11px] text-[#64748B]">
-                    <span>Service Lift:</span>
-                    <span className="text-emerald-700 font-bold">{generatedMovingPass ? 'Pass Generated ✓' : 'Padded & Reserved'}</span>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setMovingPassModalOpen(true)}
-                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-semibold text-xs py-3 rounded-xl cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
-              >
-                <FileText className="w-3.5 h-3.5 text-[#38BDF8]" />
-                <span>{generatedMovingPass ? 'View Pass #MV-9921' : 'Book Shifting Slot'}</span>
-              </button>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* ── 5. RWA FINANCIAL DESK & RESIDENT COMMUNITY FORUM ── */}
-      <section id="rwa-dues" className="px-3.5 sm:px-6 lg:px-8 py-6">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
-          
-          {/* Left Column: Voice Pass & FastTag Gate Test */}
-          <div className="lg:col-span-6 bg-white rounded-3xl p-5 sm:p-8 shadow-[0_14px_38px_rgba(15,23,42,0.07)] space-y-4 sm:space-y-5 border-2 border-[#CBD5E1]">
-            <div className="flex items-center justify-between">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB]">
-                  GATE ACCESS CONTROLS
-                </span>
-                <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A] mt-0.5">
-                  Voice Gate Pass &amp; ANPR FastTag
-                </h3>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2 border border-[#CBD5E1]">
-                <span className="text-[10px] font-bold text-[#2563EB]">🎙️ VOICE PASS</span>
-                <p className="text-[10px] sm:text-[11px] text-[#64748B]">Hands-free resident approval</p>
-                <button
-                  type="button"
-                  onClick={handleVoiceRecord}
-                  className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-2 rounded-xl text-[10px] cursor-pointer"
-                >
-                  {isRecording ? 'Recording...' : voiceApproved ? 'Voice Sent ✓' : 'Speak Pass →'}
-                </button>
-              </div>
-
-              <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2 border border-[#CBD5E1]">
-                <span className="text-[10px] font-bold text-[#2563EB]">🚗 FASTTAG BOOM</span>
-                <p className="text-[10px] sm:text-[11px] text-[#64748B]">0.5s auto license clearance</p>
-                <button
-                  type="button"
-                  onClick={handleGuardOpenBoom}
-                  className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-2 rounded-xl text-[10px] cursor-pointer"
-                >
-                  {guardBoomStatus === 'OPEN' ? 'Boom Open ✓' : 'Test Gate →'}
-                </button>
-              </div>
-            </div>
-
-            {/* Smart Meter Topup */}
-            <div className="p-3.5 bg-[#F8FAFC] rounded-2xl flex items-center justify-between text-xs border border-[#CBD5E1]">
-              <div>
-                <span className="text-[#64748B] font-semibold text-[10px]">SMART METER (MTR-882190)</span>
-                <p className="font-bold text-[#0F172A] text-sm">Balance: ₹{meterBalance}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  const updated = SocietyStore.rechargeSmartMeter(500);
-                  setMeterBalance(updated);
-                  alert('⚡ Smart Meter MTR-882190 recharged with ₹500 via UPI!');
-                }}
-                className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs px-3.5 py-2 rounded-xl cursor-pointer"
-              >
-                + Topup ₹500
-              </button>
-            </div>
-          </div>
-
-          {/* Right Column: Resident AGM Poll & Notice Board */}
-          <div id="community" className="lg:col-span-6 bg-white rounded-3xl p-5 sm:p-8 shadow-[0_14px_38px_rgba(15,23,42,0.07)] space-y-4 sm:space-y-5 border-2 border-[#CBD5E1]">
-            <div className="flex items-center justify-between">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB]">
-                  RESIDENT COMMUNITY FORUM
-                </span>
-                <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A] mt-0.5">
-                  Live AGM Voting Poll &amp; Notices
-                </h3>
-              </div>
-              <span className="text-xs font-bold text-[#64748B]">{totalVotes} Votes</span>
-            </div>
-
-            {/* AGM Poll */}
-            <div className="p-3.5 bg-[#F8FAFC] rounded-2xl space-y-2.5 border border-[#CBD5E1]">
-              <h4 className="font-serif text-xs sm:text-sm font-bold text-[#0F172A]">
-                {forumPoll.title}
-              </h4>
-
-              <div className="space-y-1">
-                <div className="flex justify-between text-[10px] sm:text-[11px] font-bold">
-                  <span className="text-emerald-700">👍 YES ({forumPoll.yesVotes} Votes - {yesPercentage}%)</span>
-                  <span className="text-rose-700">👎 NO ({forumPoll.noVotes} Votes - {100 - yesPercentage}%)</span>
-                </div>
-                <div className="w-full bg-[#E2E8F0] rounded-full h-2 overflow-hidden flex">
-                  <div className="bg-emerald-600 h-full transition-all duration-500" style={{ width: `${yesPercentage}%` }} />
-                  <div className="bg-rose-600 h-full transition-all duration-500" style={{ width: `${100 - yesPercentage}%` }} />
-                </div>
-              </div>
-
-              <div className="flex gap-2 pt-1">
-                <button
-                  type="button"
-                  onClick={() => handleVote('YES')}
-                  disabled={forumPoll.userVoted !== null}
-                  className={`flex-1 py-2 rounded-xl text-xs font-bold cursor-pointer ${
-                    forumPoll.userVoted === 'YES' ? 'bg-emerald-700 text-white' : 'bg-white text-[#0F172A] shadow-xs border border-[#CBD5E1]'
-                  }`}
-                >
-                  Vote YES
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleVote('NO')}
-                  disabled={forumPoll.userVoted !== null}
-                  className={`flex-1 py-2 rounded-xl text-xs font-bold cursor-pointer ${
-                    forumPoll.userVoted === 'NO' ? 'bg-rose-700 text-white' : 'bg-white text-[#0F172A] shadow-xs border border-[#CBD5E1]'
-                  }`}
-                >
-                  Vote NO
-                </button>
-              </div>
-            </div>
-
-            {/* Buy & Sell Link */}
-            <div className="p-3.5 bg-[#F8FAFC] rounded-2xl flex items-center justify-between text-xs border border-[#CBD5E1]">
-              <div>
-                <span className="text-[#64748B] font-semibold text-[10px]">RESIDENT MARKETPLACE</span>
-                <p className="font-bold text-[#0F172A] text-xs sm:text-sm">Solid Wood Dining Table (₹9,500)</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedSeller({
-                    name: 'Solid Sheesham Wood Dining Table',
-                    price: '₹9,500',
-                    ownerName: 'Tower B - Flat 402 (Ankit)',
-                    ownerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
-                  });
-                  setChatModalOpen(true);
-                }}
-                className="bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-xs px-3.5 py-2 rounded-xl cursor-pointer"
-              >
-                Chat Seller
-              </button>
-            </div>
-          </div>
-
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── 6. LEADERSHIP & FOUNDERS ── */}
       <section id="leadership" className="px-3.5 sm:px-6 lg:px-8 py-8 sm:py-12 max-w-7xl mx-auto space-y-6">
@@ -1341,6 +1574,69 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
           </div>
 
+        </div>
+      </section>
+
+      {/* ── 6. LEADERSHIP & FOUNDERS ── */}
+      <section id="leadership" className="px-3.5 sm:px-6 lg:px-8 py-8 sm:py-12 max-w-7xl mx-auto space-y-6">
+        <div className="text-center space-y-1.5">
+          <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#2563EB] block">
+            STAYSETU LEADERSHIP
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-serif text-[#0F172A]">
+            Meet Our Founders
+          </h2>
+          <p className="text-xs text-[#64748B] max-w-lg mx-auto">
+            Pioneering smart gated community technology &amp; automated township management across India.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          {/* Founder - Sudhanshu Pandey */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_14px_38px_rgba(15,23,42,0.07)] flex flex-col sm:flex-row items-center gap-5 group hover:shadow-xl transition-all border-2 border-[#CBD5E1]">
+            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-md shrink-0">
+              <Image
+                src="/images/founders/sudhanshu-pandey.jpg"
+                alt="Sudhanshu Pandey - Founder"
+                width={128}
+                height={128}
+                className="w-full h-full object-cover"
+                unoptimized
+              />
+            </div>
+            <div className="space-y-1.5 text-center sm:text-left">
+              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#0F172A] text-white px-3 py-0.5 rounded-full">
+                FOUNDER &amp; CEO
+              </span>
+              <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#0F172A]">Sudhanshu Pandey</h3>
+              <p className="text-xs text-[#475569] leading-relaxed">
+                Driving StaySetu&apos;s vision for next-generation smart gated societies, AI security terminals, and automated township living.
+              </p>
+            </div>
+          </div>
+
+          {/* Co-Founder - Ayushi Singh */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_14px_38px_rgba(15,23,42,0.07)] flex flex-col sm:flex-row items-center gap-5 group hover:shadow-xl transition-all border-2 border-[#CBD5E1]">
+            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-md shrink-0">
+              <Image
+                src="/images/founders/ayushi-singh.jpg"
+                alt="Ayushi Singh - Co-Founder"
+                width={128}
+                height={128}
+                className="w-full h-full object-cover"
+                unoptimized
+              />
+            </div>
+            <div className="space-y-1.5 text-center sm:text-left">
+              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#0F172A] text-white px-3 py-0.5 rounded-full">
+                CO-FOUNDER &amp; COO
+              </span>
+              <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#0F172A]">Ayushi Singh</h3>
+              <p className="text-xs text-[#475569] leading-relaxed">
+                Co-Founder steering product innovation, resident operations, helper attendance radars, and StaySetu&apos;s smart society ecosystem.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
