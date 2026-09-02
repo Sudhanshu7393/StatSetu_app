@@ -814,45 +814,60 @@ export default function CompleteEcosystemStaySetuPortal() {
                     />
                   </div>
 
-                  {/* 📷 Live Photo Proof Upload Box */}
+                  {/* 📷 Live Photo Proof Upload Options */}
                   <div>
                     <label className="font-bold text-[#475569] text-[11px] block mb-1">
-                      Attach Live Photo of Blocked Vehicle (Proof):
+                      Attach Photo of Blocked Vehicle (Proof):
                     </label>
                     
                     {parkingPhoto ? (
-                      <div className="relative rounded-2xl overflow-hidden border-2 border-[#CBD5E1] max-h-48 bg-slate-900 group">
+                      <div className="relative rounded-2xl overflow-hidden border-2 border-[#CBD5E1] bg-slate-900 group">
                         <img
                           src={parkingPhoto}
                           alt="Wrongly Parked Vehicle Proof"
                           className="w-full h-44 object-cover"
                         />
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-between p-3 text-white">
-                          <span className="text-[10px] bg-emerald-700 font-bold px-2 py-1 rounded-md flex items-center gap-1">
+                          <span className="text-[10px] bg-emerald-700 font-bold px-2 py-1 rounded-md flex items-center gap-1 shadow-sm">
                             <CheckCircle2 className="w-3.5 h-3.5" />
                             <span>Photo Attached</span>
                           </span>
                           <button
                             type="button"
                             onClick={() => setParkingPhoto(null)}
-                            className="bg-rose-700 hover:bg-rose-800 text-white text-[10px] font-bold px-2.5 py-1 rounded-md cursor-pointer"
+                            className="bg-rose-700 hover:bg-rose-800 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-md cursor-pointer transition-transform active:scale-95"
                           >
-                            Remove Photo
+                            Remove / Retake
                           </button>
                         </div>
                       </div>
                     ) : (
-                      <label className="w-full p-3.5 bg-[#F8FAFC] hover:bg-[#F1F5F9] border-2 border-dashed border-[#CBD5E1] rounded-2xl flex items-center justify-center gap-2 cursor-pointer transition-colors text-slate-700 font-bold text-xs">
-                        <Camera className="w-4 h-4 text-[#2563EB]" />
-                        <span>📷 Take / Upload Live Photo of Blocked Vehicle</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          capture="environment"
-                          onChange={handlePhotoUpload}
-                          className="hidden"
-                        />
-                      </label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {/* 1. Direct Live Camera Capture */}
+                        <label className="p-3 bg-[#F8FAFC] hover:bg-[#F1F5F9] border-2 border-dashed border-[#2563EB] rounded-2xl flex items-center justify-center gap-2 cursor-pointer transition-colors text-[#2563EB] font-bold text-xs shadow-2xs">
+                          <Camera className="w-4 h-4" />
+                          <span>📷 Click Live Photo (Camera)</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            capture="environment"
+                            onChange={handlePhotoUpload}
+                            className="hidden"
+                          />
+                        </label>
+
+                        {/* 2. Gallery Upload */}
+                        <label className="p-3 bg-[#F8FAFC] hover:bg-[#F1F5F9] border-2 border-dashed border-[#CBD5E1] rounded-2xl flex items-center justify-center gap-2 cursor-pointer transition-colors text-slate-700 font-bold text-xs shadow-2xs">
+                          <Download className="w-4 h-4 text-slate-500" />
+                          <span>🖼️ Choose from Gallery</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handlePhotoUpload}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
                     )}
                   </div>
 
@@ -1574,69 +1589,6 @@ export default function CompleteEcosystemStaySetuPortal() {
             </div>
           </div>
 
-        </div>
-      </section>
-
-      {/* ── 6. LEADERSHIP & FOUNDERS ── */}
-      <section id="leadership" className="px-3.5 sm:px-6 lg:px-8 py-8 sm:py-12 max-w-7xl mx-auto space-y-6">
-        <div className="text-center space-y-1.5">
-          <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#2563EB] block">
-            STAYSETU LEADERSHIP
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-serif text-[#0F172A]">
-            Meet Our Founders
-          </h2>
-          <p className="text-xs text-[#64748B] max-w-lg mx-auto">
-            Pioneering smart gated community technology &amp; automated township management across India.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {/* Founder - Sudhanshu Pandey */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_14px_38px_rgba(15,23,42,0.07)] flex flex-col sm:flex-row items-center gap-5 group hover:shadow-xl transition-all border-2 border-[#CBD5E1]">
-            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-md shrink-0">
-              <Image
-                src="/images/founders/sudhanshu-pandey.jpg"
-                alt="Sudhanshu Pandey - Founder"
-                width={128}
-                height={128}
-                className="w-full h-full object-cover"
-                unoptimized
-              />
-            </div>
-            <div className="space-y-1.5 text-center sm:text-left">
-              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#0F172A] text-white px-3 py-0.5 rounded-full">
-                FOUNDER &amp; CEO
-              </span>
-              <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#0F172A]">Sudhanshu Pandey</h3>
-              <p className="text-xs text-[#475569] leading-relaxed">
-                Driving StaySetu&apos;s vision for next-generation smart gated societies, AI security terminals, and automated township living.
-              </p>
-            </div>
-          </div>
-
-          {/* Co-Founder - Ayushi Singh */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_14px_38px_rgba(15,23,42,0.07)] flex flex-col sm:flex-row items-center gap-5 group hover:shadow-xl transition-all border-2 border-[#CBD5E1]">
-            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-md shrink-0">
-              <Image
-                src="/images/founders/ayushi-singh.jpg"
-                alt="Ayushi Singh - Co-Founder"
-                width={128}
-                height={128}
-                className="w-full h-full object-cover"
-                unoptimized
-              />
-            </div>
-            <div className="space-y-1.5 text-center sm:text-left">
-              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#0F172A] text-white px-3 py-0.5 rounded-full">
-                CO-FOUNDER &amp; COO
-              </span>
-              <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#0F172A]">Ayushi Singh</h3>
-              <p className="text-xs text-[#475569] leading-relaxed">
-                Co-Founder steering product innovation, resident operations, helper attendance radars, and StaySetu&apos;s smart society ecosystem.
-              </p>
-            </div>
-          </div>
         </div>
       </section>
 
