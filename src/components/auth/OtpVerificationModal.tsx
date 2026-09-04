@@ -126,7 +126,7 @@ export function OtpVerificationModal({
             <MessageSquare className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="font-serif font-bold text-slate-900 text-lg sm:text-xl">
+            <h3 className="font-extrabold tracking-tight text-slate-900 text-lg sm:text-xl">
               Verify Phone Number
             </h3>
             <p className="text-xs text-slate-500">

@@ -143,7 +143,7 @@ export function Navbar() {
                             StaySetu Verified Account
                           </span>
                         </div>
-                        <p className="font-serif font-bold text-xs text-[#0F172A] truncate">
+                        <p className="font-bold text-xs text-[#0F172A] truncate">
                           {currentUser.name || 'Resident User'}
                         </p>
                         <p className="text-[10px] text-[#64748B] truncate">

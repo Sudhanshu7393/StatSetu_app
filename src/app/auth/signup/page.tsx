@@ -168,7 +168,7 @@ export default function SocietySignupPage() {
             <StaySetuLogo variant="dark" size="lg" />
           </Link>
 
-          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#0F172A] pt-2">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0F172A] pt-2">
             Create Your Account
           </h1>
           <p className="text-xs text-[#64748B]">
@@ -182,7 +182,7 @@ export default function SocietySignupPage() {
           {success ? (
             <div className="p-6 text-center space-y-3">
               <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
-              <h3 className="font-serif font-bold text-lg text-[#0F172A]">Account Registered!</h3>
+              <h3 className="font-extrabold tracking-tight text-lg text-[#0F172A]">Account Registered!</h3>
               <p className="text-xs text-[#64748B]">Welcome to StaySetu. Redirecting to your community dashboard...</p>
             </div>
           ) : (

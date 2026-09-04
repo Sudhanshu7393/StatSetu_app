@@ -227,7 +227,7 @@ export default function SocietyLoginPage() {
             <StaySetuLogo variant="dark" size="lg" />
           </Link>
 
-          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#0F172A] pt-2">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0F172A] pt-2">
             Sign in to Your Society
           </h1>
           <p className="text-xs text-[#64748B]">
@@ -413,7 +413,7 @@ export default function SocietyLoginPage() {
                   <UserX className="w-7 h-7" />
                 </div>
 
-                <h3 className="font-serif font-bold text-xl text-slate-900">
+                <h3 className="font-extrabold tracking-tight text-xl text-slate-900">
                   Account Not Registered!
                 </h3>
 

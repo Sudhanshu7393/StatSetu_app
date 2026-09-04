@@ -471,7 +471,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
           >
             <div className="flex items-center gap-1.5">
               <Building2 className="w-4 h-4 text-[#2563EB] shrink-0" />
-              <span className="font-serif font-bold text-xs text-[#0F172A] tracking-tight group-hover:text-[#2563EB] transition-colors truncate">
+              <span className="font-extrabold text-xs text-[#0F172A] tracking-tight group-hover:text-[#2563EB] transition-colors truncate">
                 {currentUser?.society || 'Greenwood Grand Township, Gurugram'}
               </span>
               <ChevronDown className="w-3 h-3 text-[#64748B] shrink-0 group-hover:translate-y-0.5 transition-transform" />
@@ -557,7 +557,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
 
         {/* ═══════════════════════════════════════════════════════════════
             TAB 1: 🏠 HOME (NOBROKERHOOD / MYGATE QUICK ACTION DASHBOARD)
-           ═══════════════════════════════════════════════════════════════ */}
+            ═══════════════════════════════════════════════════════════════ */}
         {activeTab === 'HOME' && (
           <div className="space-y-4 animate-in fade-in duration-200">
             
@@ -571,7 +571,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     <ShieldCheck className="w-3 h-3 text-[#38BDF8]" />
                     <span>Verified Resident</span>
                   </div>
-                  <h2 className="font-serif font-bold text-lg text-white">
+                  <h2 className="font-extrabold tracking-tight text-lg text-white">
                     {currentUser?.name || 'Sudhanshu Pandey'}
                   </h2>
                   <p className="text-xs text-slate-300 font-semibold flex items-center gap-1.5">
@@ -732,7 +732,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             {activePasses.length > 0 && (
               <div className="bg-white rounded-3xl p-4 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-serif font-bold text-xs text-[#0F172A] flex items-center gap-1.5">
+                  <span className="font-bold text-xs text-[#0F172A] flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     <span>Active Gate Passes ({activePasses.length})</span>
                   </span>
@@ -776,7 +776,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   <div className="p-1.5 rounded-xl bg-purple-50 text-purple-700">
                     <Users className="w-4 h-4" />
                   </div>
-                  <span className="font-serif font-bold text-xs text-[#0F172A]">
+                  <span className="font-bold text-xs text-[#0F172A]">
                     Domestic Staff Active on Campus
                   </span>
                 </div>
@@ -804,7 +804,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             <div className="bg-white rounded-3xl p-4 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 flex items-center justify-between text-xs">
               <div className="space-y-0.5">
                 <span className="text-[10px] font-bold text-[#64748B] uppercase">PREPAID ELECTRICITY METER</span>
-                <p className="font-serif font-bold text-sm text-[#0F172A]">Balance: ₹{meterBalance}</p>
+                <p className="font-bold text-sm text-[#0F172A]">Balance: ₹{meterBalance}</p>
                 <p className="text-[9px] text-emerald-700 font-semibold">MTR-882190 (Tower A - 102)</p>
               </div>
 
@@ -824,7 +824,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             {/* Recent Gate Activity Log Snippet */}
             <div className="bg-white rounded-3xl p-4 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="font-serif font-bold text-xs text-[#0F172A]">
+                <span className="font-bold text-xs text-[#0F172A]">
                   🛡️ Live Gate Entry Feed
                 </span>
                 <button
@@ -863,7 +863,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   <div className="p-1.5 rounded-xl bg-blue-50 text-[#2563EB]">
                     <Mic className="w-5 h-5" />
                   </div>
-                  <span className="font-serif font-bold text-sm text-[#0F172A]">Voice Gate Pass (Hands-Free)</span>
+                  <span className="font-bold text-sm text-[#0F172A]">Voice Gate Pass (Hands-Free)</span>
                 </div>
                 <span className="text-[9px] font-bold bg-blue-100 text-[#2563EB] px-2 py-0.5 rounded-full">
                   AI Voice
@@ -897,7 +897,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   <div className="p-1.5 rounded-xl bg-rose-50 text-rose-600">
                     <Car className="w-5 h-5" />
                   </div>
-                  <span className="font-serif font-bold text-sm text-[#0F172A]">Wrong Parking Photo Alert</span>
+                  <span className="font-bold text-sm text-[#0F172A]">Wrong Parking Photo Alert</span>
                 </div>
                 <span className="text-[9px] font-bold bg-rose-100 text-rose-800 px-2 py-0.5 rounded-full">
                   Basement B1/B2
@@ -994,7 +994,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             {/* FastTag & Guard Gate Logs */}
             <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="font-serif font-bold text-xs text-[#0F172A]">
+                <span className="font-bold text-xs text-[#0F172A]">
                   🚗 ANPR FastTag Boom Barrier Control
                 </span>
                 <button
@@ -1029,7 +1029,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-bold text-[#64748B] uppercase">RWA MONTHLY DUES</span>
-                  <h3 className="font-serif font-bold text-lg text-[#0F172A]">September Maintenance</h3>
+                  <h3 className="font-bold text-lg text-[#0F172A]">September Maintenance</h3>
                 </div>
                 <span className={`text-xs font-black px-2.5 py-1 rounded-full ${maintenancePaid ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
                   {maintenancePaid ? 'PAID ✓' : 'DUE'}
@@ -1081,7 +1081,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             {/* Sinking Fund & RWA Audited Ledger */}
             <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="font-serif font-bold text-xs text-[#0F172A]">
+                <span className="font-bold text-xs text-[#0F172A]">
                   🏛️ RWA Audited Transparency Statement
                 </span>
                 <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
@@ -1092,11 +1092,11 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="p-3 bg-slate-50/80 rounded-xl border border-slate-200/60">
                   <span className="text-[10px] text-[#64748B] block">SINKING FUND (HDFC)</span>
-                  <span className="font-serif font-bold text-sm text-[#0F172A]">₹1.15 Crores</span>
+                  <span className="font-bold text-sm text-[#0F172A]">₹1.15 Crores</span>
                 </div>
                 <div className="p-3 bg-slate-50/80 rounded-xl border border-slate-200/60">
                   <span className="text-[10px] text-[#64748B] block">COLLECTION THIS MONTH</span>
-                  <span className="font-serif font-bold text-sm text-emerald-700">₹38,42,000</span>
+                  <span className="font-bold text-sm text-emerald-700">₹38,42,000</span>
                 </div>
               </div>
 
@@ -1128,7 +1128,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 <span className="text-xs font-bold text-[#64748B]">{totalVotes} Votes</span>
               </div>
 
-              <h4 className="font-serif text-xs font-bold text-[#0F172A] leading-relaxed">
+              <h4 className="font-bold text-xs text-[#0F172A] leading-relaxed">
                 {forumPoll.title}
               </h4>
 
@@ -1170,7 +1170,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             {/* Resident Marketplace Items */}
             <div className="space-y-3">
               <div className="flex items-center justify-between px-1">
-                <span className="font-serif font-bold text-xs text-[#0F172A]">
+                <span className="font-bold text-xs text-[#0F172A]">
                   🛍️ Resident Marketplace (Buy &amp; Sell)
                 </span>
                 <span className="text-[10px] text-[#64748B]">Zero Brokerage</span>
@@ -1210,7 +1210,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   <div key={item.id} className="bg-white rounded-2xl p-3 border border-slate-200/80 shadow-[0_4px_16px_rgba(0,0,0,0.03)] space-y-2 flex flex-col justify-between">
                     <img src={item.image} alt={item.title} className="w-full h-24 object-cover rounded-xl" />
                     <div>
-                      <h5 className="font-serif font-bold text-xs text-[#0F172A] truncate">{item.title}</h5>
+                      <h5 className="font-bold text-xs text-[#0F172A] truncate">{item.title}</h5>
                       <p className="font-bold text-xs text-[#2563EB]">{item.price}</p>
                       <p className="text-[9px] text-[#64748B] truncate">{item.seller}</p>
                     </div>
@@ -1246,11 +1246,11 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             {/* Flat Profile Card */}
             <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-[#0F172A] text-white font-serif font-bold text-lg flex items-center justify-center shadow-xs">
+                <div className="w-12 h-12 rounded-2xl bg-[#0F172A] text-white font-bold text-lg flex items-center justify-center shadow-xs">
                   {(currentUser?.name || 'S').charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <h3 className="font-serif font-bold text-base text-[#0F172A]">{currentUser?.name || 'Sudhanshu Pandey'}</h3>
+                  <h3 className="font-bold text-base text-[#0F172A]">{currentUser?.name || 'Sudhanshu Pandey'}</h3>
                   <p className="text-xs text-[#64748B]">{currentUser?.email || 'staysetu26@gmail.com'}</p>
                   <p className="text-xs font-bold text-[#2563EB]">🏡 {currentUser?.flat || 'Tower A - Flat 102'}</p>
                 </div>
@@ -1275,7 +1275,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             {/* Active 2-Hour Helpdesk Tickets */}
             <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="font-serif font-bold text-xs text-[#0F172A]">
+                <span className="font-bold text-xs text-[#0F172A]">
                   🔧 2-Hour SLA Helpdesk Tickets
                 </span>
                 <button onClick={() => setHelpdeskModalOpen(true)} className="text-[10px] text-[#2563EB] font-bold">
@@ -1304,7 +1304,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
 
             {/* Leadership Info */}
             <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
-              <span className="font-serif font-bold text-xs text-[#0F172A] block">
+              <span className="font-bold text-xs text-[#0F172A] block">
                 🏢 StaySetu Leadership &amp; Support
               </span>
               <div className="space-y-2 text-xs text-[#475569]">
@@ -1318,7 +1318,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             {/* Guard Terminal Mode Switcher */}
             <div className="bg-white rounded-3xl p-4 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 flex items-center justify-between">
               <div>
-                <p className="font-serif font-bold text-xs text-[#0F172A]">🛡️ Security Guard Terminal Mode</p>
+                <p className="font-bold text-xs text-[#0F172A]">🛡️ Security Guard Terminal Mode</p>
                 <p className="text-[10px] text-[#64748B]">For Gate security personnel &amp; guards</p>
               </div>
               <button
@@ -1391,7 +1391,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
           <div className="bg-white rounded-t-3xl sm:rounded-3xl border border-slate-200 w-full max-w-md p-5 space-y-4 shadow-2xl animate-in slide-in-from-bottom duration-200">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <div>
-                <h3 className="font-serif font-bold text-base text-[#0F172A]">Select Society Campus</h3>
+                <h3 className="font-bold text-base text-[#0F172A]">Select Society Campus</h3>
                 <p className="text-[11px] text-[#64748B]">Switch between your registered residential units</p>
               </div>
               <button onClick={() => setSocietyPickerOpen(false)} className="text-[#64748B] hover:text-[#0F172A] p-1">
@@ -1428,7 +1428,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-serif font-bold text-xs text-[#0F172A]">{soc.name}</span>
+                    <span className="font-bold text-xs text-[#0F172A]">{soc.name}</span>
                     {currentUser?.society === soc.name && (
                       <CheckCircle2 className="w-4 h-4 text-[#2563EB]" />
                     )}
@@ -1448,7 +1448,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
           <div className="bg-white rounded-t-3xl sm:rounded-3xl border border-slate-200 w-full max-w-md p-5 space-y-4 shadow-2xl animate-in slide-in-from-bottom duration-200 max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <div>
-                <h3 className="font-serif font-bold text-base text-[#0F172A] flex items-center gap-2">
+                <h3 className="font-bold text-base text-[#0F172A] flex items-center gap-2">
                   <span>📢 Society Circulars</span>
                   {unreadNoticeCount > 0 && (
                     <span className="text-[10px] bg-[#2563EB] text-white font-bold px-2 py-0.5 rounded-full">
@@ -1485,7 +1485,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-serif font-bold text-xs text-[#0F172A]">{notice.title}</span>
+                    <span className="font-bold text-xs text-[#0F172A]">{notice.title}</span>
                     <span className="text-[9px] font-bold text-[#64748B]">{notice.time}</span>
                   </div>
                   <p className="text-[11px] text-[#475569] leading-relaxed">{notice.body}</p>
@@ -1507,7 +1507,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <div>
                 <span className="text-[9px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">PAYMENT SUCCESSFUL</span>
-                <h3 className="font-serif font-bold text-base text-[#0F172A] mt-1">Official GST Tax Receipt</h3>
+                <h3 className="font-bold text-base text-[#0F172A] mt-1">Official GST Tax Receipt</h3>
               </div>
               <button onClick={() => setInvoiceModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
@@ -1563,7 +1563,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             <div className="w-16 h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto animate-pulse">
               <ShieldAlert className="w-8 h-8" />
             </div>
-            <h3 className="font-serif font-bold text-xl text-slate-900">Trigger Society Emergency SOS?</h3>
+            <h3 className="font-bold text-xl text-slate-900">Trigger Society Emergency SOS?</h3>
             <p className="text-xs text-slate-600">
               This will instantly trigger loud alarms on the Main Gate Security Guard Terminal and send urgent alerts to all RWA committee members.
             </p>
@@ -1596,7 +1596,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
-              <h3 className="font-serif font-bold text-base text-[#0F172A]">🛵 Pre-Approve Delivery</h3>
+              <h3 className="font-bold text-base text-[#0F172A]">🛵 Pre-Approve Delivery</h3>
               <button onClick={() => setDeliveryModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
               </button>
@@ -1645,7 +1645,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
-              <h3 className="font-serif font-bold text-base text-[#0F172A]">🚖 Pre-Approve Cab</h3>
+              <h3 className="font-bold text-base text-[#0F172A]">🚖 Pre-Approve Cab</h3>
               <button onClick={() => setCabModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
               </button>
@@ -1693,7 +1693,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
-              <h3 className="font-serif font-bold text-base text-[#0F172A]">🎫 Invite Guest (WhatsApp QR)</h3>
+              <h3 className="font-bold text-base text-[#0F172A]">🎫 Invite Guest (WhatsApp QR)</h3>
               <button onClick={() => setGuestModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
               </button>
@@ -1702,7 +1702,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               {generatedGuestPass ? (
                 <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-center space-y-3">
                   <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">PASS ACTIVE</span>
-                  <p className="font-serif font-bold text-xl text-[#0F172A]">{generatedGuestPass}</p>
+                  <p className="font-bold text-xl text-[#0F172A]">{generatedGuestPass}</p>
                   <p className="text-[11px] text-[#475569]">Guest: <strong>{guestName}</strong> for {currentUser?.flat || 'Flat A-102'}</p>
                   <a
                     href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
@@ -1757,7 +1757,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-3 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
-              <h3 className="font-serif font-bold text-base text-[#0F172A]">Request Backup Domestic Help</h3>
+              <h3 className="font-bold text-base text-[#0F172A]">Request Backup Domestic Help</h3>
               <button onClick={() => setMaidModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
               </button>
@@ -1787,7 +1787,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-3 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
-              <h3 className="font-serif font-bold text-base text-[#0F172A]">Raise 2-Hour SLA Ticket</h3>
+              <h3 className="font-bold text-base text-[#0F172A]">Raise 2-Hour SLA Ticket</h3>
               <button onClick={() => setHelpdeskModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
               </button>
@@ -1833,7 +1833,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-3 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
-              <h3 className="font-serif font-bold text-base text-[#0F172A]">Book Clubhouse Amenity</h3>
+              <h3 className="font-bold text-base text-[#0F172A]">Book Clubhouse Amenity</h3>
               <button onClick={() => setAmenityModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
               </button>
@@ -1884,7 +1884,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-3 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
-              <h3 className="font-serif font-bold text-base text-[#0F172A]">Shifting Truck &amp; Lift Pass</h3>
+              <h3 className="font-bold text-base text-[#0F172A]">Shifting Truck &amp; Lift Pass</h3>
               <button onClick={() => setMovingPassModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
               </button>
