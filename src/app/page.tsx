@@ -471,7 +471,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
           >
             <div className="flex items-center gap-1.5">
               <Building2 className="w-4 h-4 text-[#2563EB] shrink-0" />
-              <span className="font-extrabold text-xs text-[#0F172A] tracking-tight group-hover:text-[#2563EB] transition-colors truncate">
+              <span className="font-heading font-extrabold text-xs text-[#0F172A] tracking-tight group-hover:text-[#2563EB] transition-colors truncate">
                 {currentUser?.society || 'Greenwood Grand Township, Gurugram'}
               </span>
               <ChevronDown className="w-3 h-3 text-[#64748B] shrink-0 group-hover:translate-y-0.5 transition-transform" />
@@ -571,7 +571,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     <ShieldCheck className="w-3 h-3 text-[#38BDF8]" />
                     <span>Verified Resident</span>
                   </div>
-                  <h2 className="font-extrabold tracking-tight text-lg text-white">
+                  <h2 className="font-heading font-extrabold tracking-tight text-lg text-white">
                     {currentUser?.name || 'Sudhanshu Pandey'}
                   </h2>
                   <p className="text-xs text-slate-300 font-semibold flex items-center gap-1.5">

@@ -26,12 +26,24 @@ const config: Config = {
       },
       fontFamily: {
         sans: [
-          "var(--font-plus-jakarta)",
-          "Plus Jakarta Sans",
+          "var(--font-inter)",
+          "Inter",
           "system-ui",
           "-apple-system",
           "BlinkMacSystemFont",
           "Segoe UI",
+          "sans-serif",
+        ],
+        heading: [
+          "var(--font-outfit)",
+          "Outfit",
+          "var(--font-inter)",
+          "system-ui",
+          "sans-serif",
+        ],
+        display: [
+          "var(--font-outfit)",
+          "Outfit",
           "sans-serif",
         ],
       },

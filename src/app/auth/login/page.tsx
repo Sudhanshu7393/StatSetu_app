@@ -227,7 +227,7 @@ export default function SocietyLoginPage() {
             <StaySetuLogo variant="dark" size="lg" />
           </Link>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0F172A] pt-2">
+          <h1 className="text-2xl sm:text-3xl font-heading font-extrabold tracking-tight text-[#0F172A] pt-2">
             Sign in to Your Society
           </h1>
           <p className="text-xs text-[#64748B]">

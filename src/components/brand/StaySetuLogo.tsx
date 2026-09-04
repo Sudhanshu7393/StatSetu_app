@@ -88,7 +88,7 @@ export function StaySetuLogo({
       {/* ── Official Wordmark Typography ── */}
       {showText && (
         <div className="flex flex-col leading-none">
-          <span className={`font-extrabold tracking-tight ${currentSize.text} ${stayTextColor}`}>
+          <span className={`font-heading font-extrabold tracking-tight ${currentSize.text} ${stayTextColor}`}>
             Stay<span className={setuTextColor}>Setu</span>
           </span>
           <span className={`text-[8px] font-bold uppercase tracking-[0.2em] mt-1 ${subtextColor}`}>
