@@ -54,11 +54,31 @@ import {
   Compass,
   Sparkles,
   ChevronDown,
+  Printer,
+  CheckCheck,
 } from 'lucide-react';
 import { InAppChatModal } from '@/components/chat/InAppChatModal';
 import { SocietyStore, HelperStaff, AmenityBooking, HelpdeskTicket, ParkingAlert, GateLog, AGMPoll } from '@/lib/societyStore';
 
 type AppTab = 'HOME' | 'GATE' | 'PAYMENTS' | 'BAZAAR' | 'MY_FLAT';
+
+interface ActivePass {
+  id: string;
+  type: 'DELIVERY' | 'CAB' | 'GUEST';
+  title: string;
+  detail: string;
+  code: string;
+  time: string;
+}
+
+interface SocietyNotice {
+  id: string;
+  title: string;
+  body: string;
+  time: string;
+  category: 'MAINTENANCE' | 'COMMUNITY' | 'SECURITY';
+  isRead: boolean;
+}
 
 export default function NoBrokerHoodStaySetuMobileApp() {
   const router = useRouter();
@@ -76,6 +96,56 @@ export default function NoBrokerHoodStaySetuMobileApp() {
     flat?: string;
     society?: string;
   } | null>(null);
+
+  // ── 🏢 SOCIETY CAMPUS SELECTOR STATE ──
+  const [societyPickerOpen, setSocietyPickerOpen] = useState(false);
+
+  // ── 🔔 DYNAMIC NOTIFICATIONS & READ STATUS STATE ──
+  const [noticeModalOpen, setNoticeModalOpen] = useState(false);
+  const [notices, setNotices] = useState<SocietyNotice[]>([
+    {
+      id: 'notif-1',
+      title: '⚠️ DG Power Backup 30-Min Load Testing',
+      body: 'Scheduled load testing on Wednesday from 11:00 AM to 11:30 AM across all high-rise towers. Elevators will operate on secondary UPS.',
+      time: 'Today, 09:30 AM',
+      category: 'MAINTENANCE',
+      isRead: false,
+    },
+    {
+      id: 'notif-2',
+      title: '🏊 Swimming Pool Ozone Deep Cleaning',
+      body: 'Semi-annual filtration & ozone deep cleaning on Friday 06:00 AM - 12:00 PM. Reopens Saturday morning.',
+      time: 'Yesterday, 04:15 PM',
+      category: 'COMMUNITY',
+      isRead: false,
+    },
+    {
+      id: 'notif-3',
+      title: '🚗 Basement B1 Speed Limit Notice (10 km/h)',
+      body: 'Security marshals will monitor speeding vehicles in ramps and basement driveways. Please drive safely.',
+      time: '02 Sep 2026',
+      category: 'SECURITY',
+      isRead: true,
+    },
+  ]);
+
+  const unreadNoticeCount = notices.filter(n => !n.isRead).length;
+
+  const handleMarkAllNoticesAsRead = () => {
+    setNotices(prev => prev.map(n => ({ ...n, isRead: true })));
+  };
+
+  // ── 🎫 ACTIVE PRE-APPROVED PASSES ON HOME ──
+  const [activePasses, setActivePasses] = useState<ActivePass[]>([
+    {
+      id: 'pass-del-1',
+      type: 'DELIVERY',
+      title: 'Zomato Food Delivery',
+      detail: 'Rider: Aman Kumar • Leave at Gate Desk',
+      code: 'DEL-8841',
+      time: 'Valid next 45 mins',
+    },
+  ]);
 
   // ── MANDATORY AUTHENTICATION GATE ──
   useEffect(() => {
@@ -115,9 +185,6 @@ export default function NoBrokerHoodStaySetuMobileApp() {
   });
   const [meterBalance, setMeterBalance] = useState(1450);
   const [maintenancePaid, setMaintenancePaid] = useState(false);
-
-  // Sync notification toast
-  const [syncNotification, setSyncNotification] = useState<string | null>(null);
 
   // ── 1. WRONG PARKING RESOLVER WITH LIVE CAMERA PHOTO ──
   const [parkingCarNo, setParkingCarNo] = useState('UP14 EX 9988');
@@ -162,8 +229,9 @@ export default function NoBrokerHoodStaySetuMobileApp() {
   const [maidModalOpen, setMaidModalOpen] = useState(false);
   const [bookedMaid, setBookedMaid] = useState<string | null>(null);
 
-  // ── 3. RWA FINANCIAL TRANSPARENCY ──
+  // ── 3. RWA FINANCIAL TRANSPARENCY & GST INVOICE ──
   const [ledgerModalOpen, setLedgerModalOpen] = useState(false);
+  const [invoiceModalOpen, setInvoiceModalOpen] = useState(false);
 
   // ── 4. DIGITAL MOVE-IN / OUT & SERVICE LIFT ──
   const [movingPassModalOpen, setMovingPassModalOpen] = useState(false);
@@ -181,9 +249,6 @@ export default function NoBrokerHoodStaySetuMobileApp() {
   const [helpdeskCategory, setHelpdeskCategory] = useState('Plumbing & Water Seepage');
   const [helpdeskDescription, setHelpdeskDescription] = useState('');
   const [otpVerifyInput, setOtpVerifyInput] = useState('');
-
-  // ── 7. NOTICE BOARD & CIRCULARS ──
-  const [noticeModalOpen, setNoticeModalOpen] = useState(false);
 
   // Guard Terminal State
   const [guardBoomStatus, setGuardBoomStatus] = useState<'CLOSED' | 'OPEN'>('CLOSED');
@@ -282,21 +347,40 @@ export default function NoBrokerHoodStaySetuMobileApp() {
   const handlePayMaintenance = () => {
     SocietyStore.payMaintenance('102');
     setMaintenancePaid(true);
-    alert('💳 Payment of ₹3,540 Successful via UPI! Instant GST Receipt generated & Sinking Fund updated.');
+    setInvoiceModalOpen(true);
   };
 
   const handlePreApproveDelivery = () => {
+    const passCode = `DEL-${Math.floor(1000 + Math.random() * 9000)}`;
+    const newPass: ActivePass = {
+      id: `pass-${Date.now()}`,
+      type: 'DELIVERY',
+      title: `${deliveryPartner} Delivery`,
+      detail: leaveAtGate ? 'Leave at Gate Security Desk' : 'Direct Doorstep Clearance',
+      code: passCode,
+      time: 'Valid next 60 mins',
+    };
+    setActivePasses(prev => [newPass, ...prev]);
     SocietyStore.addGateLog(
       'DELIVERY',
-      `🛵 Pre-Approved Delivery: ${deliveryPartner} for ${currentUser?.flat || 'Tower A - 102'} ${leaveAtGate ? '(Leave at Gate)' : ''}`,
+      `🛵 Pre-Approved Delivery: ${deliveryPartner} (#${passCode}) for ${currentUser?.flat || 'Tower A - 102'}`,
       'Pre-Approved',
       isNetworkOnline
     );
     setDeliveryModalOpen(false);
-    alert(`✅ ${deliveryPartner} delivery pre-approved! Security will grant direct touchless entry.`);
   };
 
   const handlePreApproveCab = () => {
+    const passCode = `CAB-${Math.floor(1000 + Math.random() * 9000)}`;
+    const newPass: ActivePass = {
+      id: `pass-${Date.now()}`,
+      type: 'CAB',
+      title: `${cabPartner} Cab (${cabPlate})`,
+      detail: '0.4s FastTag Boom Entry Pre-Approved',
+      code: passCode,
+      time: 'Valid next 30 mins',
+    };
+    setActivePasses(prev => [newPass, ...prev]);
     SocietyStore.addGateLog(
       'CAB',
       `🚖 Pre-Approved Cab: ${cabPartner} (${cabPlate}) for ${currentUser?.flat || 'Tower A - 102'}`,
@@ -304,7 +388,6 @@ export default function NoBrokerHoodStaySetuMobileApp() {
       isNetworkOnline
     );
     setCabModalOpen(false);
-    alert(`✅ ${cabPartner} (${cabPlate}) pre-approved! Boom barrier will open automatically.`);
   };
 
   const handleCreateGuestPass = () => {
@@ -314,12 +397,36 @@ export default function NoBrokerHoodStaySetuMobileApp() {
     }
     const passCode = `GST-${Math.floor(1000 + Math.random() * 9000)}`;
     setGeneratedGuestPass(passCode);
+    const newPass: ActivePass = {
+      id: `pass-${Date.now()}`,
+      type: 'GUEST',
+      title: `Guest: ${guestName}`,
+      detail: `Invited to ${currentUser?.flat || 'Flat A-102'}`,
+      code: passCode,
+      time: 'Valid Today',
+    };
+    setActivePasses(prev => [newPass, ...prev]);
     SocietyStore.addGateLog(
       'VISITOR',
       `🎫 Guest Pass #${passCode}: ${guestName} for ${currentUser?.flat || 'Tower A - 102'}`,
       'Pass Active',
       isNetworkOnline
     );
+  };
+
+  const handleCancelPass = (passId: string) => {
+    setActivePasses(prev => prev.filter(p => p.id !== passId));
+  };
+
+  const handleSwitchSociety = (societyName: string, flatName: string) => {
+    const updatedUser = {
+      ...(currentUser || {}),
+      society: societyName,
+      flat: flatName,
+    };
+    setCurrentUser(updatedUser);
+    localStorage.setItem('staysetu-current-user', JSON.stringify(updatedUser));
+    setSocietyPickerOpen(false);
   };
 
   const handleLogout = () => {
@@ -357,14 +464,17 @@ export default function NoBrokerHoodStaySetuMobileApp() {
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-4 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
         <div className="max-w-md mx-auto flex items-center justify-between">
           
-          {/* Society & Flat Selector */}
-          <div className="space-y-0.5 max-w-[200px] sm:max-w-none">
-            <div className="flex items-center gap-1.5 cursor-pointer group">
+          {/* Society & Flat Selector (Interactive Sheet Trigger) */}
+          <div
+            onClick={() => setSocietyPickerOpen(true)}
+            className="space-y-0.5 max-w-[200px] sm:max-w-none cursor-pointer group"
+          >
+            <div className="flex items-center gap-1.5">
               <Building2 className="w-4 h-4 text-[#2563EB] shrink-0" />
               <span className="font-serif font-bold text-xs text-[#0F172A] tracking-tight group-hover:text-[#2563EB] transition-colors truncate">
-                {currentUser?.society || 'Greenwood Grand Township'}
+                {currentUser?.society || 'Greenwood Grand Township, Gurugram'}
               </span>
-              <ChevronDown className="w-3 h-3 text-[#64748B] shrink-0" />
+              <ChevronDown className="w-3 h-3 text-[#64748B] shrink-0 group-hover:translate-y-0.5 transition-transform" />
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
@@ -391,17 +501,22 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               <span className="text-[10px] font-black uppercase tracking-wider">SOS</span>
             </button>
 
-            {/* 🔔 Circulars & Notice Bell */}
+            {/* 🔔 Dynamic Notice Bell with Unread Badge */}
             <button
               type="button"
-              onClick={() => setNoticeModalOpen(true)}
+              onClick={() => {
+                setNoticeModalOpen(true);
+                handleMarkAllNoticesAsRead();
+              }}
               className="relative p-2 bg-slate-100 hover:bg-slate-200/80 rounded-full text-[#0F172A] cursor-pointer transition-colors border border-slate-200/60"
-              title="Society Notices"
+              title="Society Circulars"
             >
               <Bell className="w-4 h-4 text-[#475569]" />
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#2563EB] text-white text-[9px] font-bold rounded-full flex items-center justify-center shadow-xs">
-                2
-              </span>
+              {unreadNoticeCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#2563EB] text-white text-[9px] font-black rounded-full flex items-center justify-center shadow-xs animate-pulse">
+                  {unreadNoticeCount}
+                </span>
+              )}
             </button>
 
             {/* 👤 Resident Profile Avatar */}
@@ -448,8 +563,6 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             
             {/* 🌟 Luxury Midnight Gradient Resident Identity Card */}
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] p-5 text-white shadow-[0_15px_35px_rgba(15,23,42,0.18)] border border-slate-700/80">
-              
-              {/* Subtle ambient light gradient flare */}
               <div className="absolute -top-10 -right-10 w-36 h-36 bg-[#2563EB]/25 rounded-full blur-2xl pointer-events-none" />
               
               <div className="relative z-10 flex items-center justify-between">
@@ -480,22 +593,28 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     {maintenancePaid ? 'Paid ✓' : 'Due: ₹3,540'}
                   </span>
                   <button
-                    onClick={() => setActiveTab('PAYMENTS')}
+                    onClick={() => {
+                      if (maintenancePaid) {
+                        setInvoiceModalOpen(true);
+                      } else {
+                        setActiveTab('PAYMENTS');
+                      }
+                    }}
                     className="text-[11px] text-[#38BDF8] hover:text-white font-bold block transition-colors"
                   >
-                    Pay Dues →
+                    {maintenancePaid ? 'View Invoice 🧾' : 'Pay Dues →'}
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* ── 8 QUICK ACTION TILES GRID (COLORFUL NOBROKERHOOD STYLE) ── */}
+            {/* ── 8 QUICK ACTION TILES GRID (100% VECTOR HIGH-RES ICONS) ── */}
             <div>
               <div className="flex items-center justify-between mb-2.5 px-1">
                 <p className="text-[11px] font-bold text-[#475569] uppercase tracking-wider">
-                  ⚡ Quick Passes &amp; Approvals
+                  ⚡ Quick Daily Passes &amp; Services
                 </p>
-                <span className="text-[10px] text-[#64748B] font-semibold">1-Tap Actions</span>
+                <span className="text-[10px] text-[#64748B] font-semibold">1-Tap Approvals</span>
               </div>
 
               <div className="grid grid-cols-4 gap-2.5">
@@ -503,106 +622,152 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   {
                     id: 'delivery',
                     label: 'Delivery',
-                    icon: '🛵',
-                    sub: 'Swiggy/Amazon',
+                    icon: PackageCheck,
+                    iconColor: 'text-orange-600',
                     onClick: () => setDeliveryModalOpen(true),
                     badge: 'Instant',
-                    gradient: 'from-orange-50 to-amber-50 border-orange-200/80 text-orange-950',
-                    badgeColor: 'bg-orange-100 text-orange-700',
+                    gradient: 'from-orange-50/80 to-amber-50/80 border-orange-200/80 text-orange-950',
+                    badgeColor: 'bg-orange-100 text-orange-800',
                   },
                   {
                     id: 'cab',
                     label: 'Allow Cab',
-                    icon: '🚖',
-                    sub: 'Uber/Ola',
+                    icon: Car,
+                    iconColor: 'text-amber-600',
                     onClick: () => setCabModalOpen(true),
                     badge: 'FastTag',
-                    gradient: 'from-yellow-50 to-amber-50 border-yellow-200/80 text-amber-950',
+                    gradient: 'from-yellow-50/80 to-amber-50/80 border-yellow-200/80 text-amber-950',
                     badgeColor: 'bg-yellow-100 text-amber-800',
                   },
                   {
                     id: 'guest',
                     label: 'Invite Guest',
-                    icon: '🎫',
-                    sub: 'WhatsApp QR',
+                    icon: QrCode,
+                    iconColor: 'text-emerald-600',
                     onClick: () => setGuestModalOpen(true),
-                    badge: 'Pass',
-                    gradient: 'from-emerald-50 to-teal-50 border-emerald-200/80 text-emerald-950',
+                    badge: 'QR Pass',
+                    gradient: 'from-emerald-50/80 to-teal-50/80 border-emerald-200/80 text-emerald-950',
                     badgeColor: 'bg-emerald-100 text-emerald-800',
                   },
                   {
                     id: 'maid',
                     label: 'Backup Maid',
-                    icon: '🧹',
-                    sub: 'Cook & Maid',
+                    icon: Users,
+                    iconColor: 'text-purple-600',
                     onClick: () => setMaidModalOpen(true),
-                    badge: 'Live',
-                    gradient: 'from-purple-50 to-fuchsia-50 border-purple-200/80 text-purple-950',
+                    badge: 'Staff',
+                    gradient: 'from-purple-50/80 to-fuchsia-50/80 border-purple-200/80 text-purple-950',
                     badgeColor: 'bg-purple-100 text-purple-800',
                   },
                   {
                     id: 'parking',
                     label: 'Wrong Parking',
-                    icon: '🚗',
-                    sub: 'Live Camera Alert',
+                    icon: Camera,
+                    iconColor: 'text-rose-600',
                     onClick: () => {
                       setActiveTab('GATE');
                       setTimeout(() => {
                         document.getElementById('wrong-parking-card')?.scrollIntoView({ behavior: 'smooth' });
                       }, 100);
                     },
-                    badge: 'Photo',
-                    gradient: 'from-rose-50 to-red-50 border-rose-200/80 text-rose-950',
-                    badgeColor: 'bg-rose-100 text-rose-700',
+                    badge: 'Camera',
+                    gradient: 'from-rose-50/80 to-red-50/80 border-rose-200/80 text-rose-950',
+                    badgeColor: 'bg-rose-100 text-rose-800',
                   },
                   {
                     id: 'helpdesk',
                     label: '2-Hr Helpdesk',
-                    icon: '🔧',
-                    sub: 'Plumber/Electrician',
+                    icon: Wrench,
+                    iconColor: 'text-cyan-600',
                     onClick: () => setHelpdeskModalOpen(true),
-                    badge: 'SLA',
-                    gradient: 'from-cyan-50 to-sky-50 border-cyan-200/80 text-cyan-950',
+                    badge: 'OTP SLA',
+                    gradient: 'from-cyan-50/80 to-sky-50/80 border-cyan-200/80 text-cyan-950',
                     badgeColor: 'bg-cyan-100 text-cyan-800',
                   },
                   {
                     id: 'amenity',
                     label: 'Clubhouse',
-                    icon: '🏸',
-                    sub: 'Court & Pool',
+                    icon: CalendarDays,
+                    iconColor: 'text-indigo-600',
                     onClick: () => setAmenityModalOpen(true),
-                    badge: 'Free',
-                    gradient: 'from-indigo-50 to-blue-50 border-indigo-200/80 text-indigo-950',
+                    badge: 'Free Slot',
+                    gradient: 'from-indigo-50/80 to-blue-50/80 border-indigo-200/80 text-indigo-950',
                     badgeColor: 'bg-indigo-100 text-indigo-800',
                   },
                   {
                     id: 'moving',
                     label: 'Move-In Pass',
-                    icon: '🚚',
-                    sub: 'Service Lift',
+                    icon: Truck,
+                    iconColor: 'text-slate-700',
                     onClick: () => setMovingPassModalOpen(true),
-                    badge: 'Truck',
-                    gradient: 'from-slate-50 to-gray-50 border-slate-200/80 text-slate-950',
+                    badge: 'Lift Pass',
+                    gradient: 'from-slate-50/80 to-gray-100/80 border-slate-200/80 text-slate-950',
                     badgeColor: 'bg-slate-200 text-slate-800',
                   },
-                ].map(action => (
-                  <button
-                    key={action.id}
-                    type="button"
-                    onClick={action.onClick}
-                    className={`bg-gradient-to-b ${action.gradient} rounded-2xl p-2.5 border shadow-[0_4px_12px_rgba(0,0,0,0.03)] flex flex-col items-center justify-between text-center space-y-1 cursor-pointer transition-transform active:scale-95 group relative min-h-[96px] hover:shadow-md`}
-                  >
-                    <span className="text-2xl pt-1 group-hover:scale-110 transition-transform">{action.icon}</span>
-                    <span className="text-[10px] font-bold leading-tight block">
-                      {action.label}
-                    </span>
-                    <span className={`text-[8px] font-black px-1.5 py-0.2 rounded-md ${action.badgeColor}`}>
-                      {action.badge}
-                    </span>
-                  </button>
-                ))}
+                ].map(action => {
+                  const IconComp = action.icon;
+                  return (
+                    <button
+                      key={action.id}
+                      type="button"
+                      onClick={action.onClick}
+                      className={`bg-gradient-to-b ${action.gradient} rounded-2xl p-2.5 border shadow-[0_4px_12px_rgba(0,0,0,0.03)] flex flex-col items-center justify-between text-center space-y-1.5 cursor-pointer transition-transform active:scale-95 group relative min-h-[96px] hover:shadow-md`}
+                    >
+                      <div className="p-2 rounded-xl bg-white/80 shadow-2xs group-hover:scale-110 transition-transform">
+                        <IconComp className={`w-5 h-5 ${action.iconColor}`} />
+                      </div>
+                      <span className="text-[10px] font-bold leading-tight block">
+                        {action.label}
+                      </span>
+                      <span className={`text-[8px] font-black px-1.5 py-0.2 rounded-md ${action.badgeColor}`}>
+                        {action.badge}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
+
+            {/* ── ACTIVE PRE-APPROVED PASSES WIDGET ── */}
+            {activePasses.length > 0 && (
+              <div className="bg-white rounded-3xl p-4 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="font-serif font-bold text-xs text-[#0F172A] flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Active Gate Passes ({activePasses.length})</span>
+                  </span>
+                  <span className="text-[10px] font-bold text-[#2563EB]">Live at Guard Terminal</span>
+                </div>
+
+                <div className="space-y-2">
+                  {activePasses.map(pass => (
+                    <div
+                      key={pass.id}
+                      className="p-3 bg-emerald-50/70 rounded-2xl border border-emerald-200/80 flex items-center justify-between text-xs"
+                    >
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-bold text-[#0F172A]">{pass.title}</span>
+                          <span className="font-mono text-[9px] font-bold bg-white px-1.5 py-0.5 rounded text-emerald-800 border border-emerald-200">
+                            #{pass.code}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-emerald-900">{pass.detail}</p>
+                        <p className="text-[9px] text-[#64748B]">{pass.time}</p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleCancelPass(pass.id)}
+                        className="text-[10px] font-bold text-rose-700 bg-white hover:bg-rose-50 px-2.5 py-1.5 rounded-xl border border-rose-200 shadow-2xs cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Helper Biometric Attendance Radar Snippet */}
             <div className="bg-white rounded-3xl p-4 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-2.5">
@@ -612,7 +777,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     <Users className="w-4 h-4" />
                   </div>
                   <span className="font-serif font-bold text-xs text-[#0F172A]">
-                    Staff Active on Campus Today
+                    Domestic Staff Active on Campus
                   </span>
                 </div>
                 <button
@@ -673,7 +838,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               <div className="space-y-1.5">
                 {guardLogs.slice(0, 3).map(log => (
                   <div key={log.id} className="p-2.5 bg-slate-50/80 rounded-xl flex items-center justify-between text-[11px] border border-slate-200/60">
-                    <span className="text-[#0F172A] font-semibold truncate max-w-[200px]">{log.detail}</span>
+                    <span className="text-[#0F172A] font-medium truncate max-w-[200px]">{log.detail}</span>
                     <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded shrink-0">
                       {log.timestamp}
                     </span>
@@ -886,17 +1051,31 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={handlePayMaintenance}
-                disabled={maintenancePaid}
-                className={`w-full py-3.5 rounded-2xl text-xs font-bold cursor-pointer shadow-md transition-transform active:scale-95 flex items-center justify-center gap-2 ${
-                  maintenancePaid ? 'bg-emerald-700 text-white' : 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white'
-                }`}
-              >
-                <CreditCard className="w-4 h-4" />
-                <span>{maintenancePaid ? 'Maintenance Paid via UPI ✓' : 'Pay ₹3,540 via 1-Click UPI'}</span>
-              </button>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={handlePayMaintenance}
+                  disabled={maintenancePaid}
+                  className={`flex-1 py-3.5 rounded-2xl text-xs font-bold cursor-pointer shadow-md transition-transform active:scale-95 flex items-center justify-center gap-2 ${
+                    maintenancePaid ? 'bg-emerald-700 text-white' : 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white'
+                  }`}
+                >
+                  <CreditCard className="w-4 h-4" />
+                  <span>{maintenancePaid ? 'Maintenance Paid via UPI ✓' : 'Pay ₹3,540 via 1-Click UPI'}</span>
+                </button>
+
+                {maintenancePaid && (
+                  <button
+                    type="button"
+                    onClick={() => setInvoiceModalOpen(true)}
+                    className="p-3.5 bg-slate-100 hover:bg-slate-200 rounded-2xl text-slate-800 font-bold text-xs flex items-center gap-1.5 cursor-pointer border border-slate-200"
+                    title="Download GST Invoice"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Receipt</span>
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Sinking Fund & RWA Audited Ledger */}
@@ -1123,7 +1302,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               )}
             </div>
 
-            {/* Founders & Leadership Info */}
+            {/* Leadership Info */}
             <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
               <span className="font-serif font-bold text-xs text-[#0F172A] block">
                 🏢 StaySetu Leadership &amp; Support
@@ -1205,6 +1384,177 @@ export default function NoBrokerHoodStaySetuMobileApp() {
       </nav>
 
       {/* ── 3. ALL NATIVE ACTION SHEET MODALS ── */}
+
+      {/* 🏢 Interactive Society Picker Modal */}
+      {societyPickerOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-white rounded-t-3xl sm:rounded-3xl border border-slate-200 w-full max-w-md p-5 space-y-4 shadow-2xl animate-in slide-in-from-bottom duration-200">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+              <div>
+                <h3 className="font-serif font-bold text-base text-[#0F172A]">Select Society Campus</h3>
+                <p className="text-[11px] text-[#64748B]">Switch between your registered residential units</p>
+              </div>
+              <button onClick={() => setSocietyPickerOpen(false)} className="text-[#64748B] hover:text-[#0F172A] p-1">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-2 text-xs">
+              {[
+                {
+                  name: 'Greenwood Grand Township, Gurugram',
+                  flat: 'Tower A - Flat 102',
+                  tag: 'Primary Residence (Active)',
+                },
+                {
+                  name: 'DLF The Crest, Sector 54 Gurugram',
+                  flat: 'Tower 3 - Flat 504',
+                  tag: 'Secondary Apartment',
+                },
+                {
+                  name: 'Godrej Woods, Sector 43 Noida',
+                  flat: 'Tower Evergreen - Flat 802',
+                  tag: 'Family Flat',
+                },
+              ].map((soc, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => handleSwitchSociety(soc.name, soc.flat)}
+                  className={`w-full p-3.5 rounded-2xl border text-left cursor-pointer transition-all ${
+                    currentUser?.society === soc.name
+                      ? 'bg-blue-50/70 border-[#2563EB] shadow-xs'
+                      : 'bg-slate-50 hover:bg-slate-100 border-slate-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-serif font-bold text-xs text-[#0F172A]">{soc.name}</span>
+                    {currentUser?.society === soc.name && (
+                      <CheckCircle2 className="w-4 h-4 text-[#2563EB]" />
+                    )}
+                  </div>
+                  <p className="text-[11px] font-semibold text-[#2563EB] mt-0.5">{soc.flat}</p>
+                  <span className="text-[9px] font-bold text-[#64748B]">{soc.tag}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 📢 Dynamic Circulars & Notices Modal (With Mark as Read) */}
+      {noticeModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-white rounded-t-3xl sm:rounded-3xl border border-slate-200 w-full max-w-md p-5 space-y-4 shadow-2xl animate-in slide-in-from-bottom duration-200 max-h-[85vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+              <div>
+                <h3 className="font-serif font-bold text-base text-[#0F172A] flex items-center gap-2">
+                  <span>📢 Society Circulars</span>
+                  {unreadNoticeCount > 0 && (
+                    <span className="text-[10px] bg-[#2563EB] text-white font-bold px-2 py-0.5 rounded-full">
+                      {unreadNoticeCount} New
+                    </span>
+                  )}
+                </h3>
+                <p className="text-[11px] text-[#64748B]">Official verified RWA notices</p>
+              </div>
+              <button onClick={() => setNoticeModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A] p-1">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={handleMarkAllNoticesAsRead}
+                className="text-[10px] font-bold text-[#2563EB] hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                <CheckCheck className="w-3.5 h-3.5" />
+                <span>Mark All as Read</span>
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              {notices.map(notice => (
+                <div
+                  key={notice.id}
+                  className={`p-3.5 rounded-2xl border transition-all space-y-1.5 ${
+                    notice.isRead
+                      ? 'bg-slate-50/70 border-slate-200/80 text-slate-700'
+                      : 'bg-blue-50/40 border-blue-200 text-slate-900 shadow-2xs'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-serif font-bold text-xs text-[#0F172A]">{notice.title}</span>
+                    <span className="text-[9px] font-bold text-[#64748B]">{notice.time}</span>
+                  </div>
+                  <p className="text-[11px] text-[#475569] leading-relaxed">{notice.body}</p>
+                  <div className="flex items-center justify-between pt-1 border-t border-slate-200/50 text-[9px]">
+                    <span className="font-bold text-[#2563EB] uppercase">{notice.category}</span>
+                    <span className="font-semibold text-emerald-700">Verified by Secretary ✓</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 🧾 GST Tax Invoice Download View Modal */}
+      {invoiceModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-6 space-y-4 shadow-2xl text-xs">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+              <div>
+                <span className="text-[9px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">PAYMENT SUCCESSFUL</span>
+                <h3 className="font-serif font-bold text-base text-[#0F172A] mt-1">Official GST Tax Receipt</h3>
+              </div>
+              <button onClick={() => setInvoiceModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+              <div className="flex justify-between">
+                <span className="text-[#64748B]">Invoice Number:</span>
+                <span className="font-mono font-bold text-[#0F172A]">#GST-2026-9921</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#64748B]">Billed To:</span>
+                <span className="font-bold text-[#0F172A]">Sudhanshu Pandey ({currentUser?.flat || 'A-102'})</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#64748B]">Society GSTIN:</span>
+                <span className="font-mono font-bold text-[#0F172A]">07AAACS1234F1Z8</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#64748B]">Maintenance (1,770 sqft):</span>
+                <span className="font-bold text-[#0F172A]">₹3,000.00</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#64748B]">CGST (9%) + SGST (9%):</span>
+                <span className="font-bold text-[#0F172A]">₹540.00</span>
+              </div>
+              <div className="flex justify-between font-bold text-sm pt-1.5 border-t border-slate-200 text-[#0F172A]">
+                <span>Total Paid:</span>
+                <span className="text-emerald-700">₹3,540.00 (UPI)</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                alert('📥 PDF Invoice #GST-2026-9921 downloaded successfully!');
+                setInvoiceModalOpen(false);
+              }}
+              className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3.5 rounded-2xl shadow-md cursor-pointer flex items-center justify-center gap-2"
+            >
+              <Download className="w-4 h-4 text-[#38BDF8]" />
+              <span>Download Official PDF Invoice</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 🚨 Emergency SOS Modal */}
       {sosModalOpen && (
@@ -1573,30 +1923,6 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               >
                 Generate Shifting Pass
               </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 📢 Circulars & Notices Modal */}
-      {noticeModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-3 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
-              <h3 className="font-serif font-bold text-base text-[#0F172A]">📢 Society Circulars</h3>
-              <button onClick={() => setNoticeModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="space-y-2 text-xs">
-              <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200 space-y-1">
-                <span className="font-bold text-amber-950">⚠️ DG Power Backup Testing</span>
-                <p className="text-[11px] text-amber-900">Wednesday 11:00 AM - 11:30 AM across all high-rise towers.</p>
-              </div>
-              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
-                <span className="font-bold text-[#0F172A]">🏊 Swimming Pool Deep Cleaning</span>
-                <p className="text-[11px] text-[#64748B]">Friday 06:00 AM - 12:00 PM. Reopens Saturday.</p>
-              </div>
             </div>
           </div>
         </div>
