@@ -196,7 +196,7 @@ export default function SocietyLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#EEF2F6] text-[#0F172A] flex items-center justify-center px-4 py-12 font-sans antialiased relative bg-[radial-gradient(#94A3B8_1.2px,transparent_1.2px)] [background-size:28px_28px]">
+    <div className="min-h-screen bg-gradient-to-b from-[#F8FAFC] via-[#F1F5F9] to-[#E2E8F0] text-[#0F172A] flex items-center justify-center px-4 py-10 font-sans antialiased">
       <div className="w-full max-w-md space-y-6">
 
         {/* Brand Header */}
@@ -214,14 +214,14 @@ export default function SocietyLoginPage() {
         </div>
 
         {/* Login Card */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_16px_45px_rgba(15,23,42,0.08)] border-2 border-[#CBD5E1] space-y-5">
+        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(15,23,42,0.06)] border border-[#E2E8F0] space-y-5">
           
           {/* Direct 1-Click Continue with Google (Gmail) */}
           <button
             type="button"
             onClick={handleGoogleSignIn}
             disabled={isGoogleLoading}
-            className="w-full bg-white hover:bg-[#F8FAFC] border-2 border-[#CBD5E1] text-[#0F172A] font-bold text-xs py-3.5 rounded-2xl shadow-xs flex items-center justify-center gap-2.5 transition-transform active:scale-95 cursor-pointer"
+            className="w-full bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] text-[#0F172A] font-bold text-xs py-3.5 rounded-2xl shadow-xs flex items-center justify-center gap-2.5 transition-transform active:scale-95 cursor-pointer"
           >
             {isGoogleLoading ? (
               <span className="flex items-center gap-2">
@@ -254,9 +254,9 @@ export default function SocietyLoginPage() {
           </button>
 
           <div className="flex items-center gap-3">
-            <div className="h-[1px] bg-[#CBD5E1] flex-1" />
+            <div className="h-[1px] bg-[#E2E8F0] flex-1" />
             <span className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider">or email &amp; password</span>
-            <div className="h-[1px] bg-[#CBD5E1] flex-1" />
+            <div className="h-[1px] bg-[#E2E8F0] flex-1" />
           </div>
 
           {/* Role Selector */}
@@ -314,7 +314,7 @@ export default function SocietyLoginPage() {
                   }}
                   required
                   placeholder="Enter registered email or mobile number"
-                  className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl pl-10 pr-3.5 py-2.5 text-xs font-bold text-[#0F172A] focus:outline-none focus:border-[#0F172A]"
+                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl pl-10 pr-3.5 py-2.5 text-xs font-bold text-[#0F172A] focus:outline-none focus:border-[#0F172A] transition-colors"
                 />
               </div>
             </div>
@@ -334,7 +334,7 @@ export default function SocietyLoginPage() {
                   }}
                   required
                   placeholder="Enter your password"
-                  className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl pl-10 pr-10 py-2.5 text-xs font-bold text-[#0F172A] focus:outline-none focus:border-[#0F172A]"
+                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl pl-10 pr-10 py-2.5 text-xs font-bold text-[#0F172A] focus:outline-none focus:border-[#0F172A] transition-colors"
                 />
                 <button
                   type="button"
@@ -366,7 +366,7 @@ export default function SocietyLoginPage() {
           </form>
 
           {/* Footer Navigation */}
-          <div className="text-center pt-2 border-t border-[#CBD5E1] text-xs text-[#64748B]">
+          <div className="text-center pt-2 border-t border-[#E2E8F0] text-xs text-[#64748B]">
             Not registered yet?{' '}
             <Link href="/auth/signup" className="font-bold text-[#2563EB] hover:underline">
               Create New Account →

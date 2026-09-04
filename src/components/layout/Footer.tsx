@@ -32,7 +32,7 @@ const LEADERSHIP_LINKS = [
 
 export function Footer() {
   const pathname = usePathname();
-  if (pathname === '/') return null;
+  if (pathname === '/' || pathname.startsWith('/auth')) return null;
   return (
     <footer className="bg-[#0F172A] text-[#94A3B8] mt-auto font-sans border-t border-[#1E293B]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">

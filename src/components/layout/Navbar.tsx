@@ -21,8 +21,8 @@ export function Navbar() {
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // Return null on main mobile app page to prevent dual headers
-  if (pathname === '/') return null;
+  // Return null on main mobile app page and auth screens to prevent dual headers and keep auth distraction-free
+  if (pathname === '/' || pathname.startsWith('/auth')) return null;
 
   // Sync logged in user state
   useEffect(() => {

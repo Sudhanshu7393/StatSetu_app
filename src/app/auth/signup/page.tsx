@@ -159,7 +159,7 @@ export default function SocietySignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#EEF2F6] text-[#0F172A] flex items-center justify-center px-4 py-12 font-sans antialiased relative bg-[radial-gradient(#94A3B8_1.2px,transparent_1.2px)] [background-size:28px_28px]">
+    <div className="min-h-screen bg-gradient-to-b from-[#F8FAFC] via-[#F1F5F9] to-[#E2E8F0] text-[#0F172A] flex items-center justify-center px-4 py-10 font-sans antialiased">
       <div className="w-full max-w-md space-y-6">
 
         {/* Brand Header */}
@@ -177,7 +177,7 @@ export default function SocietySignupPage() {
         </div>
 
         {/* Signup Card */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_16px_45px_rgba(15,23,42,0.08)] border-2 border-[#CBD5E1] space-y-5">
+        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(15,23,42,0.06)] border border-[#E2E8F0] space-y-5">
           
           {success ? (
             <div className="p-6 text-center space-y-3">
@@ -192,7 +192,7 @@ export default function SocietySignupPage() {
                 type="button"
                 onClick={handleGoogleSignUp}
                 disabled={isGoogleLoading}
-                className="w-full bg-white hover:bg-[#F8FAFC] border-2 border-[#CBD5E1] text-[#0F172A] font-bold text-xs py-3.5 rounded-2xl shadow-xs flex items-center justify-center gap-2.5 transition-transform active:scale-95 cursor-pointer"
+                className="w-full bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] text-[#0F172A] font-bold text-xs py-3.5 rounded-2xl shadow-xs flex items-center justify-center gap-2.5 transition-transform active:scale-95 cursor-pointer"
               >
                 {isGoogleLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin text-[#2563EB]" />
@@ -220,9 +220,9 @@ export default function SocietySignupPage() {
               </button>
 
               <div className="flex items-center gap-3">
-                <div className="h-[1px] bg-[#CBD5E1] flex-1" />
+                <div className="h-[1px] bg-[#E2E8F0] flex-1" />
                 <span className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider">or enter details</span>
-                <div className="h-[1px] bg-[#CBD5E1] flex-1" />
+                <div className="h-[1px] bg-[#E2E8F0] flex-1" />
               </div>
 
               {/* Role Selector */}
@@ -303,7 +303,7 @@ export default function SocietySignupPage() {
                     onChange={e => setPassword(e.target.value)}
                     required
                     placeholder="Minimum 6 characters"
-                    className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3.5 py-2 text-xs font-bold text-[#0F172A]"
+                    className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3.5 py-2 text-xs font-bold text-[#0F172A] focus:outline-none focus:border-[#0F172A] transition-colors"
                   />
                 </div>
 
@@ -315,7 +315,7 @@ export default function SocietySignupPage() {
                     onChange={e => setSocietyName(e.target.value)}
                     required
                     placeholder="e.g. Greenwood Grand Township, Gurugram"
-                    className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3.5 py-2 text-xs font-bold text-[#0F172A]"
+                    className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3.5 py-2 text-xs font-bold text-[#0F172A] focus:outline-none focus:border-[#0F172A] transition-colors"
                   />
                 </div>
 
@@ -329,7 +329,7 @@ export default function SocietySignupPage() {
                         onChange={e => setTowerWing(e.target.value)}
                         required
                         placeholder="e.g. Tower A"
-                        className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A]"
+                        className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A] focus:outline-none focus:border-[#0F172A] transition-colors"
                       />
                     </div>
                     <div>
@@ -340,7 +340,7 @@ export default function SocietySignupPage() {
                         onChange={e => setFlatNo(e.target.value)}
                         required
                         placeholder="e.g. Flat 102"
-                        className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A]"
+                        className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A] focus:outline-none focus:border-[#0F172A] transition-colors"
                       />
                     </div>
                   </div>
@@ -352,7 +352,7 @@ export default function SocietySignupPage() {
                     <select
                       value={unitsCount}
                       onChange={e => setUnitsCount(e.target.value)}
-                      className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3.5 py-2 text-xs font-bold text-[#0F172A]"
+                      className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3.5 py-2 text-xs font-bold text-[#0F172A] focus:outline-none focus:border-[#0F172A] transition-colors"
                     >
                       <option>50 - 150 Flats</option>
                       <option>150 - 500 Flats</option>
@@ -373,7 +373,7 @@ export default function SocietySignupPage() {
             </>
           )}
 
-          <div className="text-center pt-2 border-t border-[#CBD5E1] text-xs text-[#64748B]">
+          <div className="text-center pt-2 border-t border-[#E2E8F0] text-xs text-[#64748B]">
             Already registered?{' '}
             <Link href="/auth/login" className="font-bold text-[#2563EB] hover:underline">
               Sign In to Your Flat →
