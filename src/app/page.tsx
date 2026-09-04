@@ -52,6 +52,8 @@ import {
   KeyRound,
   Bike,
   Compass,
+  Sparkles,
+  ChevronDown,
 } from 'lucide-react';
 import { InAppChatModal } from '@/components/chat/InAppChatModal';
 import { SocietyStore, HelperStaff, AmenityBooking, HelpdeskTicket, ParkingAlert, GateLog, AGMPoll } from '@/lib/societyStore';
@@ -183,20 +185,6 @@ export default function NoBrokerHoodStaySetuMobileApp() {
   // ── 7. NOTICE BOARD & CIRCULARS ──
   const [noticeModalOpen, setNoticeModalOpen] = useState(false);
 
-  // ── FLAT DIRECTORY & LIVE INTERCOM MODAL ──
-  const [flatDirectoryModalOpen, setFlatDirectoryModalOpen] = useState(false);
-  const [selectedFlatDetail, setSelectedFlatDetail] = useState<{
-    tower: string;
-    flatNo: string;
-    residentName: string;
-    intercom: string;
-    bhk: string;
-    carPlate: string;
-    parkingSlot: string;
-  } | null>(null);
-  const [isIntercomCalling, setIsIntercomCalling] = useState(false);
-  const [intercomConnected, setIntercomConnected] = useState(false);
-
   // Guard Terminal State
   const [guardBoomStatus, setGuardBoomStatus] = useState<'CLOSED' | 'OPEN'>('CLOSED');
 
@@ -205,7 +193,6 @@ export default function NoBrokerHoodStaySetuMobileApp() {
   const [voiceApproved, setVoiceApproved] = useState(false);
   const [sosActiveAlert, setSosActiveAlert] = useState(false);
   const [sosModalOpen, setSosModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [chatModalOpen, setChatModalOpen] = useState(false);
 
   const [selectedSeller, setSelectedSeller] = useState({
@@ -241,19 +228,6 @@ export default function NoBrokerHoodStaySetuMobileApp() {
     return () => clearInterval(interval);
   }, [parkingAlertSent, parkingSecondsLeft]);
 
-  const handleToggleNetwork = () => {
-    const nextState = !isNetworkOnline;
-    setIsNetworkOnline(nextState);
-
-    if (nextState) {
-      setSyncNotification('⚡ Reconnected! All offline local gate entries synced to cloud.');
-      setTimeout(() => setSyncNotification(null), 4000);
-    } else {
-      setSyncNotification('⚠️ Wi-Fi Disconnected. Offline Local SQLite DB active — All gate passes saved locally.');
-      setTimeout(() => setSyncNotification(null), 4000);
-    }
-  };
-
   const handleSendParkingAlert = () => {
     const alertData = SocietyStore.createParkingAlert(parkingCarNo, parkingSlot);
     setActiveParkingAlert(alertData);
@@ -281,11 +255,6 @@ export default function NoBrokerHoodStaySetuMobileApp() {
     setTimeout(() => setGuardBoomStatus('CLOSED'), 3500);
   };
 
-  const handleGuardScanANPR = () => {
-    SocietyStore.addGateLog('FASTTAG', 'UP14 EX 9988 (Tower C - Flat 402) - FastTag Boom Open', isNetworkOnline ? 'Auto 0.4s' : 'Local SQLite 0.01s', isNetworkOnline);
-    alert(`📷 ANPR Camera scanned UP14 EX 9988! Saved ${isNetworkOnline ? 'to Cloud' : '100% Offline to Local DB'}. Barrier Cleared!`);
-  };
-
   const handleBookMaid = (helper: HelperStaff) => {
     SocietyStore.bookBackupMaid(helper.id, currentUser?.flat || 'Tower A - Flat 102');
     setBookedMaid(helper.name);
@@ -308,16 +277,6 @@ export default function NoBrokerHoodStaySetuMobileApp() {
     setHelpdeskModalOpen(false);
     setHelpdeskDescription('');
     alert(`🎟️ Ticket #${ticket.id} Dispatched! Assigned to ${ticket.assignedTechnician} (Phone: ${ticket.technicianPhone}). OTP to close: ${ticket.otpToClose}`);
-  };
-
-  const handleVerifyOtpTicket = (ticketId: string) => {
-    const success = SocietyStore.resolveTicketWithOtp(ticketId, otpVerifyInput);
-    if (success) {
-      alert(`🎉 Ticket #${ticketId} marked as RESOLVED! Thank you for verifying with Resident OTP.`);
-      setOtpVerifyInput('');
-    } else {
-      alert('❌ Invalid OTP. Please enter the correct 4-digit Resident verification OTP.');
-    }
   };
 
   const handlePayMaintenance = () => {
@@ -374,17 +333,17 @@ export default function NoBrokerHoodStaySetuMobileApp() {
 
   if (isAuthChecking) {
     return (
-      <div className="min-h-screen bg-[#EEF2F6] flex flex-col items-center justify-center space-y-4 font-sans antialiased relative bg-[radial-gradient(#94A3B8_1.2px,transparent_1.2px)] [background-size:28px_28px]">
-        <div className="w-14 h-14 rounded-3xl bg-[#0F172A] text-[#38BDF8] flex items-center justify-center shadow-2xl border border-[#334155] animate-pulse">
-          <Building2 className="w-7 h-7 text-[#38BDF8]" />
+      <div className="min-h-screen bg-gradient-to-b from-[#F8FAFC] to-[#EEF2F6] flex flex-col items-center justify-center space-y-4 font-sans antialiased">
+        <div className="w-16 h-16 rounded-3xl bg-[#0F172A] text-[#38BDF8] flex items-center justify-center shadow-[0_12px_35px_rgba(15,23,42,0.25)] border border-slate-700 animate-pulse">
+          <Building2 className="w-8 h-8 text-[#38BDF8]" />
         </div>
         <div className="text-center space-y-1">
-          <p className="text-xs font-bold text-[#0F172A] uppercase tracking-[0.2em]">
-            StaySetu Smart Operating System
+          <p className="text-xs font-bold text-[#0F172A] uppercase tracking-[0.25em]">
+            StaySetu Super-App
           </p>
           <p className="text-[11px] text-[#64748B] flex items-center justify-center gap-1.5 font-medium">
             <Loader2 className="w-3.5 h-3.5 animate-spin text-[#2563EB]" />
-            <span>Verifying Society Access...</span>
+            <span>Loading Secure Flat Dashboard...</span>
           </p>
         </div>
       </div>
@@ -392,20 +351,20 @@ export default function NoBrokerHoodStaySetuMobileApp() {
   }
 
   return (
-    <div className="min-h-screen bg-[#EEF2F6] text-[#0F172A] font-sans antialiased pb-28 select-none relative bg-[radial-gradient(#94A3B8_1.2px,transparent_1.2px)] [background-size:28px_28px]">
+    <div className="min-h-screen bg-gradient-to-b from-[#F8FAFC] via-[#F1F5F9] to-[#E2E8F0] text-[#0F172A] font-sans antialiased pb-28 select-none">
       
-      {/* ── 1. NATIVE MOBILE APP TOP BAR (STICKY HEADER) ── */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-2 border-[#CBD5E1] px-4 py-2.5 shadow-xs">
+      {/* ── 1. NATIVE MOBILE APP TOP BAR (FROSTED GLASS HEADER) ── */}
+      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-4 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
         <div className="max-w-md mx-auto flex items-center justify-between">
           
-          {/* Society & Flat Identity Selector */}
+          {/* Society & Flat Selector */}
           <div className="space-y-0.5">
-            <div className="flex items-center gap-1.5 cursor-pointer">
+            <div className="flex items-center gap-1.5 cursor-pointer group">
               <Building2 className="w-4 h-4 text-[#2563EB]" />
-              <span className="font-serif font-bold text-xs text-[#0F172A] tracking-tight">
+              <span className="font-serif font-bold text-xs text-[#0F172A] tracking-tight group-hover:text-[#2563EB] transition-colors">
                 {currentUser?.society || 'Greenwood Grand Township'}
               </span>
-              <span className="text-[10px] text-[#64748B]">▼</span>
+              <ChevronDown className="w-3 h-3 text-[#64748B]" />
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -418,17 +377,17 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             </div>
           </div>
 
-          {/* Quick Action Badges (SOS + Notification Bell + Guard Switcher) */}
+          {/* Quick Action Badges (SOS + Bell + Terminal Switcher) */}
           <div className="flex items-center gap-2">
             
-            {/* 🚨 Instant Emergency SOS Button */}
+            {/* 🚨 Emergency SOS Button */}
             <button
               type="button"
               onClick={() => setSosModalOpen(true)}
-              className="bg-rose-600 hover:bg-rose-700 text-white p-2 rounded-xl shadow-xs flex items-center gap-1 cursor-pointer transition-transform active:scale-90"
+              className="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white px-2.5 py-1.5 rounded-xl shadow-[0_4px_12px_rgba(225,29,72,0.3)] flex items-center gap-1 cursor-pointer transition-transform active:scale-90"
               title="Emergency SOS"
             >
-              <ShieldAlert className="w-4 h-4 animate-bounce" />
+              <ShieldAlert className="w-3.5 h-3.5 animate-bounce" />
               <span className="text-[10px] font-black uppercase tracking-wider">SOS</span>
             </button>
 
@@ -436,7 +395,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             <button
               type="button"
               onClick={() => setNoticeModalOpen(true)}
-              className="relative p-2 bg-[#F1F5F9] hover:bg-[#E2E8F0] rounded-xl text-[#0F172A] cursor-pointer border border-[#CBD5E1]"
+              className="relative p-2 bg-slate-100 hover:bg-slate-200/80 rounded-xl text-[#0F172A] cursor-pointer transition-colors border border-slate-200/60"
             >
               <Bell className="w-4 h-4 text-[#475569]" />
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#2563EB] text-white text-[9px] font-bold rounded-full flex items-center justify-center shadow-xs">
@@ -450,10 +409,10 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               onClick={() => setActivePortalMode(activePortalMode === 'RESIDENT' ? 'GUARD' : 'RESIDENT')}
               className={`p-2 rounded-xl text-xs font-bold cursor-pointer transition-all border ${
                 activePortalMode === 'GUARD'
-                  ? 'bg-[#0F172A] text-[#38BDF8] border-[#334155]'
-                  : 'bg-[#F8FAFC] text-[#475569] border-[#CBD5E1]'
+                  ? 'bg-[#0F172A] text-[#38BDF8] border-slate-700 shadow-xs'
+                  : 'bg-slate-100 text-[#475569] border-slate-200/60'
               }`}
-              title="Switch Terminal"
+              title="Switch Terminal View"
             >
               <Radio className="w-4 h-4" />
             </button>
@@ -465,15 +424,15 @@ export default function NoBrokerHoodStaySetuMobileApp() {
 
       {/* ── EMERGENCY SOS ACTIVE BANNER ── */}
       {sosActiveAlert && (
-        <div className="bg-rose-700 text-white py-3 px-4 shadow-xl sticky top-14 z-50 animate-pulse">
+        <div className="bg-gradient-to-r from-rose-600 via-red-600 to-rose-700 text-white py-3 px-4 shadow-xl sticky top-14 z-50 animate-pulse">
           <div className="max-w-md mx-auto flex items-center justify-between gap-2 text-xs font-black">
             <div className="flex items-center gap-2">
               <ShieldAlert className="w-5 h-5" />
-              <span>🚨 SOS ACTIVE: Tower A - Flat 102 (Gate Security Alerted)</span>
+              <span>🚨 SOS ACTIVE: Flat A-102 (Gate Guard Terminal Alerted)</span>
             </div>
             <button
               onClick={() => setSosActiveAlert(false)}
-              className="bg-white text-rose-700 px-2.5 py-1 rounded-lg text-[10px] uppercase font-black cursor-pointer"
+              className="bg-white text-rose-700 px-2.5 py-1 rounded-lg text-[10px] uppercase font-black cursor-pointer shadow-sm"
             >
               Dismiss
             </button>
@@ -481,15 +440,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
         </div>
       )}
 
-      {/* ── OFFLINE / SYNC NOTIFICATION TOAST ── */}
-      {syncNotification && (
-        <div className="bg-[#0F172A] text-white py-2 px-4 shadow-lg text-center text-xs font-bold sticky top-14 z-40 border-b border-[#334155]">
-          {syncNotification}
-        </div>
-      )}
-
       {/* ── MAIN MOBILE APP CONTENT CONTAINER ── */}
-      <main className="max-w-md mx-auto px-4 pt-3 space-y-4">
+      <main className="max-w-md mx-auto px-4 pt-4 space-y-4">
 
         {/* ═══════════════════════════════════════════════════════════════
             TAB 1: 🏠 HOME (NOBROKERHOOD / MYGATE QUICK ACTION DASHBOARD)
@@ -497,40 +449,57 @@ export default function NoBrokerHoodStaySetuMobileApp() {
         {activeTab === 'HOME' && (
           <div className="space-y-4 animate-in fade-in duration-200">
             
-            {/* Quick Flat Summary Card */}
-            <div className="bg-white rounded-3xl p-4 shadow-[0_12px_30px_rgba(15,23,42,0.06)] border-2 border-[#CBD5E1] flex items-center justify-between">
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider">
-                  MY RESIDENCE
-                </span>
-                <h2 className="font-serif font-bold text-base text-[#0F172A]">
-                  {currentUser?.name || 'Sudhanshu Pandey'}
-                </h2>
-                <p className="text-xs text-[#2563EB] font-bold flex items-center gap-1">
-                  <span>🏡 {currentUser?.flat || 'Tower A - Flat 102'}</span>
-                  <span className="text-[#64748B]">• 3 BHK</span>
-                </p>
-              </div>
+            {/* 🌟 Luxury Midnight Gradient Resident Identity Card */}
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] p-5 text-white shadow-[0_15px_35px_rgba(15,23,42,0.18)] border border-slate-700/80">
+              
+              {/* Subtle ambient light gradient flare */}
+              <div className="absolute -top-10 -right-10 w-36 h-36 bg-[#2563EB]/25 rounded-full blur-2xl pointer-events-none" />
+              
+              <div className="relative z-10 flex items-center justify-between">
+                <div className="space-y-1.5">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 backdrop-blur-xs border border-white/10 text-[9px] font-bold tracking-wider text-[#38BDF8] uppercase">
+                    <ShieldCheck className="w-3 h-3 text-[#38BDF8]" />
+                    <span>Verified Resident</span>
+                  </div>
+                  <h2 className="font-serif font-bold text-lg text-white">
+                    {currentUser?.name || 'Sudhanshu Pandey'}
+                  </h2>
+                  <p className="text-xs text-slate-300 font-semibold flex items-center gap-1.5">
+                    <span>🏡 {currentUser?.flat || 'Tower A - Flat 102'}</span>
+                    <span className="text-slate-500">•</span>
+                    <span className="text-slate-400">3 BHK Penthouse</span>
+                  </p>
+                </div>
 
-              <div className="text-right space-y-1">
-                <span className="text-[10px] font-bold text-[#64748B] uppercase">MAINTENANCE</span>
-                <p className={`text-xs font-black ${maintenancePaid ? 'text-emerald-700' : 'text-amber-700'}`}>
-                  {maintenancePaid ? 'Paid ✓' : 'Due: ₹3,540'}
-                </p>
-                <button
-                  onClick={() => setActiveTab('PAYMENTS')}
-                  className="text-[10px] text-[#2563EB] font-bold hover:underline block"
-                >
-                  Pay Dues →
-                </button>
+                <div className="text-right space-y-1.5">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                    MAINTENANCE
+                  </span>
+                  <span className={`inline-block text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-xs ${
+                    maintenancePaid
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                      : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                  }`}>
+                    {maintenancePaid ? 'Paid ✓' : 'Due: ₹3,540'}
+                  </span>
+                  <button
+                    onClick={() => setActiveTab('PAYMENTS')}
+                    className="text-[11px] text-[#38BDF8] hover:text-white font-bold block transition-colors"
+                  >
+                    Pay Dues →
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* ── 8 QUICK ACTION TILES GRID (NOBROKERHOOD CORE APPS) ── */}
+            {/* ── 8 QUICK ACTION TILES GRID (COLORFUL NOBROKERHOOD STYLE) ── */}
             <div>
-              <p className="text-[11px] font-bold text-[#475569] uppercase tracking-wider mb-2 px-1">
-                ⚡ Quick Daily Passes &amp; Services
-              </p>
+              <div className="flex items-center justify-between mb-2.5 px-1">
+                <p className="text-[11px] font-bold text-[#475569] uppercase tracking-wider">
+                  ⚡ Quick Passes &amp; Approvals
+                </p>
+                <span className="text-[10px] text-[#64748B] font-semibold">1-Tap Actions</span>
+              </div>
 
               <div className="grid grid-cols-4 gap-2.5">
                 {[
@@ -541,6 +510,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     sub: 'Swiggy/Amazon',
                     onClick: () => setDeliveryModalOpen(true),
                     badge: 'Instant',
+                    gradient: 'from-orange-50 to-amber-50 border-orange-200/80 text-orange-950',
+                    badgeColor: 'bg-orange-100 text-orange-700',
                   },
                   {
                     id: 'cab',
@@ -549,6 +520,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     sub: 'Uber/Ola',
                     onClick: () => setCabModalOpen(true),
                     badge: 'FastTag',
+                    gradient: 'from-yellow-50 to-amber-50 border-yellow-200/80 text-amber-950',
+                    badgeColor: 'bg-yellow-100 text-amber-800',
                   },
                   {
                     id: 'guest',
@@ -557,6 +530,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     sub: 'WhatsApp QR',
                     onClick: () => setGuestModalOpen(true),
                     badge: 'Pass',
+                    gradient: 'from-emerald-50 to-teal-50 border-emerald-200/80 text-emerald-950',
+                    badgeColor: 'bg-emerald-100 text-emerald-800',
                   },
                   {
                     id: 'maid',
@@ -565,6 +540,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     sub: 'Cook & Maid',
                     onClick: () => setMaidModalOpen(true),
                     badge: 'Live',
+                    gradient: 'from-purple-50 to-fuchsia-50 border-purple-200/80 text-purple-950',
+                    badgeColor: 'bg-purple-100 text-purple-800',
                   },
                   {
                     id: 'parking',
@@ -578,6 +555,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                       }, 100);
                     },
                     badge: 'Photo',
+                    gradient: 'from-rose-50 to-red-50 border-rose-200/80 text-rose-950',
+                    badgeColor: 'bg-rose-100 text-rose-700',
                   },
                   {
                     id: 'helpdesk',
@@ -586,6 +565,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     sub: 'Plumber/Electrician',
                     onClick: () => setHelpdeskModalOpen(true),
                     badge: 'SLA',
+                    gradient: 'from-cyan-50 to-sky-50 border-cyan-200/80 text-cyan-950',
+                    badgeColor: 'bg-cyan-100 text-cyan-800',
                   },
                   {
                     id: 'amenity',
@@ -594,6 +575,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     sub: 'Court & Pool',
                     onClick: () => setAmenityModalOpen(true),
                     badge: 'Free',
+                    gradient: 'from-indigo-50 to-blue-50 border-indigo-200/80 text-indigo-950',
+                    badgeColor: 'bg-indigo-100 text-indigo-800',
                   },
                   {
                     id: 'moving',
@@ -602,19 +585,21 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     sub: 'Service Lift',
                     onClick: () => setMovingPassModalOpen(true),
                     badge: 'Truck',
+                    gradient: 'from-slate-50 to-gray-50 border-slate-200/80 text-slate-950',
+                    badgeColor: 'bg-slate-200 text-slate-800',
                   },
                 ].map(action => (
                   <button
                     key={action.id}
                     type="button"
                     onClick={action.onClick}
-                    className="bg-white hover:bg-[#F8FAFC] rounded-2xl p-2.5 border-2 border-[#CBD5E1] shadow-xs flex flex-col items-center justify-between text-center space-y-1.5 cursor-pointer transition-transform active:scale-95 group relative min-h-[95px]"
+                    className={`bg-gradient-to-b ${action.gradient} rounded-2xl p-2.5 border shadow-[0_4px_12px_rgba(0,0,0,0.03)] flex flex-col items-center justify-between text-center space-y-1 cursor-pointer transition-transform active:scale-95 group relative min-h-[96px] hover:shadow-md`}
                   >
-                    <span className="text-2xl pt-1">{action.icon}</span>
-                    <span className="text-[10px] font-bold text-[#0F172A] leading-tight block">
+                    <span className="text-2xl pt-1 group-hover:scale-110 transition-transform">{action.icon}</span>
+                    <span className="text-[10px] font-bold leading-tight block">
                       {action.label}
                     </span>
-                    <span className="text-[8px] font-bold text-[#2563EB] bg-blue-50 px-1.5 py-0.2 rounded">
+                    <span className={`text-[8px] font-black px-1.5 py-0.2 rounded-md ${action.badgeColor}`}>
                       {action.badge}
                     </span>
                   </button>
@@ -623,12 +608,14 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             </div>
 
             {/* Helper Biometric Attendance Radar Snippet */}
-            <div className="bg-white rounded-3xl p-4 shadow-[0_12px_30px_rgba(15,23,42,0.06)] border-2 border-[#CBD5E1] space-y-2.5">
+            <div className="bg-white rounded-3xl p-4 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-2.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4 text-[#2563EB]" />
+                  <div className="p-1.5 rounded-xl bg-purple-50 text-purple-700">
+                    <Users className="w-4 h-4" />
+                  </div>
                   <span className="font-serif font-bold text-xs text-[#0F172A]">
-                    Domestic Staff Active on Campus
+                    Staff Active on Campus Today
                   </span>
                 </div>
                 <button
@@ -640,11 +627,11 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="p-2.5 bg-[#F8FAFC] rounded-xl border border-[#CBD5E1] space-y-0.5">
+                <div className="p-2.5 bg-slate-50/80 rounded-xl border border-slate-200/60 space-y-0.5">
                   <p className="font-bold text-[#0F172A] text-[11px]">Sunita Devi (Cook)</p>
                   <p className="text-[10px] text-emerald-700 font-semibold">🟢 Inside Tower A</p>
                 </div>
-                <div className="p-2.5 bg-[#F8FAFC] rounded-xl border border-[#CBD5E1] space-y-0.5">
+                <div className="p-2.5 bg-slate-50/80 rounded-xl border border-slate-200/60 space-y-0.5">
                   <p className="font-bold text-[#0F172A] text-[11px]">Ramesh Kumar (Cleaning)</p>
                   <p className="text-[10px] text-emerald-700 font-semibold">🟢 Inside Tower D</p>
                 </div>
@@ -652,7 +639,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             </div>
 
             {/* Smart Meter Quick Topup */}
-            <div className="bg-white rounded-3xl p-4 shadow-[0_12px_30px_rgba(15,23,42,0.06)] border-2 border-[#CBD5E1] flex items-center justify-between text-xs">
+            <div className="bg-white rounded-3xl p-4 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 flex items-center justify-between text-xs">
               <div className="space-y-0.5">
                 <span className="text-[10px] font-bold text-[#64748B] uppercase">PREPAID ELECTRICITY METER</span>
                 <p className="font-serif font-bold text-sm text-[#0F172A]">Balance: ₹{meterBalance}</p>
@@ -666,14 +653,14 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   setMeterBalance(updated);
                   alert('⚡ Smart Meter recharged with ₹500 via UPI!');
                 }}
-                className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs px-3.5 py-2.5 rounded-xl shadow-xs cursor-pointer transition-transform active:scale-95"
+                className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs px-3.5 py-2.5 rounded-xl shadow-[0_4px_12px_rgba(37,99,235,0.25)] cursor-pointer transition-transform active:scale-95"
               >
                 + Recharge ₹500
               </button>
             </div>
 
             {/* Recent Gate Activity Log Snippet */}
-            <div className="bg-white rounded-3xl p-4 shadow-[0_12px_30px_rgba(15,23,42,0.06)] border-2 border-[#CBD5E1] space-y-2.5">
+            <div className="bg-white rounded-3xl p-4 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="font-serif font-bold text-xs text-[#0F172A]">
                   🛡️ Live Gate Entry Feed
@@ -688,9 +675,9 @@ export default function NoBrokerHoodStaySetuMobileApp() {
 
               <div className="space-y-1.5">
                 {guardLogs.slice(0, 3).map(log => (
-                  <div key={log.id} className="p-2 bg-[#F8FAFC] rounded-xl flex items-center justify-between text-[11px] border border-[#CBD5E1]">
+                  <div key={log.id} className="p-2.5 bg-slate-50/80 rounded-xl flex items-center justify-between text-[11px] border border-slate-200/60">
                     <span className="text-[#0F172A] font-semibold truncate max-w-[200px]">{log.detail}</span>
-                    <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded shrink-0">
+                    <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded shrink-0">
                       {log.timestamp}
                     </span>
                   </div>
@@ -708,10 +695,12 @@ export default function NoBrokerHoodStaySetuMobileApp() {
           <div className="space-y-4 animate-in fade-in duration-200">
             
             {/* Voice Gate Pass Action */}
-            <div className="bg-white rounded-3xl p-5 shadow-[0_12px_30px_rgba(15,23,42,0.06)] border-2 border-[#CBD5E1] space-y-3">
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Mic className="w-5 h-5 text-[#2563EB]" />
+                  <div className="p-1.5 rounded-xl bg-blue-50 text-[#2563EB]">
+                    <Mic className="w-5 h-5" />
+                  </div>
                   <span className="font-serif font-bold text-sm text-[#0F172A]">Voice Gate Pass (Hands-Free)</span>
                 </div>
                 <span className="text-[9px] font-bold bg-blue-100 text-[#2563EB] px-2 py-0.5 rounded-full">
@@ -726,7 +715,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               <button
                 type="button"
                 onClick={handleVoiceRecord}
-                className={`w-full py-3 rounded-2xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm transition-all ${
+                className={`w-full py-3.5 rounded-2xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all ${
                   isRecording
                     ? 'bg-rose-600 text-white animate-pulse'
                     : voiceApproved
@@ -740,10 +729,12 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             </div>
 
             {/* 🚗 WRONG PARKING CARD WITH LIVE CAMERA PHOTO */}
-            <div id="wrong-parking-card" className="bg-white rounded-3xl p-5 shadow-[0_12px_30px_rgba(15,23,42,0.06)] border-2 border-[#CBD5E1] space-y-3.5">
+            <div id="wrong-parking-card" className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Car className="w-5 h-5 text-rose-600" />
+                  <div className="p-1.5 rounded-xl bg-rose-50 text-rose-600">
+                    <Car className="w-5 h-5" />
+                  </div>
                   <span className="font-serif font-bold text-sm text-[#0F172A]">Wrong Parking Photo Alert</span>
                 </div>
                 <span className="text-[9px] font-bold bg-rose-100 text-rose-800 px-2 py-0.5 rounded-full">
@@ -759,7 +750,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     value={parkingCarNo}
                     onChange={e => setParkingCarNo(e.target.value)}
                     placeholder="e.g. UP14 EX 9988"
-                    className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A]"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20"
                   />
                 </div>
 
@@ -770,7 +761,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     value={parkingSlot}
                     onChange={e => setParkingSlot(e.target.value)}
                     placeholder="e.g. Basement B1 - Slot #42"
-                    className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A]"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20"
                   />
                 </div>
 
@@ -778,14 +769,14 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 <div>
                   <label className="font-bold text-[#64748B] text-[10px] uppercase block mb-1">Vehicle Photo Proof</label>
                   {parkingPhoto ? (
-                    <div className="relative rounded-2xl overflow-hidden border-2 border-[#CBD5E1] bg-slate-900">
-                      <img src={parkingPhoto} alt="Proof" className="w-full h-36 object-cover" />
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-between p-2.5 text-white">
+                    <div className="relative rounded-2xl overflow-hidden border border-slate-300 bg-slate-900">
+                      <img src={parkingPhoto} alt="Proof" className="w-full h-40 object-cover" />
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-between p-3 text-white">
                         <span className="text-[10px] font-bold bg-emerald-700 px-2 py-1 rounded">Photo Attached ✓</span>
                         <button
                           type="button"
                           onClick={() => setParkingPhoto(null)}
-                          className="bg-rose-700 text-white text-[10px] font-bold px-2 py-1 rounded cursor-pointer"
+                          className="bg-rose-700 text-white text-[10px] font-bold px-2.5 py-1 rounded cursor-pointer"
                         >
                           Remove
                         </button>
@@ -793,12 +784,12 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     </div>
                   ) : (
                     <div className="grid grid-cols-2 gap-2">
-                      <label className="p-2.5 bg-[#F8FAFC] hover:bg-[#F1F5F9] border-2 border-dashed border-[#2563EB] rounded-xl flex items-center justify-center gap-1.5 cursor-pointer text-[#2563EB] font-bold text-xs text-center">
+                      <label className="p-3 bg-blue-50/60 hover:bg-blue-50 border-2 border-dashed border-[#2563EB] rounded-2xl flex items-center justify-center gap-1.5 cursor-pointer text-[#2563EB] font-bold text-xs text-center transition-colors">
                         <Camera className="w-4 h-4 shrink-0" />
                         <span>📷 Click Camera</span>
                         <input type="file" accept="image/*" capture="environment" onChange={handlePhotoUpload} className="hidden" />
                       </label>
-                      <label className="p-2.5 bg-[#F8FAFC] hover:bg-[#F1F5F9] border-2 border-dashed border-[#CBD5E1] rounded-xl flex items-center justify-center gap-1.5 cursor-pointer text-slate-700 font-bold text-xs text-center">
+                      <label className="p-3 bg-slate-50 hover:bg-slate-100 border-2 border-dashed border-slate-300 rounded-2xl flex items-center justify-center gap-1.5 cursor-pointer text-slate-700 font-bold text-xs text-center transition-colors">
                         <Download className="w-4 h-4 shrink-0 text-slate-500" />
                         <span>🖼️ Gallery</span>
                         <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
@@ -810,14 +801,14 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 <button
                   type="button"
                   onClick={handleSendParkingAlert}
-                  className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-xs py-3 rounded-xl shadow-md cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-1.5"
+                  className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-xs py-3.5 rounded-xl shadow-md cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-1.5"
                 >
                   <AlertTriangle className="w-4 h-4 text-[#38BDF8]" />
                   <span>Send Anonymous WhatsApp Alert {parkingPhoto ? '(With Photo)' : ''}</span>
                 </button>
 
                 {parkingAlertSent && (
-                  <div className="p-3 bg-emerald-50 rounded-xl text-xs text-emerald-900 space-y-2 border border-emerald-200">
+                  <div className="p-3 bg-emerald-50 rounded-2xl text-xs text-emerald-900 space-y-2 border border-emerald-200">
                     <p className="font-bold flex items-center gap-1">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                       <span>Alert Sent to Flat 402! ⏱️ {formatTimer(parkingSecondsLeft)} Mins Left</span>
@@ -828,7 +819,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full bg-[#25D366] text-white font-bold text-xs py-2 rounded-xl flex items-center justify-center gap-1.5 shadow-xs"
+                      className="w-full bg-[#25D366] text-white font-bold text-xs py-2.5 rounded-xl flex items-center justify-center gap-1.5 shadow-xs"
                     >
                       <MessageCircle className="w-4 h-4 fill-white text-[#25D366]" />
                       <span>Send via WhatsApp →</span>
@@ -839,14 +830,14 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             </div>
 
             {/* FastTag & Guard Gate Logs */}
-            <div className="bg-white rounded-3xl p-5 shadow-[0_12px_30px_rgba(15,23,42,0.06)] border-2 border-[#CBD5E1] space-y-3">
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="font-serif font-bold text-xs text-[#0F172A]">
                   🚗 ANPR FastTag Boom Barrier Control
                 </span>
                 <button
                   onClick={handleGuardOpenBoom}
-                  className="bg-[#0F172A] text-white text-[10px] font-bold px-3 py-1.5 rounded-lg cursor-pointer"
+                  className="bg-[#0F172A] text-white text-[10px] font-bold px-3 py-1.5 rounded-xl cursor-pointer"
                 >
                   {guardBoomStatus === 'OPEN' ? 'Boom Open ✓' : 'Test Open →'}
                 </button>
@@ -854,7 +845,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
 
               <div className="space-y-1.5 max-h-48 overflow-y-auto">
                 {guardLogs.map(log => (
-                  <div key={log.id} className="p-2 bg-[#F8FAFC] rounded-xl flex items-center justify-between text-xs border border-[#CBD5E1]">
+                  <div key={log.id} className="p-2.5 bg-slate-50/80 rounded-xl flex items-center justify-between text-xs border border-slate-200/60">
                     <span className="text-[#0F172A] font-medium truncate max-w-[220px]">{log.detail}</span>
                     <span className="text-[9px] font-bold text-[#64748B] shrink-0">{log.timestamp}</span>
                   </div>
@@ -872,7 +863,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
           <div className="space-y-4 animate-in fade-in duration-200">
             
             {/* Maintenance Bill Card */}
-            <div className="bg-white rounded-3xl p-5 shadow-[0_12px_30px_rgba(15,23,42,0.06)] border-2 border-[#CBD5E1] space-y-4">
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-4">
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-bold text-[#64748B] uppercase">RWA MONTHLY DUES</span>
@@ -883,7 +874,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 </span>
               </div>
 
-              <div className="p-3 bg-[#F8FAFC] rounded-2xl border border-[#CBD5E1] space-y-1.5 text-xs">
+              <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/60 space-y-1.5 text-xs">
                 <div className="flex justify-between font-semibold">
                   <span className="text-[#64748B]">Flat Area (1,770 Sq Ft @ ₹2/Sq Ft):</span>
                   <span className="font-bold text-[#0F172A]">₹3,540</span>
@@ -892,7 +883,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   <span className="text-[#64748B]">Due Date:</span>
                   <span className="font-bold text-rose-700">10 Sep 2026</span>
                 </div>
-                <div className="flex justify-between text-[11px] text-[#64748B] pt-1 border-t border-[#CBD5E1]">
+                <div className="flex justify-between text-[11px] text-[#64748B] pt-1.5 border-t border-slate-200">
                   <span>GST (18% Included):</span>
                   <span>Invoice #GST-2026-9921</span>
                 </div>
@@ -912,7 +903,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             </div>
 
             {/* Sinking Fund & RWA Audited Ledger */}
-            <div className="bg-white rounded-3xl p-5 shadow-[0_12px_30px_rgba(15,23,42,0.06)] border-2 border-[#CBD5E1] space-y-3">
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="font-serif font-bold text-xs text-[#0F172A]">
                   🏛️ RWA Audited Transparency Statement
@@ -923,11 +914,11 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#CBD5E1]">
+                <div className="p-3 bg-slate-50/80 rounded-xl border border-slate-200/60">
                   <span className="text-[10px] text-[#64748B] block">SINKING FUND (HDFC)</span>
                   <span className="font-serif font-bold text-sm text-[#0F172A]">₹1.15 Crores</span>
                 </div>
-                <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#CBD5E1]">
+                <div className="p-3 bg-slate-50/80 rounded-xl border border-slate-200/60">
                   <span className="text-[10px] text-[#64748B] block">COLLECTION THIS MONTH</span>
                   <span className="font-serif font-bold text-sm text-emerald-700">₹38,42,000</span>
                 </div>
@@ -953,7 +944,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
           <div className="space-y-4 animate-in fade-in duration-200">
             
             {/* AGM Voting Poll */}
-            <div className="bg-white rounded-3xl p-5 shadow-[0_12px_30px_rgba(15,23,42,0.06)] border-2 border-[#CBD5E1] space-y-3">
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB]">
                   🗳️ ACTIVE AGM BALLOT
@@ -970,7 +961,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   <span className="text-emerald-700">👍 YES ({forumPoll.yesVotes} - {yesPercentage}%)</span>
                   <span className="text-rose-700">👎 NO ({forumPoll.noVotes} - {100 - yesPercentage}%)</span>
                 </div>
-                <div className="w-full bg-[#E2E8F0] rounded-full h-2 overflow-hidden flex">
+                <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden flex">
                   <div className="bg-emerald-600 h-full" style={{ width: `${yesPercentage}%` }} />
                   <div className="bg-rose-600 h-full" style={{ width: `${100 - yesPercentage}%` }} />
                 </div>
@@ -981,8 +972,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   type="button"
                   onClick={() => handleVote('YES')}
                   disabled={forumPoll.userVoted !== null}
-                  className={`flex-1 py-2 rounded-xl text-xs font-bold cursor-pointer ${
-                    forumPoll.userVoted === 'YES' ? 'bg-emerald-700 text-white' : 'bg-[#F8FAFC] text-[#0F172A] border border-[#CBD5E1]'
+                  className={`flex-1 py-2.5 rounded-xl text-xs font-bold cursor-pointer ${
+                    forumPoll.userVoted === 'YES' ? 'bg-emerald-700 text-white' : 'bg-slate-50 text-[#0F172A] border border-slate-200'
                   }`}
                 >
                   Vote YES
@@ -991,8 +982,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   type="button"
                   onClick={() => handleVote('NO')}
                   disabled={forumPoll.userVoted !== null}
-                  className={`flex-1 py-2 rounded-xl text-xs font-bold cursor-pointer ${
-                    forumPoll.userVoted === 'NO' ? 'bg-rose-700 text-white' : 'bg-[#F8FAFC] text-[#0F172A] border border-[#CBD5E1]'
+                  className={`flex-1 py-2.5 rounded-xl text-xs font-bold cursor-pointer ${
+                    forumPoll.userVoted === 'NO' ? 'bg-rose-700 text-white' : 'bg-slate-50 text-[#0F172A] border border-slate-200'
                   }`}
                 >
                   Vote NO
@@ -1040,7 +1031,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     image: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=400&q=80',
                   },
                 ].map(item => (
-                  <div key={item.id} className="bg-white rounded-2xl p-3 border-2 border-[#CBD5E1] shadow-xs space-y-2 flex flex-col justify-between">
+                  <div key={item.id} className="bg-white rounded-2xl p-3 border border-slate-200/80 shadow-[0_4px_16px_rgba(0,0,0,0.03)] space-y-2 flex flex-col justify-between">
                     <img src={item.image} alt={item.title} className="w-full h-24 object-cover rounded-xl" />
                     <div>
                       <h5 className="font-serif font-bold text-xs text-[#0F172A] truncate">{item.title}</h5>
@@ -1058,7 +1049,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                         });
                         setChatModalOpen(true);
                       }}
-                      className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-[10px] py-1.5 rounded-lg"
+                      className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold text-[10px] py-2 rounded-xl transition-colors"
                     >
                       Chat Seller
                     </button>
@@ -1077,7 +1068,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
           <div className="space-y-4 animate-in fade-in duration-200">
             
             {/* Flat Profile Card */}
-            <div className="bg-white rounded-3xl p-5 shadow-[0_12px_30px_rgba(15,23,42,0.06)] border-2 border-[#CBD5E1] space-y-3">
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-2xl bg-[#0F172A] text-white font-serif font-bold text-lg flex items-center justify-center shadow-xs">
                   {(currentUser?.name || 'S').charAt(0).toUpperCase()}
@@ -1089,7 +1080,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 </div>
               </div>
 
-              <div className="p-3 bg-[#F8FAFC] rounded-2xl border border-[#CBD5E1] space-y-1.5 text-xs">
+              <div className="p-3 bg-slate-50/80 rounded-2xl border border-slate-200/60 space-y-1.5 text-xs">
                 <div className="flex justify-between">
                   <span className="text-[#64748B]">Registered Vehicle:</span>
                   <span className="font-bold text-[#0F172A]">UP14 EX 9988 (Honda City)</span>
@@ -1106,7 +1097,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             </div>
 
             {/* Active 2-Hour Helpdesk Tickets */}
-            <div className="bg-white rounded-3xl p-5 shadow-[0_12px_30px_rgba(15,23,42,0.06)] border-2 border-[#CBD5E1] space-y-3">
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="font-serif font-bold text-xs text-[#0F172A]">
                   🔧 2-Hour SLA Helpdesk Tickets
@@ -1119,7 +1110,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               {helpdeskTickets.length > 0 ? (
                 <div className="space-y-2">
                   {helpdeskTickets.map(ticket => (
-                    <div key={ticket.id} className="p-3 bg-[#F8FAFC] rounded-xl text-xs space-y-1 border border-[#CBD5E1]">
+                    <div key={ticket.id} className="p-3 bg-slate-50/80 rounded-xl text-xs space-y-1 border border-slate-200/60">
                       <div className="flex justify-between font-bold text-[#0F172A]">
                         <span>#{ticket.id}: {ticket.category}</span>
                         <span className={ticket.status === 'RESOLVED' ? 'text-emerald-700' : 'text-[#2563EB]'}>
@@ -1136,12 +1127,12 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             </div>
 
             {/* Founders & Leadership Info */}
-            <div className="bg-white rounded-3xl p-5 shadow-[0_12px_30px_rgba(15,23,42,0.06)] border-2 border-[#CBD5E1] space-y-3">
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
               <span className="font-serif font-bold text-xs text-[#0F172A] block">
                 🏢 StaySetu Leadership &amp; Support
               </span>
               <div className="space-y-2 text-xs text-[#475569]">
-                <div className="flex items-center justify-between p-2 bg-[#F8FAFC] rounded-xl border border-[#CBD5E1]">
+                <div className="flex items-center justify-between p-2.5 bg-slate-50/80 rounded-xl border border-slate-200/60">
                   <span>Sudhanshu Pandey (Founder &amp; CEO)</span>
                   <span className="text-[10px] font-bold text-[#2563EB]">Verified</span>
                 </div>
@@ -1152,7 +1143,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             <button
               type="button"
               onClick={handleLogout}
-              className="w-full bg-rose-50 hover:bg-rose-100 text-rose-700 border-2 border-rose-200 font-bold text-xs py-3 rounded-2xl cursor-pointer flex items-center justify-center gap-2 transition-colors"
+              className="w-full bg-rose-50 hover:bg-rose-100/80 text-rose-700 border border-rose-200 font-bold text-xs py-3.5 rounded-2xl cursor-pointer flex items-center justify-center gap-2 transition-colors"
             >
               <LogOut className="w-4 h-4 text-rose-600" />
               <span>Sign Out of Flat Account</span>
@@ -1163,9 +1154,9 @@ export default function NoBrokerHoodStaySetuMobileApp() {
 
       </main>
 
-      {/* ── 2. NATIVE MOBILE APP BOTTOM NAVIGATION BAR (FIXED 5 TABS) ── */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-t-2 border-[#CBD5E1] shadow-[0_-8px_30px_rgba(15,23,42,0.08)] py-2 px-3">
-        <div className="max-w-md mx-auto grid grid-cols-5 gap-1">
+      {/* ── 2. NATIVE MOBILE APP FLOATING FROSTED GLASS BOTTOM BAR (FIXED 5 TABS) ── */}
+      <nav className="fixed bottom-3 left-3 right-3 z-50 max-w-md mx-auto bg-white/90 backdrop-blur-2xl border border-white/60 shadow-[0_12px_40px_rgba(15,23,42,0.14)] rounded-3xl py-1.5 px-2">
+        <div className="grid grid-cols-5 gap-1">
           {[
             { id: 'HOME', label: 'Home', icon: Home },
             { id: 'GATE', label: 'Gate', icon: Shield },
@@ -1184,10 +1175,12 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   isActive ? 'text-[#2563EB] font-bold' : 'text-[#64748B] hover:text-[#0F172A] font-medium'
                 }`}
               >
-                <div className={`p-1 rounded-xl transition-all ${isActive ? 'bg-blue-50 text-[#2563EB]' : ''}`}>
-                  <IconComponent className="w-5 h-5" />
+                <div className={`p-1.5 rounded-xl transition-all ${isActive ? 'bg-[#2563EB] text-white shadow-[0_4px_12px_rgba(37,99,235,0.35)]' : ''}`}>
+                  <IconComponent className="w-4 h-4" />
                 </div>
-                <span className="text-[10px] tracking-tight">{tabItem.label}</span>
+                <span className={`text-[9px] tracking-tight mt-0.5 ${isActive ? 'font-black text-[#2563EB]' : 'font-medium'}`}>
+                  {tabItem.label}
+                </span>
               </button>
             );
           })}
@@ -1199,13 +1192,13 @@ export default function NoBrokerHoodStaySetuMobileApp() {
       {/* 🚨 Emergency SOS Modal */}
       {sosModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-2 border-rose-600 w-full max-w-sm p-6 space-y-4 shadow-2xl text-center">
+          <div className="bg-white rounded-3xl border border-rose-200 w-full max-w-sm p-6 space-y-4 shadow-2xl text-center">
             <div className="w-16 h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto animate-pulse">
               <ShieldAlert className="w-8 h-8" />
             </div>
             <h3 className="font-serif font-bold text-xl text-slate-900">Trigger Society Emergency SOS?</h3>
             <p className="text-xs text-slate-600">
-              This will instantly trigger loud alarms on the Main Gate Security Guard Terminal and send urgent SMS/WhatsApp alerts to all RWA committee members.
+              This will instantly trigger loud alarms on the Main Gate Security Guard Terminal and send urgent alerts to all RWA committee members.
             </p>
             <div className="space-y-2 pt-2">
               <button
@@ -1215,14 +1208,14 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   setSosModalOpen(false);
                   SocietyStore.addGateLog('EMERGENCY', `🚨 SOS Triggered by Flat ${currentUser?.flat || 'A-102'}`, 'Gate Alerted', isNetworkOnline);
                 }}
-                className="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs py-3.5 rounded-xl shadow-md cursor-pointer"
+                className="w-full bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white font-bold text-xs py-3.5 rounded-xl shadow-md cursor-pointer"
               >
                 YES, TRIGGER EMERGENCY ALARM
               </button>
               <button
                 type="button"
                 onClick={() => setSosModalOpen(false)}
-                className="w-full bg-[#F8FAFC] text-slate-700 font-bold text-xs py-2.5 rounded-xl border border-[#CBD5E1] cursor-pointer"
+                className="w-full bg-slate-100 text-slate-700 font-bold text-xs py-2.5 rounded-xl cursor-pointer"
               >
                 Cancel
               </button>
@@ -1234,8 +1227,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
       {/* 🛵 Pre-Approve Delivery Modal */}
       {deliveryModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-2 border-[#CBD5E1] w-full max-w-sm p-5 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#CBD5E1] pb-2.5">
+          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
               <h3 className="font-serif font-bold text-base text-[#0F172A]">🛵 Pre-Approve Delivery</h3>
               <button onClick={() => setDeliveryModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
@@ -1247,7 +1240,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 <select
                   value={deliveryPartner}
                   onChange={e => setDeliveryPartner(e.target.value)}
-                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"
                 >
                   <option>Swiggy</option>
                   <option>Zomato</option>
@@ -1258,7 +1251,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 </select>
               </div>
 
-              <label className="flex items-center gap-2 p-2 bg-[#F8FAFC] rounded-xl border border-[#CBD5E1] cursor-pointer">
+              <label className="flex items-center gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={leaveAtGate}
@@ -1271,7 +1264,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               <button
                 type="button"
                 onClick={handlePreApproveDelivery}
-                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3 rounded-xl shadow-md cursor-pointer"
+                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3.5 rounded-xl shadow-md cursor-pointer"
               >
                 Pre-Approve Entry Pass
               </button>
@@ -1283,8 +1276,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
       {/* 🚖 Pre-Approve Cab Modal */}
       {cabModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-2 border-[#CBD5E1] w-full max-w-sm p-5 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#CBD5E1] pb-2.5">
+          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
               <h3 className="font-serif font-bold text-base text-[#0F172A]">🚖 Pre-Approve Cab</h3>
               <button onClick={() => setCabModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
@@ -1296,7 +1289,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 <select
                   value={cabPartner}
                   onChange={e => setCabPartner(e.target.value)}
-                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"
                 >
                   <option>Uber</option>
                   <option>Ola</option>
@@ -1312,14 +1305,14 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   value={cabPlate}
                   onChange={e => setCabPlate(e.target.value)}
                   placeholder="e.g. DL 1Y 4421"
-                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"
                 />
               </div>
 
               <button
                 type="button"
                 onClick={handlePreApproveCab}
-                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3 rounded-xl shadow-md cursor-pointer"
+                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3.5 rounded-xl shadow-md cursor-pointer"
               >
                 Approve Cab Boom Entry
               </button>
@@ -1331,8 +1324,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
       {/* 🎫 Guest Invite Pass Modal */}
       {guestModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-2 border-[#CBD5E1] w-full max-w-sm p-5 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#CBD5E1] pb-2.5">
+          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
               <h3 className="font-serif font-bold text-base text-[#0F172A]">🎫 Invite Guest (WhatsApp QR)</h3>
               <button onClick={() => setGuestModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
@@ -1365,7 +1358,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                       value={guestName}
                       onChange={e => setGuestName(e.target.value)}
                       placeholder="e.g. Vikas Sharma"
-                      className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"
                     />
                   </div>
                   <div>
@@ -1375,13 +1368,13 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                       value={guestPhone}
                       onChange={e => setGuestPhone(e.target.value)}
                       placeholder="98765 43210"
-                      className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"
                     />
                   </div>
                   <button
                     type="button"
                     onClick={handleCreateGuestPass}
-                    className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3 rounded-xl shadow-md cursor-pointer"
+                    className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3.5 rounded-xl shadow-md cursor-pointer"
                   >
                     Generate Instant QR Pass
                   </button>
@@ -1395,8 +1388,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
       {/* 🧹 Backup Maid Modal */}
       {maidModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-2 border-[#CBD5E1] w-full max-w-sm p-5 space-y-3 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#CBD5E1] pb-2.5">
+          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-3 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
               <h3 className="font-serif font-bold text-base text-[#0F172A]">Request Backup Domestic Help</h3>
               <button onClick={() => setMaidModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
@@ -1408,7 +1401,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 <button
                   key={helper.id}
                   onClick={() => handleBookMaid(helper)}
-                  className="w-full p-2.5 bg-[#F8FAFC] rounded-xl border border-[#CBD5E1] text-left text-xs font-bold flex items-center justify-between cursor-pointer hover:border-[#0F172A]"
+                  className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 text-left text-xs font-bold flex items-center justify-between cursor-pointer hover:border-[#0F172A] transition-colors"
                 >
                   <div>
                     <p className="text-[#0F172A]">{helper.name} ({helper.role})</p>
@@ -1425,8 +1418,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
       {/* 🔧 Helpdesk Ticket Modal */}
       {helpdeskModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-2 border-[#CBD5E1] w-full max-w-sm p-5 space-y-3 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#CBD5E1] pb-2.5">
+          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-3 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
               <h3 className="font-serif font-bold text-base text-[#0F172A]">Raise 2-Hour SLA Ticket</h3>
               <button onClick={() => setHelpdeskModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
@@ -1438,7 +1431,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 <select
                   value={helpdeskCategory}
                   onChange={e => setHelpdeskCategory(e.target.value)}
-                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"
                 >
                   <option>Plumbing &amp; Water Seepage</option>
                   <option>Electrical MCB / Power Backup</option>
@@ -1453,13 +1446,13 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   value={helpdeskDescription}
                   onChange={e => setHelpdeskDescription(e.target.value)}
                   placeholder="Describe your maintenance issue..."
-                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl p-2.5 text-xs"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs"
                 />
               </div>
               <button
                 type="button"
                 onClick={handleRaiseTicket}
-                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3 rounded-xl shadow-md cursor-pointer"
+                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3.5 rounded-xl shadow-md cursor-pointer"
               >
                 Dispatch Technician (2-Hr SLA)
               </button>
@@ -1471,8 +1464,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
       {/* 🏸 Amenity Booking Modal */}
       {amenityModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-2 border-[#CBD5E1] w-full max-w-sm p-5 space-y-3 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#CBD5E1] pb-2.5">
+          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-3 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
               <h3 className="font-serif font-bold text-base text-[#0F172A]">Book Clubhouse Amenity</h3>
               <button onClick={() => setAmenityModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
@@ -1484,7 +1477,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 <select
                   value={selectedAmenity}
                   onChange={e => setSelectedAmenity(e.target.value)}
-                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"
                 >
                   <option>Badminton Court #1</option>
                   <option>Badminton Court #2</option>
@@ -1498,7 +1491,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 <select
                   value={amenitySlot}
                   onChange={e => setAmenitySlot(e.target.value)}
-                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"
                 >
                   <option>06:00 AM - 07:00 AM</option>
                   <option>07:00 AM - 08:00 AM</option>
@@ -1510,7 +1503,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               <button
                 type="button"
                 onClick={handleConfirmAmenity}
-                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3 rounded-xl shadow-md cursor-pointer"
+                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3.5 rounded-xl shadow-md cursor-pointer"
               >
                 Confirm Slot Pass (Free)
               </button>
@@ -1522,8 +1515,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
       {/* 🚚 Move-In Service Lift Modal */}
       {movingPassModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-2 border-[#CBD5E1] w-full max-w-sm p-5 space-y-3 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#CBD5E1] pb-2.5">
+          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-3 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
               <h3 className="font-serif font-bold text-base text-[#0F172A]">Shifting Truck &amp; Lift Pass</h3>
               <button onClick={() => setMovingPassModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
@@ -1536,7 +1529,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   type="text"
                   value={movingDate}
                   onChange={e => setMovingDate(e.target.value)}
-                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"
                 />
               </div>
               <div>
@@ -1544,7 +1537,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 <select
                   value={movingSlot}
                   onChange={e => setMovingSlot(e.target.value)}
-                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3 py-2 text-xs font-bold"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"
                 >
                   <option>10:00 AM - 12:00 PM</option>
                   <option>02:00 PM - 04:00 PM</option>
@@ -1559,7 +1552,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   setMovingPassModalOpen(false);
                   alert('🚚 Shifting Truck Pass #MV-9921 generated & Service Lift reserved!');
                 }}
-                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3 rounded-xl shadow-md cursor-pointer"
+                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3.5 rounded-xl shadow-md cursor-pointer"
               >
                 Generate Shifting Pass
               </button>
@@ -1571,19 +1564,19 @@ export default function NoBrokerHoodStaySetuMobileApp() {
       {/* 📢 Circulars & Notices Modal */}
       {noticeModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-2 border-[#CBD5E1] w-full max-w-sm p-5 space-y-3 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#CBD5E1] pb-2.5">
+          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-sm p-5 space-y-3 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
               <h3 className="font-serif font-bold text-base text-[#0F172A]">📢 Society Circulars</h3>
               <button onClick={() => setNoticeModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A]">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <div className="space-y-2 text-xs">
-              <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 space-y-1">
+              <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200 space-y-1">
                 <span className="font-bold text-amber-950">⚠️ DG Power Backup Testing</span>
                 <p className="text-[11px] text-amber-900">Wednesday 11:00 AM - 11:30 AM across all high-rise towers.</p>
               </div>
-              <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#CBD5E1] space-y-1">
+              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
                 <span className="font-bold text-[#0F172A]">🏊 Swimming Pool Deep Cleaning</span>
                 <p className="text-[11px] text-[#64748B]">Friday 06:00 AM - 12:00 PM. Reopens Saturday.</p>
               </div>
