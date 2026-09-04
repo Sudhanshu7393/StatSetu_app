@@ -46,7 +46,6 @@ export const metadata: Metadata = {
   ],
   authors: [
     { name: "Sudhanshu Pandey", url: "https://staysetu.com" },
-    { name: "Ayushi Singh", url: "https://staysetu.com" },
   ],
   creator: "StaySetu Technologies",
   publisher: "StaySetu",
@@ -112,11 +111,6 @@ export default function RootLayout({
         "@type": "Person",
         name: "Sudhanshu Pandey",
         jobTitle: "Founder & CEO",
-      },
-      {
-        "@type": "Person",
-        name: "Ayushi Singh",
-        jobTitle: "Co-Founder & COO",
       },
     ],
     sameAs: [],

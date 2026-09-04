@@ -26,7 +26,6 @@ const RWA_GOVERNANCE_LINKS = [
 
 const LEADERSHIP_LINKS = [
   { label: 'Sudhanshu Pandey (Founder & CEO)', href: '/#leadership' },
-  { label: 'Ayushi Singh (Co-Founder & COO)', href: '/#leadership' },
   { label: 'Township Enterprise Onboarding', href: '/auth/signup' },
   { label: 'SOC-2 & 256-Bit Security', href: '/#wrong-parking-spotlight' },
 ];
@@ -117,7 +116,7 @@ export function Footer() {
         <div className="pt-6 border-t border-[#334155] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#64748B]">
           <p>© {new Date().getFullYear()} StaySetu Technologies Pvt. Ltd. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <span>Co-Founded by Sudhanshu Pandey &amp; Ayushi Singh</span>
+            <span>Founded by Sudhanshu Pandey</span>
           </div>
         </div>
 

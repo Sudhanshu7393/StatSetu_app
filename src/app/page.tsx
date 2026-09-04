@@ -1145,10 +1145,6 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   <span>Sudhanshu Pandey (Founder &amp; CEO)</span>
                   <span className="text-[10px] font-bold text-[#2563EB]">Verified</span>
                 </div>
-                <div className="flex items-center justify-between p-2 bg-[#F8FAFC] rounded-xl border border-[#CBD5E1]">
-                  <span>Ayushi Singh (Co-Founder &amp; COO)</span>
-                  <span className="text-[10px] font-bold text-[#2563EB]">Verified</span>
-                </div>
               </div>
             </div>
 

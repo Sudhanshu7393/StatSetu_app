@@ -107,7 +107,6 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 ## 👥 Leadership & Founders
 
 * **Sudhanshu Pandey** — Founder & CEO
-* **Ayushi Singh** — Co-Founder & COO
 
 ---
 
