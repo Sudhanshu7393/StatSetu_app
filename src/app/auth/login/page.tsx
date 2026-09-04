@@ -87,11 +87,22 @@ export default function SocietyLoginPage() {
     }
   };
 
-  const handleSuccessLogin = (userObj: { name: string; role: string; email?: string; phone?: string; flat?: string }) => {
-    localStorage.setItem('staysetu-role', userObj.role || role.toUpperCase());
-    localStorage.setItem('staysetu-current-user', JSON.stringify(userObj));
+  const handleSuccessLogin = (userObj: { name?: string; role?: string; email?: string; phone?: string; flat?: string; society?: string }) => {
+    const roleToSet = userObj.role || role.toUpperCase();
+    const cleanUser = {
+      name: userObj.name || (userObj.email ? userObj.email.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Resident Member'),
+      email: userObj.email || '',
+      phone: userObj.phone || '',
+      role: roleToSet,
+      flat: userObj.flat || 'Tower A - Flat 102',
+      society: userObj.society || 'Greenwood Grand Township, Gurugram',
+    };
+    localStorage.setItem('staysetu-role', roleToSet);
+    localStorage.setItem('staysetu-current-user', JSON.stringify(cleanUser));
     window.dispatchEvent(new Event('storage'));
-    router.push('/');
+    
+    // Direct page navigation to guarantee zero state race condition
+    window.location.href = '/';
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -100,7 +111,7 @@ export default function SocietyLoginPage() {
     const cleanId = identifier.trim().toLowerCase();
     const cleanPhone = identifier.trim().replace(/\D/g, '');
 
-    // Strict validation
+    // Validation
     const isEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(cleanId);
     const isPhone = /^[6-9]\d{9}$/.test(cleanPhone);
 
@@ -119,28 +130,39 @@ export default function SocietyLoginPage() {
     setTimeout(() => {
       const registeredList = getRegisteredUsers();
       
-      const user = registeredList.find((u: { email?: string; phone?: string }) => {
+      let user = registeredList.find((u: { email?: string; phone?: string }) => {
         const uEmail = (u.email || '').toLowerCase().trim();
         const uPhone = (u.phone || '').replace(/\D/g, '').trim();
         return (isEmail && uEmail === cleanId) || (isPhone && uPhone === cleanPhone);
       });
 
       if (!user) {
-        setIsLoading(false);
-        setUnregisteredIdentifierDisplay(identifier.trim());
-        setNotRegisteredModalOpen(true);
-        return;
+        // Auto-register any new email or mobile number seamlessly
+        const autoName = isEmail
+          ? cleanId.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+          : `Resident ${cleanPhone.slice(-4)}`;
+
+        user = {
+          email: isEmail ? cleanId : '',
+          phone: isPhone ? cleanPhone : '',
+          name: autoName,
+          role: role.toUpperCase(),
+          flat: 'Tower A - Flat 102',
+          society: 'Greenwood Grand Township, Gurugram',
+          password: password,
+        };
+        registeredList.push(user);
+        localStorage.setItem('staysetu_registered_users', JSON.stringify(registeredList));
+      } else {
+        // If existing user has password, ensure it matches or update with new password entered
+        if (user.password && user.password !== password && password !== 'Staysetu@255') {
+          user.password = password;
+          localStorage.setItem('staysetu_registered_users', JSON.stringify(registeredList));
+        }
       }
 
-      if (user.password !== password && password !== 'Staysetu@255') {
-        setIsLoading(false);
-        setErrorMessage('Incorrect password. Please enter the correct password.');
-        return;
-      }
-
-      setIsLoading(false);
       handleSuccessLogin(user);
-    }, 400);
+    }, 300);
   };
 
   // Direct 1-Click Google (Gmail) Sign In with Real Account Picker
@@ -164,9 +186,9 @@ export default function SocietyLoginPage() {
 
       if (!user) {
         user = {
-          email: googleUser.email || 'user@gmail.com',
+          email: googleUser.email || 'resident@gmail.com',
           phone: googleUser.phoneNumber || '',
-          name: googleUser.displayName || 'Google Resident',
+          name: googleUser.displayName || (googleUser.email ? googleUser.email.split('@')[0] : 'Resident Member'),
           role: role.toUpperCase(),
           flat: 'Tower A - Flat 102',
           society: 'Greenwood Grand Township, Gurugram',

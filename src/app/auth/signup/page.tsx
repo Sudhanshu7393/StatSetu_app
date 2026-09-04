@@ -111,8 +111,8 @@ export default function SocietySignupPage() {
 
     setSuccess(true);
     setTimeout(() => {
-      router.push('/');
-    }, 1200);
+      window.location.href = '/';
+    }, 400);
   };
 
   // Direct Google Sign Up
@@ -132,9 +132,9 @@ export default function SocietySignupPage() {
 
       if (!user) {
         user = {
-          email: googleUser.email || 'user@gmail.com',
+          email: googleUser.email || 'resident@gmail.com',
           phone: '',
-          name: googleUser.displayName || 'Google Resident',
+          name: googleUser.displayName || (googleUser.email ? googleUser.email.split('@')[0] : 'Resident Member'),
           role: role.toUpperCase(),
           flat: 'Tower A - Flat 102',
           society: 'Greenwood Grand Township, Gurugram',
@@ -147,12 +147,12 @@ export default function SocietySignupPage() {
       localStorage.setItem('staysetu-role', role.toUpperCase());
       localStorage.setItem('staysetu-current-user', JSON.stringify(user));
       window.dispatchEvent(new Event('storage'));
-      router.push('/');
+      window.location.href = '/';
     } catch (err: unknown) {
       console.warn('Google SignUp:', err);
       // Fallback
       localStorage.setItem('staysetu-role', role.toUpperCase());
-      router.push('/');
+      window.location.href = '/';
     } finally {
       setIsGoogleLoading(false);
     }
