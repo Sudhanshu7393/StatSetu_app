@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { User, LogOut, ChevronDown, ShieldCheck, Home } from 'lucide-react';
 import { StaySetuLogo } from '@/components/brand/StaySetuLogo';
 
@@ -17,8 +17,12 @@ interface CurrentUser {
 
 export function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  // Return null on main mobile app page to prevent dual headers
+  if (pathname === '/') return null;
 
   // Sync logged in user state
   useEffect(() => {

@@ -63,7 +63,7 @@ export interface ParkingAlert {
 
 export interface GateLog {
   id: string;
-  type: 'FASTTAG' | 'VISITOR' | 'DELIVERY' | 'SHIFTING';
+  type: 'FASTTAG' | 'VISITOR' | 'DELIVERY' | 'SHIFTING' | 'CAB' | 'EMERGENCY';
   detail: string;
   status: string;
   timestamp: string;
@@ -330,7 +330,7 @@ export class SocietyStore {
     return this.getStore()?.gateLogs || [];
   }
 
-  static addGateLog(type: 'FASTTAG' | 'VISITOR' | 'DELIVERY' | 'SHIFTING', detail: string, status: string, isOnline: boolean): GateLog {
+  static addGateLog(type: GateLog['type'], detail: string, status: string, isOnline: boolean): GateLog {
     const store = this.getStore();
     const newLog: GateLog = {
       id: `log-${Date.now()}`,

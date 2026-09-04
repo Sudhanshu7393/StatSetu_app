@@ -14,6 +14,7 @@ const TABS = [
 
 export function MobileBottomNav() {
   const pathname = usePathname();
+  if (pathname === '/') return null;
 
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#F8FAFC]/95 backdrop-blur-xl border-t border-[#E2E8F0] px-2 py-1.5 shadow-[0_-8px_30px_rgba(15,23,42,0.08)]">
