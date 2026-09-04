@@ -4,9 +4,6 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
-import { SavedStaysProvider } from "@/context/SavedStaysContext";
-import { CompareProvider } from "@/context/CompareContext";
-import { FloatingCompareDock } from "@/components/compare/FloatingCompareDock";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -160,15 +157,10 @@ export default function RootLayout({
         />
       </head>
       <body className="flex flex-col min-h-screen bg-[#EEF2F6] text-slate-900 font-sans antialiased">
-        <SavedStaysProvider>
-          <CompareProvider>
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <MobileBottomNav />
-            <FloatingCompareDock />
-          </CompareProvider>
-        </SavedStaysProvider>
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <Footer />
+        <MobileBottomNav />
       </body>
     </html>
   );
