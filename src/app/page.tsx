@@ -358,34 +358,34 @@ export default function NoBrokerHoodStaySetuMobileApp() {
         <div className="max-w-md mx-auto flex items-center justify-between">
           
           {/* Society & Flat Selector */}
-          <div className="space-y-0.5">
+          <div className="space-y-0.5 max-w-[200px] sm:max-w-none">
             <div className="flex items-center gap-1.5 cursor-pointer group">
-              <Building2 className="w-4 h-4 text-[#2563EB]" />
-              <span className="font-serif font-bold text-xs text-[#0F172A] tracking-tight group-hover:text-[#2563EB] transition-colors">
+              <Building2 className="w-4 h-4 text-[#2563EB] shrink-0" />
+              <span className="font-serif font-bold text-xs text-[#0F172A] tracking-tight group-hover:text-[#2563EB] transition-colors truncate">
                 {currentUser?.society || 'Greenwood Grand Township'}
               </span>
-              <ChevronDown className="w-3 h-3 text-[#64748B]" />
+              <ChevronDown className="w-3 h-3 text-[#64748B] shrink-0" />
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[11px] font-bold text-[#2563EB]">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              <span className="text-[11px] font-bold text-[#2563EB] truncate">
                 {currentUser?.flat || 'Tower A - Flat 102'}
               </span>
-              <span className="text-[9px] font-semibold text-[#64748B] uppercase">
+              <span className="text-[9px] font-semibold text-[#64748B] uppercase shrink-0">
                 • {currentUser?.role || 'Resident'}
               </span>
             </div>
           </div>
 
-          {/* Quick Action Badges (SOS + Bell + Terminal Switcher) */}
-          <div className="flex items-center gap-2">
+          {/* Quick Action Badges (SOS + Notice Bell + Profile Avatar) */}
+          <div className="flex items-center gap-2 shrink-0">
             
             {/* 🚨 Emergency SOS Button */}
             <button
               type="button"
               onClick={() => setSosModalOpen(true)}
-              className="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white px-2.5 py-1.5 rounded-xl shadow-[0_4px_12px_rgba(225,29,72,0.3)] flex items-center gap-1 cursor-pointer transition-transform active:scale-90"
-              title="Emergency SOS"
+              className="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white px-2.5 py-1.5 rounded-full shadow-[0_4px_12px_rgba(225,29,72,0.25)] flex items-center gap-1 cursor-pointer transition-transform active:scale-95"
+              title="Emergency SOS Alarm"
             >
               <ShieldAlert className="w-3.5 h-3.5 animate-bounce" />
               <span className="text-[10px] font-black uppercase tracking-wider">SOS</span>
@@ -395,7 +395,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             <button
               type="button"
               onClick={() => setNoticeModalOpen(true)}
-              className="relative p-2 bg-slate-100 hover:bg-slate-200/80 rounded-xl text-[#0F172A] cursor-pointer transition-colors border border-slate-200/60"
+              className="relative p-2 bg-slate-100 hover:bg-slate-200/80 rounded-full text-[#0F172A] cursor-pointer transition-colors border border-slate-200/60"
+              title="Society Notices"
             >
               <Bell className="w-4 h-4 text-[#475569]" />
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#2563EB] text-white text-[9px] font-bold rounded-full flex items-center justify-center shadow-xs">
@@ -403,18 +404,14 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               </span>
             </button>
 
-            {/* Guard Terminal Switcher */}
+            {/* 👤 Resident Profile Avatar */}
             <button
               type="button"
-              onClick={() => setActivePortalMode(activePortalMode === 'RESIDENT' ? 'GUARD' : 'RESIDENT')}
-              className={`p-2 rounded-xl text-xs font-bold cursor-pointer transition-all border ${
-                activePortalMode === 'GUARD'
-                  ? 'bg-[#0F172A] text-[#38BDF8] border-slate-700 shadow-xs'
-                  : 'bg-slate-100 text-[#475569] border-slate-200/60'
-              }`}
-              title="Switch Terminal View"
+              onClick={() => setActiveTab('MY_FLAT')}
+              className="w-8 h-8 rounded-full bg-[#0F172A] hover:bg-[#1E293B] text-white flex items-center justify-center font-bold text-xs shadow-xs cursor-pointer transition-transform active:scale-95 border border-slate-700"
+              title="My Flat & Profile"
             >
-              <Radio className="w-4 h-4" />
+              {(currentUser?.name || 'S').charAt(0).toUpperCase()}
             </button>
 
           </div>
@@ -1137,6 +1134,26 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   <span className="text-[10px] font-bold text-[#2563EB]">Verified</span>
                 </div>
               </div>
+            </div>
+
+            {/* Guard Terminal Mode Switcher */}
+            <div className="bg-white rounded-3xl p-4 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 flex items-center justify-between">
+              <div>
+                <p className="font-serif font-bold text-xs text-[#0F172A]">🛡️ Security Guard Terminal Mode</p>
+                <p className="text-[10px] text-[#64748B]">For Gate security personnel &amp; guards</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setActivePortalMode(activePortalMode === 'RESIDENT' ? 'GUARD' : 'RESIDENT');
+                  alert(`Terminal switched to: ${activePortalMode === 'RESIDENT' ? 'GUARD DESK' : 'RESIDENT APP'}`);
+                }}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  activePortalMode === 'GUARD' ? 'bg-[#0F172A] text-[#38BDF8]' : 'bg-slate-100 text-[#0F172A]'
+                }`}
+              >
+                {activePortalMode === 'GUARD' ? 'Guard Active' : 'Switch Mode'}
+              </button>
             </div>
 
             {/* Logout Button */}
