@@ -267,6 +267,99 @@ export default function NoBrokerHoodStaySetuMobileApp() {
     ownerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
   });
 
+  // ── 🎁 ANIMATED SPOTLIGHT & RESIDENT PERKS CAROUSEL ──
+  const [activeSpotlightIndex, setActiveSpotlightIndex] = useState(0);
+  const [copiedCoupon, setCopiedCoupon] = useState(false);
+
+  const SPOTLIGHT_SLIDES = [
+    {
+      id: 'voice-pass',
+      tag: 'AI INNOVATION',
+      tagColor: 'bg-blue-500/20 text-blue-300 border-blue-400/30',
+      title: '🎙️ Hands-Free AI Voice Gate Pass',
+      subtitle: 'Bolkar 3 seconds me delivery & cab entry pass generate karein bina type kiye.',
+      ctaText: 'Try Voice Pass 🎙️',
+      gradient: 'from-[#0B192C] via-[#1E3E62] to-[#000000]',
+      badge: '3-Sec Pass',
+      accentColor: '#38BDF8',
+      action: () => {
+        setActiveTab('GATE');
+        setTimeout(() => {
+          document.getElementById('voice-pass-card')?.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      },
+    },
+    {
+      id: 'wrong-parking',
+      tag: 'SMART AI RADAR',
+      tagColor: 'bg-rose-500/20 text-rose-300 border-rose-400/30',
+      title: '📸 Wrong Parking Photo Scanner',
+      subtitle: 'Slot me khadi anjaan gaadi ki photo kheencho — AI car owner ko 10 min me alert bhejega.',
+      ctaText: 'Scan Car Plate 📸',
+      gradient: 'from-[#1A0B2E] via-[#311465] to-[#0F051D]',
+      badge: '10-Min SLA',
+      accentColor: '#F43F5E',
+      action: () => {
+        setActiveTab('GATE');
+        setTimeout(() => {
+          document.getElementById('wrong-parking-card')?.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      },
+    },
+    {
+      id: 'maid-radar',
+      tag: 'STAFF SECURITY',
+      tagColor: 'bg-purple-500/20 text-purple-300 border-purple-400/30',
+      title: '🛡️ Domestic Staff Biometric Radar',
+      subtitle: 'Check karein aapki maid ya cook kab society gate par enter hui real-time timestamp ke sath.',
+      ctaText: 'Check Helper Radar 👥',
+      gradient: 'from-[#0A2647] via-[#144272] to-[#051923]',
+      badge: 'Live Gate Status',
+      accentColor: '#C084FC',
+      action: () => {
+        setActiveTab('GATE');
+      },
+    },
+    {
+      id: 'maintenance-cashback',
+      tag: 'TOWNSHIP FINANCE',
+      tagColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30',
+      title: '⚡ Zero Late-Fee Maintenance Pay',
+      subtitle: 'UPI/Cards se society maintenance pay karein aur 1-click GST tax invoice download karein.',
+      ctaText: 'Pay Dues & Get Receipt 🧾',
+      gradient: 'from-[#062C30] via-[#055E68] to-[#011F26]',
+      badge: 'Instant GST Receipt',
+      accentColor: '#34D399',
+      action: () => {
+        setActiveTab('PAYMENTS');
+      },
+    },
+    {
+      id: 'urban-company-perk',
+      tag: 'EXCLUSIVE RESIDENT PERK',
+      tagColor: 'bg-amber-500/20 text-amber-300 border-amber-400/30',
+      title: '🎁 Urban Company AC & Deep Cleaning',
+      subtitle: 'StaySetu residents ke liye flat 25% Off + free lobby visit using coupon code.',
+      ctaText: copiedCoupon ? 'Coupon Copied! ✓' : 'Copy Code: STAYSETU25 📋',
+      gradient: 'from-[#2C1810] via-[#5C2E16] to-[#1A0D08]',
+      badge: 'Flat 25% OFF',
+      accentColor: '#FBBF24',
+      action: () => {
+        navigator.clipboard?.writeText('STAYSETU25');
+        setCopiedCoupon(true);
+        setTimeout(() => setCopiedCoupon(false), 2500);
+      },
+    },
+  ];
+
+  // Auto slide effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSpotlightIndex(prev => (prev + 1) % 5);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, []);
+
   // Load from persistent store & subscribe to updates
   const reloadFromStore = () => {
     setGuardLogs(SocietyStore.getGateLogs());
@@ -725,6 +818,75 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     </button>
                   );
                 })}
+              </div>
+            </div>
+
+            {/* ── ✨ ANIMATED STAYSETU SPOTLIGHT & RESIDENT PERKS SHOWCASE ── */}
+            <div className="relative overflow-hidden rounded-3xl p-5 text-white shadow-[0_12px_35px_rgba(15,23,42,0.16)] border border-slate-700/60 transition-all duration-700 ease-in-out">
+              {/* Background gradient from active slide */}
+              <div
+                className={`absolute inset-0 bg-gradient-to-br ${SPOTLIGHT_SLIDES[activeSpotlightIndex].gradient} transition-all duration-700`}
+              />
+              
+              {/* Animated Background Glow Pulse */}
+              <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none animate-pulse" />
+
+              <div className="relative z-10 space-y-3">
+                {/* Header row: Tag + Badge + Dots */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border backdrop-blur-xs ${SPOTLIGHT_SLIDES[activeSpotlightIndex].tagColor}`}>
+                      {SPOTLIGHT_SLIDES[activeSpotlightIndex].tag}
+                    </span>
+                    <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-white/15 text-white">
+                      {SPOTLIGHT_SLIDES[activeSpotlightIndex].badge}
+                    </span>
+                  </div>
+
+                  {/* Interactive Slide Dots */}
+                  <div className="flex items-center gap-1.5">
+                    {SPOTLIGHT_SLIDES.map((s, idx) => (
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={() => setActiveSpotlightIndex(idx)}
+                        className={`transition-all rounded-full cursor-pointer ${
+                          activeSpotlightIndex === idx
+                            ? 'w-5 h-1.5 bg-white'
+                            : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'
+                        }`}
+                        title={s.title}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="space-y-1">
+                  <h3 className="font-heading font-extrabold text-base text-white tracking-tight">
+                    {SPOTLIGHT_SLIDES[activeSpotlightIndex].title}
+                  </h3>
+                  <p className="text-xs text-slate-200 leading-relaxed">
+                    {SPOTLIGHT_SLIDES[activeSpotlightIndex].subtitle}
+                  </p>
+                </div>
+
+                {/* Action Row */}
+                <div className="flex items-center justify-between pt-1">
+                  <button
+                    type="button"
+                    onClick={SPOTLIGHT_SLIDES[activeSpotlightIndex].action}
+                    className="bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-xs px-3.5 py-2 rounded-xl shadow-md cursor-pointer transition-transform active:scale-95 flex items-center gap-1.5"
+                  >
+                    <span>{SPOTLIGHT_SLIDES[activeSpotlightIndex].ctaText}</span>
+                    <ChevronRight className="w-3.5 h-3.5 text-slate-700" />
+                  </button>
+
+                  <div className="text-[10px] text-slate-400 font-semibold flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-amber-400 animate-spin" />
+                    <span>StaySetu Live Feature</span>
+                  </div>
+                </div>
               </div>
             </div>
 
