@@ -62,6 +62,7 @@ import {
   MoreHorizontal,
 } from 'lucide-react';
 import { InAppChatModal } from '@/components/chat/InAppChatModal';
+import { StaySetuLogo } from '@/components/brand/StaySetuLogo';
 import { SocietyStore, HelperStaff, AmenityBooking, HelpdeskTicket, ParkingAlert, GateLog, AGMPoll } from '@/lib/societyStore';
 
 type AppTab = 'HOME' | 'GATE' | 'PAYMENTS' | 'BAZAAR' | 'MY_FLAT';
@@ -727,30 +728,19 @@ export default function NoBrokerHoodStaySetuMobileApp() {
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-4 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
         <div className="max-w-md mx-auto flex items-center justify-between">
           
-          {/* 🌿 StaySetu Brand Logo & Society Pill (Matching Reference Header) */}
+          {/* 🏛️ Official StaySetu Brand Logo & Society Pill */}
           <div
             onClick={() => setSocietyPickerOpen(true)}
-            className="flex items-center gap-2.5 cursor-pointer group"
+            className="flex items-center gap-2 cursor-pointer group"
           >
-            <div className="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shadow-[0_4px_12px_rgba(16,185,129,0.3)] group-hover:scale-105 transition-transform">
-              🌿
-            </div>
+            <StaySetuLogo size="sm" showText={true} />
+            <div className="h-4 w-[1px] bg-slate-300 mx-0.5" />
             <div className="space-y-0.2">
-              <div className="flex items-center gap-1.5">
-                <span className="font-heading font-black text-sm text-[#0F172A] tracking-tight">
-                  StaySetu
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
-                  {currentUser?.flat || 'A-102'}
-                </span>
-              </div>
-              <p className="text-[10px] text-[#64748B] font-semibold flex items-center gap-1 truncate max-w-[170px]">
-                <Building2 className="w-3 h-3 text-[#2563EB] shrink-0" />
-                <span className="truncate">{currentUser?.society?.split(',')[0] || 'Greenwood Grand'}</span>
-                <ChevronDown className="w-2.5 h-2.5 text-slate-400 shrink-0" />
-              </p>
+              <span className="text-[10px] font-bold text-[#2563EB] bg-blue-50 px-1.5 py-0.2 rounded border border-blue-200 block truncate max-w-[100px]">
+                {currentUser?.flat || 'A-102'}
+              </span>
             </div>
+            <ChevronDown className="w-3 h-3 text-slate-400 shrink-0 group-hover:translate-y-0.5 transition-transform" />
           </div>
 
           {/* Quick Action Badges (SOS + Notice Bell + Profile Avatar) */}
@@ -863,73 +853,73 @@ export default function NoBrokerHoodStaySetuMobileApp() {
           <div className="space-y-4 animate-in fade-in duration-200">
             
             {/* ── 🏙️ TOWNSHIP PANORAMA ILLUSTRATION & FLOATING SEARCH BAR ── */}
-            <div className="relative rounded-3xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-slate-200/80 bg-white">
-              {/* Township Vector Horizon Canvas */}
-              <div className="relative h-36 w-full overflow-hidden bg-gradient-to-br from-emerald-400 via-teal-500 to-sky-500 flex items-center justify-center">
-                {/* Vector Horizon Background Art */}
-                <svg className="absolute inset-0 w-full h-full object-cover opacity-30" viewBox="0 0 400 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M0 160L40 120L80 140L140 100L180 120L240 80L300 130L360 90L400 120V160H0Z" fill="white" />
-                  <rect x="45" y="60" width="25" height="100" rx="3" fill="white" opacity="0.5" />
-                  <rect x="85" y="40" width="35" height="120" rx="4" fill="white" opacity="0.6" />
-                  <rect x="135" y="70" width="30" height="90" rx="3" fill="white" opacity="0.4" />
-                  <rect x="180" y="30" width="45" height="130" rx="4" fill="white" opacity="0.7" />
-                  <rect x="240" y="55" width="35" height="105" rx="3" fill="white" opacity="0.5" />
-                  <rect x="290" y="35" width="40" height="125" rx="4" fill="white" opacity="0.6" />
-                  <rect x="345" y="65" width="30" height="95" rx="3" fill="white" opacity="0.4" />
-                  <circle cx="60" cy="30" r="14" fill="#FEF08A" opacity="0.9" />
+            <div className="relative rounded-3xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-200/80 bg-white">
+              {/* Soft Airy Pastel Skyline Canvas */}
+              <div className="relative h-32 w-full overflow-hidden bg-gradient-to-b from-[#E0F2FE] via-[#F0FDF4] to-white flex items-center justify-center p-4">
+                {/* Clean Vector Buildings Art */}
+                <svg className="absolute inset-0 w-full h-full object-cover opacity-25" viewBox="0 0 400 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 140L30 100L70 120L120 90L160 110L220 70L280 110L340 80L400 110V140H0Z" fill="#0284C7" />
+                  <rect x="40" y="50" width="22" height="90" rx="3" fill="#0D9488" opacity="0.6" />
+                  <rect x="75" y="30" width="30" height="110" rx="4" fill="#0284C7" opacity="0.7" />
+                  <rect x="120" y="60" width="25" height="80" rx="3" fill="#10B981" opacity="0.5" />
+                  <rect x="160" y="25" width="40" height="115" rx="4" fill="#0F172A" opacity="0.5" />
+                  <rect x="215" y="45" width="30" height="95" rx="3" fill="#0D9488" opacity="0.6" />
+                  <rect x="260" y="30" width="35" height="110" rx="4" fill="#0284C7" opacity="0.7" />
+                  <rect x="310" y="55" width="25" height="85" rx="3" fill="#10B981" opacity="0.5" />
+                  <circle cx="50" cy="25" r="12" fill="#FBBF24" opacity="0.8" />
                 </svg>
 
-                {/* Society Name & Resident Pill on Hero */}
-                <div className="relative z-10 text-center px-4 space-y-1">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-[10px] font-black uppercase tracking-wider shadow-xs">
-                    <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
+                {/* Resident Welcome Greeting on Canvas */}
+                <div className="relative z-10 text-center space-y-1">
+                  <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/80 border border-slate-200 text-[#0F172A] text-[10px] font-bold shadow-2xs">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     <span>{currentUser?.society || 'Greenwood Grand Township'}</span>
                   </div>
-                  <h2 className="font-heading font-black text-xl text-white drop-shadow-md tracking-tight">
+                  <h2 className="font-heading font-extrabold text-lg text-[#0F172A] tracking-tight">
                     Welcome home, {currentUser?.name?.split(' ')[0] || 'Sudhanshu'}! 👋
                   </h2>
-                  <p className="text-[11px] text-emerald-100 font-semibold drop-shadow-xs">
+                  <p className="text-[10px] text-[#64748B] font-semibold">
                     🏡 {currentUser?.flat || 'Tower A - Flat 102'} • Verified Resident
                   </p>
                 </div>
               </div>
 
-              {/* Floating Pill Search Bar */}
+              {/* Floating Pill Search Bar Overlay */}
               <div className="p-3 bg-white border-t border-slate-100">
                 <div className="relative flex items-center">
                   <Search className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
                   <input
                     type="text"
                     placeholder="Find services, passes, domestic helpers, & flats..."
-                    className="w-full bg-slate-50 hover:bg-slate-100/80 focus:bg-white text-xs font-semibold text-[#0F172A] placeholder:text-slate-400 rounded-full pl-9 pr-4 py-2.5 border border-slate-200/80 shadow-2xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    className="w-full bg-slate-50 hover:bg-slate-100/80 focus:bg-white text-xs font-semibold text-[#0F172A] placeholder:text-slate-400 rounded-full pl-9 pr-4 py-2.5 border border-slate-200/80 shadow-2xs focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 transition-all"
                   />
                 </div>
               </div>
             </div>
 
-            {/* ── 💳 MINT-LIME SMART WALLET & QUICK ACTIONS CARD (EXACT REFERENCE STYLE) ── */}
-            <div className="bg-gradient-to-r from-[#DCFCE7] via-[#F0FDF4] to-[#BBF7D0] rounded-3xl p-4.5 border border-emerald-300/80 shadow-[0_8px_25px_rgba(16,185,129,0.1)]">
+            {/* ── 💳 MINT SMART WALLET & QUICK ACTIONS (ZEVOA REFERENCE AESTHETIC) ── */}
+            <div className="bg-gradient-to-r from-[#E6F8EE] via-[#F3FAF5] to-[#DCF5E7] rounded-3xl p-5 border border-[#BDEBD0] shadow-[0_8px_25px_rgba(16,185,129,0.06)]">
               <div className="flex items-center justify-between">
                 
-                {/* Brand & Live Balance */}
+                {/* Brand & Tabular Balance */}
                 <div className="space-y-1">
                   <div className="flex items-center gap-1.5 text-emerald-800">
-                    <span className="font-heading font-black text-sm tracking-tight flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-                      staysetu <span className="font-light text-[10px] text-emerald-700 uppercase font-mono">pay</span>
+                    <span className="font-heading font-black text-xs tracking-tight flex items-center gap-1 text-emerald-700">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      StaySetu <span className="font-light text-[10px] text-emerald-800 font-mono">pay</span>
                     </span>
                   </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-emerald-700 text-lg font-bold">₹</span>
-                    <span className="font-heading font-black text-3xl text-[#0F172A] tracking-tight">
+                  <div className="flex items-baseline gap-0.5">
+                    <span className="text-amber-600 font-bold text-lg mr-0.5">₹</span>
+                    <span className="font-heading font-extrabold text-3xl text-[#0F172A] tracking-tight tabular-nums">
                       {meterBalance.toLocaleString('en-IN')}.00
                     </span>
                   </div>
-                  <p className="text-[10px] text-emerald-900 font-bold flex items-center gap-1">
+                  <p className="text-[10px] text-emerald-900 font-bold flex items-center gap-1.5">
                     <span>⚡ Prepaid Electricity</span>
                     <span>•</span>
-                    <span className={maintenancePaid ? 'text-emerald-700 font-black' : 'text-amber-800 font-black'}>
-                      {maintenancePaid ? 'Dues Cleared ✓' : 'Maint Due: ₹3,540'}
+                    <span className={maintenancePaid ? 'text-emerald-700 font-bold' : 'text-amber-800 font-bold'}>
+                      {maintenancePaid ? 'Maintenance Paid ✓' : 'Due: ₹3,540'}
                     </span>
                   </p>
                 </div>
@@ -942,7 +932,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     onClick={() => setActiveTab('PAYMENTS')}
                     className="flex flex-col items-center gap-1 group cursor-pointer"
                   >
-                    <div className="w-11 h-11 rounded-full bg-white shadow-[0_4px_14px_rgba(0,0,0,0.08)] border border-emerald-200/90 flex items-center justify-center text-[#0F172A] group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                    <div className="w-10 h-10 rounded-full bg-white shadow-[0_3px_10px_rgba(0,0,0,0.05)] border border-emerald-200 flex items-center justify-center text-[#0F172A] group-hover:scale-110 group-hover:bg-[#0F172A] group-hover:text-white transition-all">
                       <ArrowUp className="w-4 h-4" />
                     </div>
                     <span className="text-[10px] font-bold text-[#0F172A]">Pay</span>
@@ -958,7 +948,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     }}
                     className="flex flex-col items-center gap-1 group cursor-pointer"
                   >
-                    <div className="w-11 h-11 rounded-full bg-white shadow-[0_4px_14px_rgba(0,0,0,0.08)] border border-emerald-200/90 flex items-center justify-center text-[#0F172A] group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                    <div className="w-10 h-10 rounded-full bg-white shadow-[0_3px_10px_rgba(0,0,0,0.05)] border border-emerald-200 flex items-center justify-center text-[#0F172A] group-hover:scale-110 group-hover:bg-[#0F172A] group-hover:text-white transition-all">
                       <Plus className="w-4 h-4" />
                     </div>
                     <span className="text-[10px] font-bold text-[#0F172A]">Top Up</span>
@@ -970,8 +960,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     onClick={() => setSosModalOpen(true)}
                     className="flex flex-col items-center gap-1 group cursor-pointer"
                   >
-                    <div className="w-11 h-11 rounded-full bg-white shadow-[0_4px_14px_rgba(0,0,0,0.08)] border border-emerald-200/90 flex items-center justify-center text-[#0F172A] group-hover:scale-110 group-hover:bg-rose-600 group-hover:text-white transition-all">
-                      <ShieldAlert className="w-4 h-4 text-rose-600 group-hover:text-white" />
+                    <div className="w-10 h-10 rounded-full bg-white shadow-[0_3px_10px_rgba(0,0,0,0.05)] border border-emerald-200 flex items-center justify-center text-rose-600 group-hover:scale-110 group-hover:bg-rose-600 group-hover:text-white transition-all">
+                      <ShieldAlert className="w-4 h-4" />
                     </div>
                     <span className="text-[10px] font-bold text-[#0F172A]">SOS</span>
                   </button>
@@ -980,7 +970,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               </div>
             </div>
 
-            {/* ── 📱 8 SUPER-APP SERVICE TILES (WHITE ROUNDED CARDS WITH 3D-STYLE GRAPHICS) ── */}
+            {/* ── 📱 8 SUPER-APP SERVICE TILES (CLEAN WHITE CARDS & ISOMETRIC GRAPHICS) ── */}
             <div>
               <div className="flex items-center justify-between mb-2.5 px-1">
                 <p className="text-[11px] font-bold text-[#475569] uppercase tracking-wider">
@@ -996,8 +986,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     label: 'Delivery',
                     sub: 'Swiggy/Zomato',
                     icon: PackageCheck,
-                    iconBg: 'bg-gradient-to-br from-amber-400 to-orange-500 text-white',
-                    cardBg: 'hover:border-orange-200',
+                    bgColor: 'bg-amber-50 text-amber-600',
                     onClick: () => setDeliveryModalOpen(true),
                   },
                   {
@@ -1005,8 +994,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     label: 'Allow Cab',
                     sub: 'Uber/Ola',
                     icon: Car,
-                    iconBg: 'bg-gradient-to-br from-sky-400 to-blue-600 text-white',
-                    cardBg: 'hover:border-blue-200',
+                    bgColor: 'bg-blue-50 text-blue-600',
                     onClick: () => setCabModalOpen(true),
                   },
                   {
@@ -1014,8 +1002,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     label: 'Invite Guest',
                     sub: 'WhatsApp Pass',
                     icon: QrCode,
-                    iconBg: 'bg-gradient-to-br from-emerald-400 to-teal-600 text-white',
-                    cardBg: 'hover:border-emerald-200',
+                    bgColor: 'bg-emerald-50 text-emerald-600',
                     onClick: () => setGuestModalOpen(true),
                   },
                   {
@@ -1023,8 +1010,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     label: 'Helper Radar',
                     sub: 'Maid/Cook',
                     icon: Users,
-                    iconBg: 'bg-gradient-to-br from-purple-400 to-indigo-600 text-white',
-                    cardBg: 'hover:border-purple-200',
+                    bgColor: 'bg-purple-50 text-purple-600',
                     onClick: () => setMaidModalOpen(true),
                   },
                   {
@@ -1032,8 +1018,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     label: 'Wrong Park',
                     sub: 'Camera Snap',
                     icon: Camera,
-                    iconBg: 'bg-gradient-to-br from-rose-400 to-red-600 text-white',
-                    cardBg: 'hover:border-rose-200',
+                    bgColor: 'bg-rose-50 text-rose-600',
                     onClick: () => {
                       setActiveTab('GATE');
                       setTimeout(() => {
@@ -1046,8 +1031,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     label: 'Smart Meter',
                     sub: 'Recharge UPI',
                     icon: Zap,
-                    iconBg: 'bg-gradient-to-br from-amber-400 to-yellow-500 text-white',
-                    cardBg: 'hover:border-amber-200',
+                    bgColor: 'bg-yellow-50 text-amber-600',
                     onClick: () => {
                       const updated = SocietyStore.rechargeSmartMeter(500);
                       setMeterBalance(updated);
@@ -1059,8 +1043,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     label: 'Clubhouse',
                     sub: 'Court & Pool',
                     icon: CalendarDays,
-                    iconBg: 'bg-gradient-to-br from-teal-400 to-cyan-600 text-white',
-                    cardBg: 'hover:border-teal-200',
+                    bgColor: 'bg-teal-50 text-teal-600',
                     onClick: () => setAmenityModalOpen(true),
                   },
                   {
@@ -1068,8 +1051,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     label: '2-Hr SLA',
                     sub: 'Helpdesk',
                     icon: Wrench,
-                    iconBg: 'bg-gradient-to-br from-slate-600 to-slate-800 text-white',
-                    cardBg: 'hover:border-slate-300',
+                    bgColor: 'bg-slate-100 text-slate-700',
                     onClick: () => setHelpdeskModalOpen(true),
                   },
                 ].map(item => {
@@ -1079,12 +1061,12 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                       key={item.id}
                       type="button"
                       onClick={item.onClick}
-                      className={`bg-white rounded-2xl p-2.5 border border-slate-200/90 shadow-[0_4px_16px_rgba(0,0,0,0.03)] hover:shadow-md transition-all active:scale-95 flex flex-col items-center justify-center text-center space-y-2 cursor-pointer group min-h-[96px] ${item.cardBg}`}
+                      className="bg-white hover:bg-slate-50/80 rounded-2xl p-2.5 border border-slate-200/80 shadow-[0_4px_16px_rgba(0,0,0,0.03)] hover:shadow-md transition-all active:scale-95 flex flex-col items-center justify-center text-center space-y-1.5 cursor-pointer group min-h-[96px]"
                     >
-                      <div className={`w-11 h-11 rounded-2xl ${item.iconBg} flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>
-                        <Icon className="w-5 h-5 drop-shadow-xs" />
+                      <div className={`w-11 h-11 rounded-2xl ${item.bgColor} border border-slate-200/50 flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                        <Icon className="w-5 h-5" />
                       </div>
-                      <div className="space-y-0.5 leading-tight">
+                      <div className="space-y-0.2 leading-tight">
                         <span className="font-heading font-extrabold text-[11px] text-[#0F172A] block truncate">
                           {item.label}
                         </span>
