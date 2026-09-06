@@ -3,9 +3,9 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.staysetu.app",
+      "package_name": "app.vercel.stat_setu_app.twa",
       "sha256_cert_fingerprints": [
-        "14:6D:E9:CD:07:4B:40:86:40:D6:86:47:18:39:EF:5B:55:4F:73:2C:AE:0A:45:34:B3:16:6D:95:D3:2D:77:EC"
+        "0F:2D:79:6A:B6:E2:36:8C:70:DA:27:36:72:E1:E6:E5:CC:ED:50:D8:99:A7:77:B1:8A:CC:3B:84:34:26:4A:98"
       ]
     }
   }
