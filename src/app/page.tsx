@@ -1184,32 +1184,6 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               </button>
             </div>
 
-            {/* Recent Gate Activity Log Snippet */}
-            <div className="bg-white rounded-3xl p-4 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-2.5">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-xs text-[#0F172A]">
-                  🛡️ Live Gate Entry Feed
-                </span>
-                <button
-                  onClick={() => setActiveTab('GATE')}
-                  className="text-[10px] font-bold text-[#2563EB] hover:underline"
-                >
-                  View All Logs →
-                </button>
-              </div>
-
-              <div className="space-y-1.5">
-                {guardLogs.slice(0, 3).map(log => (
-                  <div key={log.id} className="p-2.5 bg-slate-50/80 rounded-xl flex items-center justify-between text-[11px] border border-slate-200/60">
-                    <span className="text-[#0F172A] font-medium truncate max-w-[200px]">{log.detail}</span>
-                    <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded shrink-0">
-                      {log.timestamp}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
           </div>
         )}
 
@@ -1354,27 +1328,43 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               </div>
             </div>
 
-            {/* FastTag & Guard Gate Logs */}
+            {/* Resident Registered Vehicles & FastTag Status */}
             <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-xs text-[#0F172A]">
-                  🚗 ANPR FastTag Boom Barrier Control
+                  🚗 My Registered Vehicles &amp; FastTag
                 </span>
-                <button
-                  onClick={handleGuardOpenBoom}
-                  className="bg-[#0F172A] text-white text-[10px] font-bold px-3 py-1.5 rounded-xl cursor-pointer"
-                >
-                  {guardBoomStatus === 'OPEN' ? 'Boom Open ✓' : 'Test Open →'}
-                </button>
+                <span className="text-[9px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
+                  Auto-ANPR Active
+                </span>
               </div>
 
-              <div className="space-y-1.5 max-h-48 overflow-y-auto">
-                {guardLogs.map(log => (
-                  <div key={log.id} className="p-2.5 bg-slate-50/80 rounded-xl flex items-center justify-between text-xs border border-slate-200/60">
-                    <span className="text-[#0F172A] font-medium truncate max-w-[220px]">{log.detail}</span>
-                    <span className="text-[9px] font-bold text-[#64748B] shrink-0">{log.timestamp}</span>
+              <div className="space-y-2">
+                <div className="p-3 bg-slate-50/90 rounded-2xl border border-slate-200/70 flex items-center justify-between text-xs">
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-[#0F172A]">DL8C AB 1234</span>
+                      <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded">Car (Sedan)</span>
+                    </div>
+                    <p className="text-[10px] text-[#64748B]">Allotted Slot: Basement B1 - Slot #12</p>
                   </div>
-                ))}
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded-xl">
+                    FastTag Linked ✓
+                  </span>
+                </div>
+
+                <div className="p-3 bg-slate-50/90 rounded-2xl border border-slate-200/70 flex items-center justify-between text-xs">
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-[#0F172A]">UP16 BZ 5519</span>
+                      <span className="text-[10px] font-bold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded">Two-Wheeler (EV)</span>
+                    </div>
+                    <p className="text-[10px] text-[#64748B]">Slot: EV Bay #04</p>
+                  </div>
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded-xl">
+                    RFID Active ✓
+                  </span>
+                </div>
               </div>
             </div>
 
