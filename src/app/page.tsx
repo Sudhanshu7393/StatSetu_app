@@ -855,33 +855,27 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             {activeTab === 'HOME' && (
           <div className="space-y-4 animate-in fade-in duration-200">
             
-            {/* ── 🏙️ TOWNSHIP PANORAMA ILLUSTRATION & FLOATING SEARCH BAR ── */}
-            <div className="relative rounded-3xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-200/80 bg-white">
-              {/* Soft Airy Pastel Skyline Canvas */}
-              <div className="relative h-32 w-full overflow-hidden bg-gradient-to-b from-[#E0F2FE] via-[#F0FDF4] to-white flex items-center justify-center p-4">
-                {/* Clean Vector Buildings Art */}
-                <svg className="absolute inset-0 w-full h-full object-cover opacity-25" viewBox="0 0 400 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M0 140L30 100L70 120L120 90L160 110L220 70L280 110L340 80L400 110V140H0Z" fill="#0284C7" />
-                  <rect x="40" y="50" width="22" height="90" rx="3" fill="#0D9488" opacity="0.6" />
-                  <rect x="75" y="30" width="30" height="110" rx="4" fill="#0284C7" opacity="0.7" />
-                  <rect x="120" y="60" width="25" height="80" rx="3" fill="#10B981" opacity="0.5" />
-                  <rect x="160" y="25" width="40" height="115" rx="4" fill="#0F172A" opacity="0.5" />
-                  <rect x="215" y="45" width="30" height="95" rx="3" fill="#0D9488" opacity="0.6" />
-                  <rect x="260" y="30" width="35" height="110" rx="4" fill="#0284C7" opacity="0.7" />
-                  <rect x="310" y="55" width="25" height="85" rx="3" fill="#10B981" opacity="0.5" />
-                  <circle cx="50" cy="25" r="12" fill="#FBBF24" opacity="0.8" />
-                </svg>
+            {/* ── 🏙️ REAL SOCIETY TOWNSHIP HERO BANNER & FLOATING SEARCH BAR ── */}
+            <div className="relative rounded-3xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-200/80 bg-white group">
+              {/* Real High-Res Gated Township Photograph with Soft Gradient Overlay */}
+              <div className="relative h-36 w-full overflow-hidden flex items-end justify-center p-3 pb-3.5">
+                <img
+                  src="/images/society-hero-mobile.png"
+                  alt="Greenwood Grand Township Campus"
+                  className="absolute inset-0 w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-slate-900/10" />
 
                 {/* Resident Welcome Greeting on Canvas */}
-                <div className="relative z-10 text-center space-y-1">
-                  <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/80 border border-slate-200 text-[#0F172A] text-[10px] font-bold shadow-2xs">
+                <div className="relative z-10 text-center space-y-1 w-full">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200/80 text-[#0F172A] text-[10px] font-bold shadow-2xs">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span>{currentUser?.society || 'Greenwood Grand Township'}</span>
+                    <span>{currentUser?.society || 'Greenwood Grand Township, Gurugram'}</span>
                   </div>
                   <h2 className="font-heading font-extrabold text-lg text-[#0F172A] tracking-tight">
                     Welcome home, {currentUser?.name?.split(' ')[0] || 'Sudhanshu'}! 👋
                   </h2>
-                  <p className="text-[10px] text-[#64748B] font-semibold">
+                  <p className="text-[10px] text-[#475569] font-bold">
                     🏡 {currentUser?.flat || 'Tower A - Flat 102'} • Verified Resident
                   </p>
                 </div>
