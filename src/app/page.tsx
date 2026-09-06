@@ -1,5 +1,6 @@
 'use client';
 
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -726,26 +727,29 @@ export default function NoBrokerHoodStaySetuMobileApp() {
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-4 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
         <div className="max-w-md mx-auto flex items-center justify-between">
           
-          {/* Society & Flat Selector (Interactive Sheet Trigger) */}
+          {/* 🌿 StaySetu Brand Logo & Society Pill (Matching Reference Header) */}
           <div
             onClick={() => setSocietyPickerOpen(true)}
-            className="space-y-0.5 max-w-[200px] sm:max-w-none cursor-pointer group"
+            className="flex items-center gap-2.5 cursor-pointer group"
           >
-            <div className="flex items-center gap-1.5">
-              <Building2 className="w-4 h-4 text-[#2563EB] shrink-0" />
-              <span className="font-heading font-extrabold text-xs text-[#0F172A] tracking-tight group-hover:text-[#2563EB] transition-colors truncate">
-                {currentUser?.society || 'Greenwood Grand Township, Gurugram'}
-              </span>
-              <ChevronDown className="w-3 h-3 text-[#64748B] shrink-0 group-hover:translate-y-0.5 transition-transform" />
+            <div className="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shadow-[0_4px_12px_rgba(16,185,129,0.3)] group-hover:scale-105 transition-transform">
+              🌿
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-              <span className="text-[11px] font-bold text-[#2563EB] truncate">
-                {currentUser?.flat || 'Tower A - Flat 102'}
-              </span>
-              <span className="text-[9px] font-semibold text-[#64748B] uppercase shrink-0">
-                • {currentUser?.role || 'Resident'}
-              </span>
+            <div className="space-y-0.2">
+              <div className="flex items-center gap-1.5">
+                <span className="font-heading font-black text-sm text-[#0F172A] tracking-tight">
+                  StaySetu
+                </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
+                  {currentUser?.flat || 'A-102'}
+                </span>
+              </div>
+              <p className="text-[10px] text-[#64748B] font-semibold flex items-center gap-1 truncate max-w-[170px]">
+                <Building2 className="w-3 h-3 text-[#2563EB] shrink-0" />
+                <span className="truncate">{currentUser?.society?.split(',')[0] || 'Greenwood Grand'}</span>
+                <ChevronDown className="w-2.5 h-2.5 text-slate-400 shrink-0" />
+              </p>
             </div>
           </div>
 
@@ -858,88 +862,129 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             {activeTab === 'HOME' && (
           <div className="space-y-4 animate-in fade-in duration-200">
             
-            {/* 🌟 Luxury Midnight Gradient Resident Identity & Smart Balance Card */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] p-5 text-white shadow-[0_15px_35px_rgba(15,23,42,0.18)] border border-slate-700/80">
-              <div className="absolute -top-10 -right-10 w-36 h-36 bg-[#2563EB]/25 rounded-full blur-2xl pointer-events-none" />
-              
-              <div className="relative z-10 flex items-center justify-between">
-                <div className="space-y-1.5">
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 backdrop-blur-xs border border-white/10 text-[9px] font-bold tracking-wider text-[#38BDF8] uppercase">
-                    <ShieldCheck className="w-3 h-3 text-[#38BDF8]" />
-                    <span>Verified Resident</span>
-                  </div>
-                  <h2 className="font-heading font-extrabold tracking-tight text-lg text-white">
-                    {currentUser?.name || 'Sudhanshu Pandey'}
-                  </h2>
-                  <p className="text-xs text-slate-300 font-semibold flex items-center gap-1.5">
-                    <span>🏡 {currentUser?.flat || 'Tower A - Flat 102'}</span>
-                    <span className="text-slate-500">•</span>
-                    <span className="text-slate-400">3 BHK Penthouse</span>
-                  </p>
-                </div>
+            {/* ── 🏙️ TOWNSHIP PANORAMA ILLUSTRATION & FLOATING SEARCH BAR ── */}
+            <div className="relative rounded-3xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-slate-200/80 bg-white">
+              {/* Township Vector Horizon Canvas */}
+              <div className="relative h-36 w-full overflow-hidden bg-gradient-to-br from-emerald-400 via-teal-500 to-sky-500 flex items-center justify-center">
+                {/* Vector Horizon Background Art */}
+                <svg className="absolute inset-0 w-full h-full object-cover opacity-30" viewBox="0 0 400 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 160L40 120L80 140L140 100L180 120L240 80L300 130L360 90L400 120V160H0Z" fill="white" />
+                  <rect x="45" y="60" width="25" height="100" rx="3" fill="white" opacity="0.5" />
+                  <rect x="85" y="40" width="35" height="120" rx="4" fill="white" opacity="0.6" />
+                  <rect x="135" y="70" width="30" height="90" rx="3" fill="white" opacity="0.4" />
+                  <rect x="180" y="30" width="45" height="130" rx="4" fill="white" opacity="0.7" />
+                  <rect x="240" y="55" width="35" height="105" rx="3" fill="white" opacity="0.5" />
+                  <rect x="290" y="35" width="40" height="125" rx="4" fill="white" opacity="0.6" />
+                  <rect x="345" y="65" width="30" height="95" rx="3" fill="white" opacity="0.4" />
+                  <circle cx="60" cy="30" r="14" fill="#FEF08A" opacity="0.9" />
+                </svg>
 
-                <div className="text-right space-y-1.5">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                    MAINTENANCE
-                  </span>
-                  <span className={`inline-block text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-xs ${
-                    maintenancePaid
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                      : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                  }`}>
-                    {maintenancePaid ? 'Paid ✓' : 'Due: ₹3,540'}
-                  </span>
-                  <button
-                    onClick={() => {
-                      if (maintenancePaid) {
-                        setInvoiceModalOpen(true);
-                      } else {
-                        setActiveTab('PAYMENTS');
-                      }
-                    }}
-                    className="text-[11px] text-[#38BDF8] hover:text-white font-bold block transition-colors"
-                  >
-                    {maintenancePaid ? 'View Invoice 🧾' : 'Pay Dues →'}
-                  </button>
+                {/* Society Name & Resident Pill on Hero */}
+                <div className="relative z-10 text-center px-4 space-y-1">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-[10px] font-black uppercase tracking-wider shadow-xs">
+                    <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
+                    <span>{currentUser?.society || 'Greenwood Grand Township'}</span>
+                  </div>
+                  <h2 className="font-heading font-black text-xl text-white drop-shadow-md tracking-tight">
+                    Welcome home, {currentUser?.name?.split(' ')[0] || 'Sudhanshu'}! 👋
+                  </h2>
+                  <p className="text-[11px] text-emerald-100 font-semibold drop-shadow-xs">
+                    🏡 {currentUser?.flat || 'Tower A - Flat 102'} • Verified Resident
+                  </p>
                 </div>
               </div>
 
-              {/* Quick Balance Strip (Prepaid Electricity Meter + Quick Top Up) */}
-              <div className="mt-4 pt-3.5 border-t border-slate-700/60 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-xl bg-amber-400/10 text-amber-400">
-                    <Zap className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">
-                      PREPAID ELECTRICITY METER
-                    </span>
-                    <span className="text-xs font-black text-white">
-                      Balance: ₹{meterBalance.toLocaleString('en-IN')}.00
-                    </span>
-                  </div>
+              {/* Floating Pill Search Bar */}
+              <div className="p-3 bg-white border-t border-slate-100">
+                <div className="relative flex items-center">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
+                  <input
+                    type="text"
+                    placeholder="Find services, passes, domestic helpers, & flats..."
+                    className="w-full bg-slate-50 hover:bg-slate-100/80 focus:bg-white text-xs font-semibold text-[#0F172A] placeholder:text-slate-400 rounded-full pl-9 pr-4 py-2.5 border border-slate-200/80 shadow-2xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  />
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    const updated = SocietyStore.rechargeSmartMeter(500);
-                    setMeterBalance(updated);
-                    alert('⚡ Smart Meter recharged with ₹500 via UPI!');
-                  }}
-                  className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-[10px] px-3 py-1.5 rounded-xl shadow-xs cursor-pointer transition-transform active:scale-95 flex items-center gap-1"
-                >
-                  <Plus className="w-3 h-3" />
-                  <span>Recharge ₹500</span>
-                </button>
               </div>
             </div>
 
-            {/* ── 8 QUICK ACTION TILES GRID (HIGH-RES ICONS & CLEAN GRADIENTS) ── */}
+            {/* ── 💳 MINT-LIME SMART WALLET & QUICK ACTIONS CARD (EXACT REFERENCE STYLE) ── */}
+            <div className="bg-gradient-to-r from-[#DCFCE7] via-[#F0FDF4] to-[#BBF7D0] rounded-3xl p-4.5 border border-emerald-300/80 shadow-[0_8px_25px_rgba(16,185,129,0.1)]">
+              <div className="flex items-center justify-between">
+                
+                {/* Brand & Live Balance */}
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1.5 text-emerald-800">
+                    <span className="font-heading font-black text-sm tracking-tight flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+                      staysetu <span className="font-light text-[10px] text-emerald-700 uppercase font-mono">pay</span>
+                    </span>
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-emerald-700 text-lg font-bold">₹</span>
+                    <span className="font-heading font-black text-3xl text-[#0F172A] tracking-tight">
+                      {meterBalance.toLocaleString('en-IN')}.00
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-emerald-900 font-bold flex items-center gap-1">
+                    <span>⚡ Prepaid Electricity</span>
+                    <span>•</span>
+                    <span className={maintenancePaid ? 'text-emerald-700 font-black' : 'text-amber-800 font-black'}>
+                      {maintenancePaid ? 'Dues Cleared ✓' : 'Maint Due: ₹3,540'}
+                    </span>
+                  </p>
+                </div>
+
+                {/* 3 Circular Action Buttons (Pay, Top Up, SOS) */}
+                <div className="flex items-center gap-3">
+                  {/* Pay Maintenance */}
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('PAYMENTS')}
+                    className="flex flex-col items-center gap-1 group cursor-pointer"
+                  >
+                    <div className="w-11 h-11 rounded-full bg-white shadow-[0_4px_14px_rgba(0,0,0,0.08)] border border-emerald-200/90 flex items-center justify-center text-[#0F172A] group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                      <ArrowUp className="w-4 h-4" />
+                    </div>
+                    <span className="text-[10px] font-bold text-[#0F172A]">Pay</span>
+                  </button>
+
+                  {/* Top Up Meter */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const updated = SocietyStore.rechargeSmartMeter(500);
+                      setMeterBalance(updated);
+                      alert('⚡ Smart Meter recharged with ₹500 via UPI!');
+                    }}
+                    className="flex flex-col items-center gap-1 group cursor-pointer"
+                  >
+                    <div className="w-11 h-11 rounded-full bg-white shadow-[0_4px_14px_rgba(0,0,0,0.08)] border border-emerald-200/90 flex items-center justify-center text-[#0F172A] group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                      <Plus className="w-4 h-4" />
+                    </div>
+                    <span className="text-[10px] font-bold text-[#0F172A]">Top Up</span>
+                  </button>
+
+                  {/* Quick SOS / Intercom */}
+                  <button
+                    type="button"
+                    onClick={() => setSosModalOpen(true)}
+                    className="flex flex-col items-center gap-1 group cursor-pointer"
+                  >
+                    <div className="w-11 h-11 rounded-full bg-white shadow-[0_4px_14px_rgba(0,0,0,0.08)] border border-emerald-200/90 flex items-center justify-center text-[#0F172A] group-hover:scale-110 group-hover:bg-rose-600 group-hover:text-white transition-all">
+                      <ShieldAlert className="w-4 h-4 text-rose-600 group-hover:text-white" />
+                    </div>
+                    <span className="text-[10px] font-bold text-[#0F172A]">SOS</span>
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            {/* ── 📱 8 SUPER-APP SERVICE TILES (WHITE ROUNDED CARDS WITH 3D-STYLE GRAPHICS) ── */}
             <div>
               <div className="flex items-center justify-between mb-2.5 px-1">
                 <p className="text-[11px] font-bold text-[#475569] uppercase tracking-wider">
-                  ⚡ Quick Daily Passes &amp; Services
+                  ⚡ Quick Passes &amp; Community Services
                 </p>
                 <span className="text-[10px] text-[#64748B] font-semibold">1-Tap Approvals</span>
               </div>
@@ -949,109 +994,131 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   {
                     id: 'delivery',
                     label: 'Delivery',
+                    sub: 'Swiggy/Zomato',
                     icon: PackageCheck,
-                    iconColor: 'text-orange-600',
+                    iconBg: 'bg-gradient-to-br from-amber-400 to-orange-500 text-white',
+                    cardBg: 'hover:border-orange-200',
                     onClick: () => setDeliveryModalOpen(true),
-                    badge: 'Instant',
-                    gradient: 'from-orange-50/90 to-amber-50/80 border-orange-200/80 text-orange-950',
-                    badgeColor: 'bg-orange-100 text-orange-800',
                   },
                   {
                     id: 'cab',
                     label: 'Allow Cab',
+                    sub: 'Uber/Ola',
                     icon: Car,
-                    iconColor: 'text-amber-600',
+                    iconBg: 'bg-gradient-to-br from-sky-400 to-blue-600 text-white',
+                    cardBg: 'hover:border-blue-200',
                     onClick: () => setCabModalOpen(true),
-                    badge: 'FastTag',
-                    gradient: 'from-yellow-50/90 to-amber-50/80 border-yellow-200/80 text-amber-950',
-                    badgeColor: 'bg-yellow-100 text-amber-800',
                   },
                   {
                     id: 'guest',
                     label: 'Invite Guest',
+                    sub: 'WhatsApp Pass',
                     icon: QrCode,
-                    iconColor: 'text-emerald-600',
+                    iconBg: 'bg-gradient-to-br from-emerald-400 to-teal-600 text-white',
+                    cardBg: 'hover:border-emerald-200',
                     onClick: () => setGuestModalOpen(true),
-                    badge: 'QR Pass',
-                    gradient: 'from-emerald-50/90 to-teal-50/80 border-emerald-200/80 text-emerald-950',
-                    badgeColor: 'bg-emerald-100 text-emerald-800',
                   },
                   {
                     id: 'maid',
-                    label: 'Backup Maid',
+                    label: 'Helper Radar',
+                    sub: 'Maid/Cook',
                     icon: Users,
-                    iconColor: 'text-purple-600',
+                    iconBg: 'bg-gradient-to-br from-purple-400 to-indigo-600 text-white',
+                    cardBg: 'hover:border-purple-200',
                     onClick: () => setMaidModalOpen(true),
-                    badge: 'Staff',
-                    gradient: 'from-purple-50/90 to-fuchsia-50/80 border-purple-200/80 text-purple-950',
-                    badgeColor: 'bg-purple-100 text-purple-800',
                   },
                   {
                     id: 'parking',
-                    label: 'Wrong Parking',
+                    label: 'Wrong Park',
+                    sub: 'Camera Snap',
                     icon: Camera,
-                    iconColor: 'text-rose-600',
+                    iconBg: 'bg-gradient-to-br from-rose-400 to-red-600 text-white',
+                    cardBg: 'hover:border-rose-200',
                     onClick: () => {
                       setActiveTab('GATE');
                       setTimeout(() => {
                         document.getElementById('wrong-parking-card')?.scrollIntoView({ behavior: 'smooth' });
                       }, 100);
                     },
-                    badge: 'Camera',
-                    gradient: 'from-rose-50/90 to-red-50/80 border-rose-200/80 text-rose-950',
-                    badgeColor: 'bg-rose-100 text-rose-800',
                   },
                   {
-                    id: 'helpdesk',
-                    label: '2-Hr Helpdesk',
-                    icon: Wrench,
-                    iconColor: 'text-cyan-600',
-                    onClick: () => setHelpdeskModalOpen(true),
-                    badge: 'OTP SLA',
-                    gradient: 'from-cyan-50/90 to-sky-50/80 border-cyan-200/80 text-cyan-950',
-                    badgeColor: 'bg-cyan-100 text-cyan-800',
+                    id: 'meter',
+                    label: 'Smart Meter',
+                    sub: 'Recharge UPI',
+                    icon: Zap,
+                    iconBg: 'bg-gradient-to-br from-amber-400 to-yellow-500 text-white',
+                    cardBg: 'hover:border-amber-200',
+                    onClick: () => {
+                      const updated = SocietyStore.rechargeSmartMeter(500);
+                      setMeterBalance(updated);
+                      alert('⚡ Smart Meter recharged with ₹500 via UPI!');
+                    },
                   },
                   {
-                    id: 'amenity',
+                    id: 'club',
                     label: 'Clubhouse',
+                    sub: 'Court & Pool',
                     icon: CalendarDays,
-                    iconColor: 'text-indigo-600',
+                    iconBg: 'bg-gradient-to-br from-teal-400 to-cyan-600 text-white',
+                    cardBg: 'hover:border-teal-200',
                     onClick: () => setAmenityModalOpen(true),
-                    badge: 'Free Slot',
-                    gradient: 'from-indigo-50/90 to-blue-50/80 border-indigo-200/80 text-indigo-950',
-                    badgeColor: 'bg-indigo-100 text-indigo-800',
                   },
                   {
-                    id: 'moving',
-                    label: 'Move-In Pass',
-                    icon: Truck,
-                    iconColor: 'text-slate-700',
-                    onClick: () => setMovingPassModalOpen(true),
-                    badge: 'Lift Pass',
-                    gradient: 'from-slate-50/90 to-gray-100/80 border-slate-200/80 text-slate-950',
-                    badgeColor: 'bg-slate-200 text-slate-800',
+                    id: 'help',
+                    label: '2-Hr SLA',
+                    sub: 'Helpdesk',
+                    icon: Wrench,
+                    iconBg: 'bg-gradient-to-br from-slate-600 to-slate-800 text-white',
+                    cardBg: 'hover:border-slate-300',
+                    onClick: () => setHelpdeskModalOpen(true),
                   },
-                ].map(action => {
-                  const IconComp = action.icon;
+                ].map(item => {
+                  const Icon = item.icon;
                   return (
                     <button
-                      key={action.id}
+                      key={item.id}
                       type="button"
-                      onClick={action.onClick}
-                      className={`bg-gradient-to-b ${action.gradient} rounded-2xl p-2.5 border shadow-[0_4px_12px_rgba(0,0,0,0.03)] flex flex-col items-center justify-between text-center space-y-1.5 cursor-pointer transition-transform active:scale-95 group relative min-h-[96px] hover:shadow-md`}
+                      onClick={item.onClick}
+                      className={`bg-white rounded-2xl p-2.5 border border-slate-200/90 shadow-[0_4px_16px_rgba(0,0,0,0.03)] hover:shadow-md transition-all active:scale-95 flex flex-col items-center justify-center text-center space-y-2 cursor-pointer group min-h-[96px] ${item.cardBg}`}
                     >
-                      <div className="p-2 rounded-xl bg-white/90 shadow-2xs group-hover:scale-110 transition-transform">
-                        <IconComp className={`w-5 h-5 ${action.iconColor}`} />
+                      <div className={`w-11 h-11 rounded-2xl ${item.iconBg} flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>
+                        <Icon className="w-5 h-5 drop-shadow-xs" />
                       </div>
-                      <span className="text-[10px] font-bold leading-tight block">
-                        {action.label}
-                      </span>
-                      <span className={`text-[8px] font-black px-1.5 py-0.2 rounded-md ${action.badgeColor}`}>
-                        {action.badge}
-                      </span>
+                      <div className="space-y-0.5 leading-tight">
+                        <span className="font-heading font-extrabold text-[11px] text-[#0F172A] block truncate">
+                          {item.label}
+                        </span>
+                        <span className="text-[9px] font-semibold text-[#64748B] block truncate">
+                          {item.sub}
+                        </span>
+                      </div>
                     </button>
                   );
                 })}
+              </div>
+            </div>
+
+            {/* ── 🎁 STAYSETU PLUS PERKS BANNER (MATCHING REFERENCE MOCKUP) ── */}
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-50 via-teal-50/70 to-amber-50 border border-emerald-200/90 p-4 shadow-[0_8px_25px_rgba(16,185,129,0.06)]">
+              <div className="flex items-center justify-between gap-3">
+                <div className="space-y-1">
+                  <span className="text-[10px] font-black text-emerald-800 uppercase tracking-wider block">
+                    Enjoy the benefits of StaySetu Plus
+                  </span>
+                  <h4 className="font-heading font-extrabold text-xs text-[#0F172A] leading-snug">
+                    Get 25% off in home deep cleaning &amp; AC service
+                  </h4>
+                  <p className="text-[10px] text-[#64748B]">
+                    Urban Company Code: <span className="font-mono font-bold text-emerald-700 bg-white px-1.5 py-0.5 rounded border border-emerald-200">STAYSETU25</span>
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => alert('🎉 Urban Company 25% Voucher STAYSETU25 copied to clipboard!')}
+                  className="bg-[#0F172A] hover:bg-[#1E293B] text-white text-[10px] font-bold px-3 py-2 rounded-xl shadow-sm shrink-0 cursor-pointer transition-transform active:scale-95"
+                >
+                  Claim →
+                </button>
               </div>
             </div>
 
