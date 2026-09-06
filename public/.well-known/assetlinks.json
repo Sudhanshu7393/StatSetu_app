@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.staysetu.app",
+      "sha256_cert_fingerprints": [
+        "14:6D:E9:CD:07:4B:40:86:40:D6:86:47:18:39:EF:5B:55:4F:73:2C:AE:0A:45:34:B3:16:6D:95:D3:2D:77:EC"
+      ]
+    }
+  }
+]

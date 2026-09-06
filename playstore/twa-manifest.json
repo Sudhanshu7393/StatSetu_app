@@ -1,0 +1,31 @@
+{
+  "packageId": "com.staysetu.app",
+  "host": "stat-setu-app.vercel.app",
+  "name": "StaySetu",
+  "launcherName": "StaySetu",
+  "themeColor": "#0F172A",
+  "navigationColor": "#0F172A",
+  "backgroundColor": "#F8FAFC",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://stat-setu-app.vercel.app/icons/icon-512x512.png",
+  "maskableIconUrl": "https://stat-setu-app.vercel.app/icons/icon-maskable.png",
+  "appVersionCode": 1,
+  "appVersionName": "1.0.0",
+  "shortcuts": [],
+  "generatorApp": "staysetu-cli",
+  "webManifestUrl": "https://stat-setu-app.vercel.app/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {
+    "playBilling": {
+      "enabled": false
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://stat-setu-app.vercel.app/"
+}
