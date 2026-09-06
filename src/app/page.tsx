@@ -147,6 +147,9 @@ export default function NoBrokerHoodStaySetuMobileApp() {
     },
   ]);
 
+  // ── ACTIVE ROLE PERSONA (RESIDENT | GUARD | RWA) ──
+  const [userRole, setUserRole] = useState<'RESIDENT' | 'GUARD' | 'RWA'>('RESIDENT');
+
   // ── MANDATORY AUTHENTICATION GATE ──
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -157,17 +160,38 @@ export default function NoBrokerHoodStaySetuMobileApp() {
     } else {
       if (userRaw) {
         try {
-          setCurrentUser(JSON.parse(userRaw));
+          const parsed = JSON.parse(userRaw);
+          setCurrentUser(parsed);
+          if (parsed.role) {
+            const normalizedRole = parsed.role.toUpperCase();
+            if (normalizedRole === 'GUARD' || normalizedRole === 'RWA' || normalizedRole === 'RESIDENT') {
+              setUserRole(normalizedRole as 'RESIDENT' | 'GUARD' | 'RWA');
+            }
+          }
         } catch {
           // ignore
+        }
+      }
+      if (roleRaw) {
+        const normalized = roleRaw.toUpperCase();
+        if (normalized === 'GUARD' || normalized === 'RWA' || normalized === 'RESIDENT') {
+          setUserRole(normalized as 'RESIDENT' | 'GUARD' | 'RWA');
         }
       }
       setIsAuthChecking(false);
     }
   }, [router]);
 
-  // ── DUAL TERMINAL SWITCHER (RESIDENT VS GUARD) ──
-  const [activePortalMode, setActivePortalMode] = useState<'RESIDENT' | 'GUARD'>('RESIDENT');
+  const handleRoleChange = (newRole: 'RESIDENT' | 'GUARD' | 'RWA') => {
+    setUserRole(newRole);
+    localStorage.setItem('staysetu-role', newRole);
+    if (currentUser) {
+      const updated = { ...currentUser, role: newRole };
+      setCurrentUser(updated);
+      localStorage.setItem('staysetu-current-user', JSON.stringify(updated));
+    }
+    window.dispatchEvent(new Event('storage'));
+  };
 
   // ── PERSISTENT STORE STATE ──
   const [isNetworkOnline, setIsNetworkOnline] = useState(true);
@@ -252,6 +276,28 @@ export default function NoBrokerHoodStaySetuMobileApp() {
 
   // Guard Terminal State
   const [guardBoomStatus, setGuardBoomStatus] = useState<'CLOSED' | 'OPEN'>('CLOSED');
+  const [guardSearchQuery, setGuardSearchQuery] = useState('');
+  const [guardVerificationResult, setGuardVerificationResult] = useState<{
+    found: boolean;
+    title: string;
+    detail: string;
+    code: string;
+    flat: string;
+    type: string;
+  } | null>(null);
+  const [guardPackages, setGuardPackages] = useState([
+    { id: 'pkg-1', flat: 'Tower A - Flat 102', courier: 'Amazon Box #24', time: '10:30 AM', status: 'WAITING_PICKUP' },
+    { id: 'pkg-2', flat: 'Tower B - Flat 304', courier: 'Zomato Meal Desk', time: '11:15 AM', status: 'WAITING_PICKUP' },
+    { id: 'pkg-3', flat: 'Tower C - Flat 501', courier: 'BlueDart Document', time: 'Yesterday', status: 'COLLECTED' },
+  ]);
+
+  // ── RWA ADMIN DESK STATES ──
+  const [rwaNoticeTitle, setRwaNoticeTitle] = useState('');
+  const [rwaNoticeBody, setRwaNoticeBody] = useState('');
+  const [rwaNoticeCategory, setRwaNoticeCategory] = useState<'MAINTENANCE' | 'SECURITY' | 'COMMUNITY'>('MAINTENANCE');
+  const [rwaNoticeBroadcasted, setRwaNoticeBroadcasted] = useState(false);
+  const [rwaNewPollTitle, setRwaNewPollTitle] = useState('');
+  const [rwaPollCreated, setRwaPollCreated] = useState(false);
 
   // Simulation States
   const [isRecording, setIsRecording] = useState(false);
@@ -409,8 +455,128 @@ export default function NoBrokerHoodStaySetuMobileApp() {
 
   const handleGuardOpenBoom = () => {
     setGuardBoomStatus('OPEN');
-    SocietyStore.addGateLog('FASTTAG', 'Manual Gate Clearance (Gate #1 - Main Society Entrance)', isNetworkOnline ? 'Cloud Synced' : 'Saved to Local DB', isNetworkOnline);
+    SocietyStore.addGateLog('FASTTAG', '🟢 Manual Boom Barrier Raised (Gate #1 - Main Society Entrance)', isNetworkOnline ? 'Cloud Synced' : 'Saved to Local DB', isNetworkOnline);
     setTimeout(() => setGuardBoomStatus('CLOSED'), 3500);
+  };
+
+  const handleGuardVerifyLookup = (e: React.FormEvent) => {
+    e.preventDefault();
+    const clean = guardSearchQuery.trim().toUpperCase();
+    if (!clean) return;
+
+    // Check active passes
+    const foundPass = activePasses.find(p => p.code.toUpperCase() === clean || p.title.toUpperCase().includes(clean));
+    if (foundPass) {
+      setGuardVerificationResult({
+        found: true,
+        title: foundPass.title,
+        detail: foundPass.detail,
+        code: foundPass.code,
+        flat: currentUser?.flat || 'Tower A - Flat 102',
+        type: foundPass.type,
+      });
+      return;
+    }
+
+    if (clean.includes('DEL') || clean.includes('ZOMATO') || clean.includes('SWIGGY') || clean.includes('AMAZON') || clean.includes('8841')) {
+      setGuardVerificationResult({
+        found: true,
+        title: 'Zomato Food Delivery (Rider Aman Kumar)',
+        detail: 'Pre-Approved by Resident • Leave at Gate Desk or Lobby',
+        code: clean || 'DEL-8841',
+        flat: 'Tower A - Flat 102',
+        type: 'DELIVERY',
+      });
+      return;
+    }
+
+    if (clean.includes('GST') || clean.includes('GUEST') || clean.includes('QR')) {
+      setGuardVerificationResult({
+        found: true,
+        title: 'Resident Guest (WhatsApp QR Pass)',
+        detail: 'Invited to Tower A - Flat 102 (Sudhanshu Pandey)',
+        code: clean || 'GST-9281',
+        flat: 'Tower A - Flat 102',
+        type: 'GUEST',
+      });
+      return;
+    }
+
+    setGuardVerificationResult({
+      found: false,
+      title: 'Pass Code Not Found / Expired',
+      detail: 'No active pre-approval found for this code. Please call resident via Intercom extension.',
+      code: clean,
+      flat: 'Unknown Flat',
+      type: 'INVALID',
+    });
+  };
+
+  const handleGuardAllowEntry = () => {
+    if (!guardVerificationResult) return;
+    SocietyStore.addGateLog(
+      (guardVerificationResult.type as 'VISITOR' | 'DELIVERY' | 'CAB') || 'VISITOR',
+      `🟢 Gate Clearance: ${guardVerificationResult.title} for ${guardVerificationResult.flat} (Pass: #${guardVerificationResult.code})`,
+      'Cleared by Guard Chief Vikram',
+      isNetworkOnline
+    );
+    setGuardBoomStatus('OPEN');
+    setTimeout(() => setGuardBoomStatus('CLOSED'), 3500);
+    setGuardVerificationResult(null);
+    setGuardSearchQuery('');
+  };
+
+  const handleGuardToggleStaff = (staffId: string) => {
+    SocietyStore.toggleHelperInCampus(staffId);
+  };
+
+  const handleBroadcastRwaNotice = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!rwaNoticeTitle.trim() || !rwaNoticeBody.trim()) return;
+
+    const newNotice: SocietyNotice = {
+      id: `notice-${Date.now()}`,
+      title: rwaNoticeTitle.trim(),
+      body: rwaNoticeBody.trim(),
+      time: 'Just Now',
+      category: rwaNoticeCategory,
+      isRead: false,
+    };
+
+    setNotices(prev => [newNotice, ...prev]);
+    SocietyStore.addNotice(newNotice.title, newNotice.body, newNotice.category);
+    setRwaNoticeTitle('');
+    setRwaNoticeBody('');
+    setRwaNoticeBroadcasted(true);
+    setTimeout(() => setRwaNoticeBroadcasted(false), 3000);
+  };
+
+  const handleCreateRwaPoll = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!rwaNewPollTitle.trim()) return;
+
+    const newPoll: AGMPoll = {
+      id: `poll-${Date.now()}`,
+      title: rwaNewPollTitle.trim(),
+      yesVotes: 1,
+      noVotes: 0,
+      userVoted: null,
+    };
+
+    setForumPoll(newPoll);
+    SocietyStore.setPoll(newPoll);
+    setRwaNewPollTitle('');
+    setRwaPollCreated(true);
+    setTimeout(() => setRwaPollCreated(false), 3000);
+  };
+
+  const handleCloseTicketWithOtp = (ticketId: string, inputOtp: string) => {
+    const success = SocietyStore.resolveTicket(ticketId, inputOtp);
+    if (success) {
+      alert(`✅ Helpdesk Ticket #${ticketId} closed successfully with OTP verification!`);
+    } else {
+      alert(`❌ Invalid OTP entered for ticket #${ticketId}. Please request correct OTP from resident.`);
+    }
   };
 
   const handleBookMaid = (helper: HelperStaff) => {
@@ -645,13 +811,48 @@ export default function NoBrokerHoodStaySetuMobileApp() {
         </div>
       )}
 
+      {/* ── 👥 MULTI-ROLE PERSONA SWITCHER (LIVE DEMO & ROLE SELECTOR) ── */}
+      <div className="bg-slate-900 text-white border-b border-slate-800 px-4 py-2 sticky top-[57px] z-30 shadow-md">
+        <div className="max-w-md mx-auto flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-black uppercase tracking-wider shrink-0">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Mode:</span>
+          </div>
+          <div className="grid grid-cols-3 gap-1.5 flex-1 max-w-[290px]">
+            {[
+              { role: 'RESIDENT' as const, label: '🏡 Resident' },
+              { role: 'GUARD' as const,    label: '🛡️ Guard Desk' },
+              { role: 'RWA' as const,      label: '🏛️ RWA Admin' },
+            ].map(r => (
+              <button
+                key={r.role}
+                type="button"
+                onClick={() => handleRoleChange(r.role)}
+                className={`py-1.5 px-2 rounded-xl text-[10px] font-bold transition-all cursor-pointer text-center leading-none ${
+                  userRole === r.role
+                    ? 'bg-[#2563EB] text-white shadow-xs font-black'
+                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                }`}
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* ── MAIN MOBILE APP CONTENT CONTAINER ── */}
       <main className="max-w-md mx-auto px-4 pt-4 space-y-4">
 
         {/* ═══════════════════════════════════════════════════════════════
-            TAB 1: 🏠 HOME (NOBROKERHOOD / MYGATE QUICK ACTION DASHBOARD)
-            ═══════════════════════════════════════════════════════════════ */}
-        {activeTab === 'HOME' && (
+            MODE 1: 🏡 RESIDENT SUPER-APP DASHBOARD
+           ═══════════════════════════════════════════════════════════════ */}
+        {userRole === 'RESIDENT' && (
+          <>
+            {/* ═══════════════════════════════════════════════════════════════
+                TAB 1: 🏠 HOME (NOBROKERHOOD / MYGATE QUICK ACTION DASHBOARD)
+                ═══════════════════════════════════════════════════════════════ */}
+            {activeTab === 'HOME' && (
           <div className="space-y-4 animate-in fade-in duration-200">
             
             {/* 🌟 Luxury Midnight Gradient Resident Identity Card */}
@@ -1486,14 +1687,12 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               <button
                 type="button"
                 onClick={() => {
-                  setActivePortalMode(activePortalMode === 'RESIDENT' ? 'GUARD' : 'RESIDENT');
-                  alert(`Terminal switched to: ${activePortalMode === 'RESIDENT' ? 'GUARD DESK' : 'RESIDENT APP'}`);
+                  setUserRole('GUARD');
+                  localStorage.setItem('staysetu-role', 'GUARD');
                 }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                  activePortalMode === 'GUARD' ? 'bg-[#0F172A] text-[#38BDF8]' : 'bg-slate-100 text-[#0F172A]'
-                }`}
+                className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 hover:bg-slate-200 text-[#0F172A]"
               >
-                {activePortalMode === 'GUARD' ? 'Guard Active' : 'Switch Mode'}
+                Switch to Guard
               </button>
             </div>
 
@@ -1510,40 +1709,593 @@ export default function NoBrokerHoodStaySetuMobileApp() {
           </div>
         )}
 
-      </main>
+        </>
+      )}
 
-      {/* ── 2. NATIVE MOBILE APP FLOATING FROSTED GLASS BOTTOM BAR (FIXED 5 TABS) ── */}
-      <nav className="fixed bottom-3 left-3 right-3 z-50 max-w-md mx-auto bg-white/90 backdrop-blur-2xl border border-white/60 shadow-[0_12px_40px_rgba(15,23,42,0.14)] rounded-3xl py-1.5 px-2">
-        <div className="grid grid-cols-5 gap-1">
-          {[
-            { id: 'HOME', label: 'Home', icon: Home },
-            { id: 'GATE', label: 'Gate', icon: Shield },
-            { id: 'PAYMENTS', label: 'Pay Dues', icon: CreditCard },
-            { id: 'BAZAAR', label: 'Bazaar', icon: ShoppingBag },
-            { id: 'MY_FLAT', label: 'My Flat', icon: User },
-          ].map(tabItem => {
-            const IconComponent = tabItem.icon;
-            const isActive = activeTab === tabItem.id;
-            return (
+        {/* ═══════════════════════════════════════════════════════════════
+            MODE 2: 🛡️ SECURITY GUARD & BOOM BARRIER TERMINAL
+           ═══════════════════════════════════════════════════════════════ */}
+        {userRole === 'GUARD' && (
+          <div className="space-y-4 animate-in fade-in duration-200">
+
+            {/* 🛡️ Guard Chief Terminal Header Card */}
+            <div className="bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] rounded-3xl p-5 text-white shadow-[0_15px_35px_rgba(15,23,42,0.18)] border border-slate-700/80 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-2xl bg-[#2563EB] text-white font-bold flex items-center justify-center text-sm shadow-xs">
+                    🛡️
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-wider">Gate #1 Main Entrance</span>
+                    </div>
+                    <h2 className="font-heading font-extrabold text-base text-white">Chief Officer Vikram Singh</h2>
+                    <p className="text-[10px] text-slate-300">Shift: Morning 07:00 AM - 03:00 PM • ANPR Camera #01 Active</p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleLogout}
+                  className="p-2 rounded-xl bg-white/10 hover:bg-rose-500/20 text-rose-300 text-xs font-bold border border-white/10"
+                  title="Guard Sign Out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Quick Gate Stats Bar */}
+              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-700/80 text-center">
+                <div className="p-2 rounded-xl bg-white/5 border border-white/5">
+                  <span className="text-[9px] font-bold text-slate-400 block uppercase">Vehicles In</span>
+                  <span className="font-heading font-extrabold text-sm text-white">184 Today</span>
+                </div>
+                <div className="p-2 rounded-xl bg-white/5 border border-white/5">
+                  <span className="text-[9px] font-bold text-slate-400 block uppercase">Staff Inside</span>
+                  <span className="font-heading font-extrabold text-sm text-emerald-400">
+                    {helpers.filter(h => h.isInsideCampus).length} / {helpers.length}
+                  </span>
+                </div>
+                <div className="p-2 rounded-xl bg-white/5 border border-white/5">
+                  <span className="text-[9px] font-bold text-slate-400 block uppercase">Packages</span>
+                  <span className="font-heading font-extrabold text-sm text-amber-400">
+                    {guardPackages.filter(p => p.status === 'WAITING_PICKUP').length} at Desk
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* 🛑 1. ANPR BOOM BARRIER LIVE CONTROLLER */}
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-xl bg-blue-50 text-[#2563EB]">
+                    <Car className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-extrabold text-sm text-[#0F172A]">ANPR FastTag Boom Barrier</h3>
+                    <p className="text-[10px] text-[#64748B]">Auto-scans RFID / FastTag in 0.4s</p>
+                  </div>
+                </div>
+
+                <span className={`text-[10px] font-black px-2.5 py-1 rounded-full ${
+                  guardBoomStatus === 'OPEN' ? 'bg-emerald-100 text-emerald-800 animate-pulse' : 'bg-rose-100 text-rose-800'
+                }`}>
+                  {guardBoomStatus === 'OPEN' ? '🟢 BARRIER RAISED' : '🔴 BARRIER LOCKED'}
+                </span>
+              </div>
+
+              {/* Big Action Button for Guard */}
               <button
-                key={tabItem.id}
                 type="button"
-                onClick={() => setActiveTab(tabItem.id as AppTab)}
-                className={`flex flex-col items-center justify-center py-1 rounded-2xl cursor-pointer transition-all ${
-                  isActive ? 'text-[#2563EB] font-bold' : 'text-[#64748B] hover:text-[#0F172A] font-medium'
+                onClick={handleGuardOpenBoom}
+                className={`w-full py-4 rounded-2xl font-heading font-extrabold text-sm shadow-md cursor-pointer transition-all active:scale-95 flex items-center justify-center gap-2 ${
+                  guardBoomStatus === 'OPEN'
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-[#0F172A] hover:bg-[#1E293B] text-white'
                 }`}
               >
-                <div className={`p-1.5 rounded-xl transition-all ${isActive ? 'bg-[#2563EB] text-white shadow-[0_4px_12px_rgba(37,99,235,0.35)]' : ''}`}>
-                  <IconComponent className="w-4 h-4" />
-                </div>
-                <span className={`text-[9px] tracking-tight mt-0.5 ${isActive ? 'font-black text-[#2563EB]' : 'font-medium'}`}>
-                  {tabItem.label}
-                </span>
+                {guardBoomStatus === 'OPEN' ? (
+                  <>
+                    <CheckCircle2 className="w-5 h-5" />
+                    <span>Barrier is Open (Auto-closing in 3s...)</span>
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-5 h-5 text-[#38BDF8]" />
+                    <span>Raise Boom Barrier (Manual Clearance)</span>
+                  </>
+                )}
               </button>
-            );
-          })}
-        </div>
-      </nav>
+            </div>
+
+            {/* 🔍 2. VISITOR / DELIVERY PASS CODE VERIFIER */}
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-xl bg-emerald-50 text-emerald-700">
+                    <QrCode className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-extrabold text-sm text-[#0F172A]">Visitor &amp; Delivery Pass Lookup</h3>
+                    <p className="text-[10px] text-[#64748B]">Search pass code (e.g. DEL-8841, GST-9281)</p>
+                  </div>
+                </div>
+              </div>
+
+              <form onSubmit={handleGuardVerifyLookup} className="flex gap-2">
+                <input
+                  type="text"
+                  value={guardSearchQuery}
+                  onChange={e => setGuardSearchQuery(e.target.value)}
+                  placeholder="Enter 4 or 8-digit Pass Code..."
+                  className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-[#0F172A] uppercase placeholder:normal-case focus:outline-none focus:border-[#0F172A]"
+                />
+                <button
+                  type="submit"
+                  className="bg-[#0F172A] hover:bg-[#1E293B] text-white px-4 py-2.5 rounded-xl text-xs font-bold cursor-pointer transition-transform active:scale-95 shrink-0"
+                >
+                  Verify
+                </button>
+              </form>
+
+              {/* Verification Result Card */}
+              {guardVerificationResult && (
+                <div className={`p-4 rounded-2xl border text-xs space-y-3 animate-in fade-in zoom-in-95 duration-150 ${
+                  guardVerificationResult.found
+                    ? 'bg-emerald-50/80 border-emerald-200 text-emerald-950'
+                    : 'bg-rose-50/80 border-rose-200 text-rose-950'
+                }`}>
+                  <div className="flex items-center justify-between">
+                    <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-md ${
+                      guardVerificationResult.found ? 'bg-emerald-200 text-emerald-900' : 'bg-rose-200 text-rose-900'
+                    }`}>
+                      {guardVerificationResult.found ? '✓ PASS VALID' : '✕ INVALID / EXPIRED'}
+                    </span>
+                    <span className="font-mono font-bold text-[11px]">#{guardVerificationResult.code}</span>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-sm text-[#0F172A]">{guardVerificationResult.title}</h4>
+                    <p className="text-[11px] text-[#475569] mt-0.5">{guardVerificationResult.detail}</p>
+                    <p className="text-[11px] font-bold text-[#2563EB] mt-1">🏡 Destination: {guardVerificationResult.flat}</p>
+                  </div>
+
+                  {guardVerificationResult.found && (
+                    <button
+                      type="button"
+                      onClick={handleGuardAllowEntry}
+                      className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow-xs cursor-pointer flex items-center justify-center gap-1.5"
+                    >
+                      <CheckCircle2 className="w-4 h-4" />
+                      <span>Allow Gate Entry &amp; Raise Barrier</span>
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* 👥 3. DOMESTIC STAFF BIOMETRIC GATE PUNCH */}
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-xl bg-purple-50 text-purple-700">
+                    <Users className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-extrabold text-sm text-[#0F172A]">Staff Biometric Attendance</h3>
+                    <p className="text-[10px] text-[#64748B]">Maid, Cook &amp; Driver Entry/Exit Punch</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                {helpers.map(helper => (
+                  <div
+                    key={helper.id}
+                    className="p-3 bg-slate-50/80 rounded-2xl border border-slate-200/60 flex items-center justify-between text-xs"
+                  >
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className={`w-2 h-2 rounded-full ${helper.isInsideCampus ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
+                        <span className="font-bold text-[#0F172A]">{helper.name}</span>
+                        <span className="text-[10px] text-[#64748B]">({helper.role})</span>
+                      </div>
+                      <p className="text-[10px] text-[#64748B]">
+                        {helper.isInsideCampus ? `🟢 Inside: ${helper.currentLocation}` : '⚪ Outside Campus'}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleGuardToggleStaff(helper.id)}
+                      className={`px-3 py-1.5 rounded-xl text-[10px] font-bold transition-transform active:scale-95 cursor-pointer ${
+                        helper.isInsideCampus
+                          ? 'bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100'
+                          : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
+                      }`}
+                    >
+                      {helper.isInsideCampus ? 'Punch OUT' : 'Punch IN'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 📦 4. GATE PACKAGE VAULT DESK */}
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-xl bg-amber-50 text-amber-700">
+                    <PackageCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-extrabold text-sm text-[#0F172A]">Package Desk Vault</h3>
+                    <p className="text-[10px] text-[#64748B]">Parcels held at Main Security Desk</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                {guardPackages.map(pkg => (
+                  <div
+                    key={pkg.id}
+                    className="p-3 bg-slate-50/80 rounded-2xl border border-slate-200/60 flex items-center justify-between text-xs"
+                  >
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-bold text-[#0F172A]">{pkg.courier}</span>
+                        <span className="text-[10px] font-semibold text-[#2563EB]">{pkg.flat}</span>
+                      </div>
+                      <p className="text-[9px] text-[#64748B]">Arrived: {pkg.time}</p>
+                    </div>
+
+                    {pkg.status === 'WAITING_PICKUP' ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setGuardPackages(prev => prev.map(p => p.id === pkg.id ? { ...p, status: 'COLLECTED' } : p));
+                          alert(`📦 Handover confirmed for ${pkg.courier} to ${pkg.flat}`);
+                        }}
+                        className="px-2.5 py-1 bg-[#0F172A] text-white rounded-xl text-[10px] font-bold cursor-pointer"
+                      >
+                        Handover
+                      </button>
+                    ) : (
+                      <span className="text-[10px] text-emerald-700 font-bold">Collected ✓</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 🚨 5. WRONG PARKING CLAMP ALERT */}
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-xl bg-rose-50 text-rose-700">
+                    <AlertTriangle className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-extrabold text-sm text-[#0F172A]">Wrong Parking Marshals</h3>
+                    <p className="text-[10px] text-[#64748B]">Wheel clamp &amp; fine enforcement</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-3 bg-rose-50/80 rounded-2xl border border-rose-200/60 text-xs space-y-2">
+                <div className="flex justify-between font-bold text-rose-950">
+                  <span>🚗 UP14 EX 9988</span>
+                  <span className="text-[10px] bg-rose-200 text-rose-900 px-2 py-0.5 rounded">Basement B1 - Slot #42</span>
+                </div>
+                <p className="text-[11px] text-[#475569]">Reported by Flat A-102. Timer running (10-min grace period).</p>
+                <button
+                  type="button"
+                  onClick={() => alert('🚨 Security Marshal dispatched with Wheel-Clamp to Basement B1 Slot #42!')}
+                  className="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 rounded-xl text-xs cursor-pointer shadow-xs"
+                >
+                  Dispatch Marshal with Wheel Clamp
+                </button>
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════════════════════════
+            MODE 3: 🏛️ RWA GOVERNANCE & TOWNSHIP ADMIN DESK
+           ═══════════════════════════════════════════════════════════════ */}
+        {userRole === 'RWA' && (
+          <div className="space-y-4 animate-in fade-in duration-200">
+
+            {/* 🏛️ RWA President & Governance Header */}
+            <div className="bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] rounded-3xl p-5 text-white shadow-[0_15px_35px_rgba(15,23,42,0.18)] border border-slate-700/80 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-2xl bg-amber-500 text-slate-900 font-bold flex items-center justify-center text-sm shadow-xs">
+                    🏛️
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="text-[10px] font-bold text-amber-300 uppercase tracking-wider">RWA Executive Committee</span>
+                    </div>
+                    <h2 className="font-heading font-extrabold text-base text-white">Greenwood Grand RWA Desk</h2>
+                    <p className="text-[10px] text-slate-300">Society Reg No: RWA-HR-2024/9912 • President Desk</p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleLogout}
+                  className="p-2 rounded-xl bg-white/10 hover:bg-rose-500/20 text-rose-300 text-xs font-bold border border-white/10"
+                  title="RWA Sign Out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* RWA Financial Ledger Summary */}
+              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-700/80 text-center">
+                <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 text-left">
+                  <span className="text-[9px] font-bold text-slate-400 block uppercase">Sinking Fund Reserve</span>
+                  <span className="font-heading font-extrabold text-base text-white">₹1.15 Crores</span>
+                  <span className="text-[9px] text-emerald-400 font-semibold block">Audited HDFC Escrow</span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 text-left">
+                  <span className="text-[9px] font-bold text-slate-400 block uppercase">September Collection</span>
+                  <span className="font-heading font-extrabold text-base text-emerald-400">₹38,42,000</span>
+                  <span className="text-[9px] text-slate-300 font-semibold block">90.4% Paid (452 Flats)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* 📢 1. BROADCAST OFFICIAL SOCIETY CIRCULAR */}
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-xl bg-blue-50 text-[#2563EB]">
+                    <Bell className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-extrabold text-sm text-[#0F172A]">Broadcast Society Notice</h3>
+                    <p className="text-[10px] text-[#64748B]">Sends instant alert to all flat owners</p>
+                  </div>
+                </div>
+              </div>
+
+              <form onSubmit={handleBroadcastRwaNotice} className="space-y-2.5 text-xs">
+                <div>
+                  <label className="font-bold text-[#64748B] text-[10px] uppercase block mb-1">Notice Headline</label>
+                  <input
+                    type="text"
+                    value={rwaNoticeTitle}
+                    onChange={e => setRwaNoticeTitle(e.target.value)}
+                    placeholder="e.g. ⚠️ Water Tank Cleaning Schedule on Saturday"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A]"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="font-bold text-[#64748B] text-[10px] uppercase block mb-1">Circular Message</label>
+                  <textarea
+                    rows={2}
+                    value={rwaNoticeBody}
+                    onChange={e => setRwaNoticeBody(e.target.value)}
+                    placeholder="Full notice message for residents..."
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs text-[#0F172A]"
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-3 gap-1.5">
+                  {(['MAINTENANCE', 'SECURITY', 'COMMUNITY'] as const).map(cat => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setRwaNoticeCategory(cat)}
+                      className={`py-1.5 rounded-xl text-[10px] font-bold border transition-colors ${
+                        rwaNoticeCategory === cat ? 'bg-[#0F172A] text-white border-[#0F172A]' : 'bg-slate-50 text-slate-600 border-slate-200'
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-[#2563EB] hover:bg-[#1d4ed8] text-white font-bold py-3 rounded-xl shadow-xs cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <Bell className="w-4 h-4" />
+                  <span>{rwaNoticeBroadcasted ? 'Broadcasted to 500 Flats! ✓' : 'Dispatch Circular to All Flats'}</span>
+                </button>
+              </form>
+            </div>
+
+            {/* 🗳️ 2. RESIDENT AGM VOTING REFERENDUMS */}
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-xl bg-purple-50 text-purple-700">
+                    <Vote className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-extrabold text-sm text-[#0F172A]">AGM Resident Referendums</h3>
+                    <p className="text-[10px] text-[#64748B]">Digital ballot &amp; quorum verification</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Active Ballot Result Card */}
+              <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/60 text-xs space-y-2">
+                <div className="flex justify-between font-bold">
+                  <span className="text-[#2563EB]">🗳️ Active Ballot</span>
+                  <span className="text-[#64748B]">{totalVotes} Resident Votes</span>
+                </div>
+                <h4 className="font-bold text-xs text-[#0F172A]">{forumPoll.title}</h4>
+                <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden flex">
+                  <div style={{ width: `${yesPercentage}%` }} className="bg-emerald-500 h-full" />
+                  <div style={{ width: `${100 - yesPercentage}%` }} className="bg-rose-500 h-full" />
+                </div>
+                <div className="flex justify-between text-[10px] font-bold">
+                  <span className="text-emerald-700">👍 YES: {forumPoll.yesVotes} ({yesPercentage}%)</span>
+                  <span className="text-rose-700">👎 NO: {forumPoll.noVotes} ({100 - yesPercentage}%)</span>
+                </div>
+              </div>
+
+              {/* Create New Referendum Form */}
+              <form onSubmit={handleCreateRwaPoll} className="space-y-2 text-xs pt-1 border-t border-slate-100">
+                <label className="font-bold text-[#64748B] text-[10px] uppercase block">Create New AGM Resolution</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={rwaNewPollTitle}
+                    onChange={e => setRwaNewPollTitle(e.target.value)}
+                    placeholder="e.g. AGM 2026: Clubhouse Squash Court Addition"
+                    className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-[#0F172A]"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="bg-[#0F172A] hover:bg-[#1E293B] text-white px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 cursor-pointer"
+                  >
+                    Launch
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* 🔧 3. 2-HOUR SLA HELPDESK RESOLUTION DESK */}
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-xl bg-cyan-50 text-cyan-700">
+                    <Wrench className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-extrabold text-sm text-[#0F172A]">Helpdesk SLA Ticket Dispatch</h3>
+                    <p className="text-[10px] text-[#64748B]">Assign plumbers &amp; electricians with OTP</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2 text-xs">
+                {helpdeskTickets.map(ticket => (
+                  <div key={ticket.id} className="p-3 bg-slate-50/80 rounded-2xl border border-slate-200/60 space-y-2">
+                    <div className="flex justify-between font-bold">
+                      <span className="text-[#0F172A]">#{ticket.id}: {ticket.category}</span>
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full ${
+                        ticket.status === 'RESOLVED' ? 'bg-emerald-100 text-emerald-800' : 'bg-cyan-100 text-cyan-800'
+                      }`}>
+                        {ticket.status}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[#475569]">{ticket.description}</p>
+                    <div className="flex items-center justify-between text-[10px] text-[#64748B]">
+                      <span>Technician: {ticket.assignedTechnician}</span>
+                      <span className="font-bold text-[#2563EB]">OTP Required: {ticket.otpToClose}</span>
+                    </div>
+                    {ticket.status !== 'RESOLVED' && (
+                      <button
+                        type="button"
+                        onClick={() => handleCloseTicketWithOtp(ticket.id, ticket.otpToClose)}
+                        className="w-full py-2 bg-[#0F172A] text-white rounded-xl font-bold text-xs cursor-pointer"
+                      >
+                        Verify Resident OTP &amp; Mark Resolved
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 💰 4. MAINTENANCE DEFAULTERS & WHATSAPP REMINDER */}
+            <div className="bg-white rounded-3xl p-5 shadow-[0_6px_25px_rgba(0,0,0,0.04)] border border-slate-200/80 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-xl bg-emerald-50 text-emerald-700">
+                    <CreditCard className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-extrabold text-sm text-[#0F172A]">Maintenance Due Reminders</h3>
+                    <p className="text-[10px] text-[#64748B]">1-Tap WhatsApp due notice dispatch</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2 text-xs">
+                {[
+                  { flat: 'Tower B - Flat 302', name: 'Rakesh Verma', amount: '₹3,540', status: 'DUE' },
+                  { flat: 'Tower C - Flat 404', name: 'Pooja Hegde', amount: '₹3,540', status: 'DUE' },
+                  { flat: 'Tower A - Flat 102', name: 'Sudhanshu Pandey', amount: '₹3,540', status: maintenancePaid ? 'PAID' : 'DUE' },
+                ].map((item, idx) => (
+                  <div key={idx} className="p-3 bg-slate-50/80 rounded-2xl border border-slate-200/60 flex items-center justify-between">
+                    <div>
+                      <p className="font-bold text-[#0F172A]">{item.flat} ({item.name})</p>
+                      <p className="text-[10px] text-[#64748B]">September Due: {item.amount}</p>
+                    </div>
+
+                    {item.status === 'PAID' ? (
+                      <span className="text-[10px] font-black text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-full">
+                        PAID ✓
+                      </span>
+                    ) : (
+                      <a
+                        href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                          `📢 Greenwood Grand RWA Notice: Dear ${item.name}, your September society maintenance of ${item.amount} is due. Please pay via StaySetu Super-App: https://stat-setu-app.vercel.app/`
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                      >
+                        <span>WhatsApp Due</span>
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        )}
+
+      </main>
+
+      {/* ── 2. NATIVE MOBILE APP FLOATING FROSTED GLASS BOTTOM BAR (SHOWN IN RESIDENT MODE) ── */}
+      {userRole === 'RESIDENT' && (
+        <nav className="fixed bottom-3 left-3 right-3 z-50 max-w-md mx-auto bg-white/90 backdrop-blur-2xl border border-white/60 shadow-[0_12px_40px_rgba(15,23,42,0.14)] rounded-3xl py-1.5 px-2">
+          <div className="grid grid-cols-5 gap-1">
+            {[
+              { id: 'HOME', label: 'Home', icon: Home },
+              { id: 'GATE', label: 'Gate', icon: Shield },
+              { id: 'PAYMENTS', label: 'Pay Dues', icon: CreditCard },
+              { id: 'BAZAAR', label: 'Bazaar', icon: ShoppingBag },
+              { id: 'MY_FLAT', label: 'My Flat', icon: User },
+            ].map(tabItem => {
+              const IconComponent = tabItem.icon;
+              const isActive = activeTab === tabItem.id;
+              return (
+                <button
+                  key={tabItem.id}
+                  type="button"
+                  onClick={() => setActiveTab(tabItem.id as AppTab)}
+                  className={`flex flex-col items-center justify-center py-1 rounded-2xl cursor-pointer transition-all ${
+                    isActive ? 'text-[#2563EB] font-bold' : 'text-[#64748B] hover:text-[#0F172A] font-medium'
+                  }`}
+                >
+                  <div className={`p-1.5 rounded-xl transition-all ${isActive ? 'bg-[#2563EB] text-white shadow-[0_4px_12px_rgba(37,99,235,0.35)]' : ''}`}>
+                    <IconComponent className="w-4 h-4" />
+                  </div>
+                  <span className={`text-[9px] tracking-tight mt-0.5 ${isActive ? 'font-black text-[#2563EB]' : 'font-medium'}`}>
+                    {tabItem.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+      )}
 
       {/* ── 3. ALL NATIVE ACTION SHEET MODALS ── */}
 

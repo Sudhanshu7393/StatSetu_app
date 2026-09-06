@@ -193,6 +193,28 @@ export class SocietyStore {
     return this.getStore()?.helpers || SEED_HELPERS;
   }
 
+  static toggleHelperInCampus(helperId: string): HelperStaff | null {
+    const store = this.getStore();
+    const helperIndex = store.helpers.findIndex((h: HelperStaff) => h.id === helperId);
+    if (helperIndex === -1) return null;
+
+    const currentStatus = store.helpers[helperIndex].isInsideCampus;
+    store.helpers[helperIndex].isInsideCampus = !currentStatus;
+    
+    // Add gate log
+    store.gateLogs.unshift({
+      id: `log-${Date.now()}`,
+      type: 'VISITOR',
+      detail: `👷 Staff Biometric: ${store.helpers[helperIndex].name} (${store.helpers[helperIndex].role}) - ${!currentStatus ? 'ENTRY PUNCH' : 'EXIT PUNCH'}`,
+      status: !currentStatus ? 'In Campus' : 'Out of Campus',
+      timestamp: 'Just now',
+      synced: true,
+    });
+
+    this.saveStore(store);
+    return store.helpers[helperIndex];
+  }
+
   static bookBackupMaid(helperId: string, flatNo: string): HelperStaff | null {
     const store = this.getStore();
     const helperIndex = store.helpers.findIndex((h: HelperStaff) => h.id === helperId);
@@ -287,7 +309,32 @@ export class SocietyStore {
     return false;
   }
 
-  // ── 5. RWA MAINTENANCE & GST BALANCES ──
+  static resolveTicket(ticketId: string, enteredOtp: string): boolean {
+    return this.resolveTicketWithOtp(ticketId, enteredOtp);
+  }
+
+  // ── 5. RWA NOTICES & CIRCULARS ──
+  static getNotices(): Array<{ id: string; title: string; body: string; time: string; category: string; isRead: boolean }> {
+    return this.getStore()?.notices || [];
+  }
+
+  static addNotice(title: string, body: string, category: string = 'Official') {
+    const store = this.getStore();
+    if (!store.notices) store.notices = [];
+    const newNotice = {
+      id: `notice-${Date.now()}`,
+      title,
+      body,
+      time: 'Just Now',
+      category,
+      isRead: false,
+    };
+    store.notices.unshift(newNotice);
+    this.saveStore(store);
+    return newNotice;
+  }
+
+  // ── 6. RWA MAINTENANCE & GST BALANCES ──
   static payMaintenance(flatNo: string): boolean {
     const store = this.getStore();
     const flatIndex = store.flats.findIndex((f: SocietyFlat) => f.flatNo === flatNo || `${f.tower} - Flat ${f.flatNo}` === flatNo);
@@ -298,7 +345,7 @@ export class SocietyStore {
     return true;
   }
 
-  // ── 6. SMART METER RECHARGE ──
+  // ── 7. SMART METER RECHARGE ──
   static rechargeSmartMeter(amount: number): number {
     const store = this.getStore();
     store.smartMeterBalance = (store.smartMeterBalance || 1450) + amount;
@@ -306,9 +353,15 @@ export class SocietyStore {
     return store.smartMeterBalance;
   }
 
-  // ── 7. AGM POLL VOTING ──
+  // ── 8. AGM POLL VOTING ──
   static getPoll(): AGMPoll {
     return this.getStore()?.poll;
+  }
+
+  static setPoll(newPoll: AGMPoll) {
+    const store = this.getStore();
+    store.poll = newPoll;
+    this.saveStore(store);
   }
 
   static votePoll(vote: 'YES' | 'NO'): AGMPoll {
@@ -325,7 +378,7 @@ export class SocietyStore {
     return store.poll;
   }
 
-  // ── 8. GATE LOGS & OFFLINE ENGINE ──
+  // ── 9. GATE LOGS & OFFLINE ENGINE ──
   static getGateLogs(): GateLog[] {
     return this.getStore()?.gateLogs || [];
   }
