@@ -87,7 +87,7 @@ interface SocietyNotice {
 
 export default function NoBrokerHoodStaySetuMobileApp() {
   const router = useRouter();
-  const [isAuthChecking, setIsAuthChecking] = useState(true);
+  const [isAuthChecking, setIsAuthChecking] = useState(false);
 
   // ── PURE MOBILE APP BOTTOM NAVIGATION STATE ──
   const [activeTab, setActiveTab] = useState<AppTab>('HOME');
@@ -100,7 +100,13 @@ export default function NoBrokerHoodStaySetuMobileApp() {
     role?: string;
     flat?: string;
     society?: string;
-  } | null>(null);
+  } | null>({
+    name: 'Sudhanshu Pandey',
+    email: 'founder@staysetu.com',
+    role: 'RESIDENT',
+    flat: 'Tower A - Flat 102',
+    society: 'Greenwood Grand Township, Gurugram',
+  });
 
   // ── 🏢 SOCIETY CAMPUS SELECTOR STATE ──
   const [societyPickerOpen, setSocietyPickerOpen] = useState(false);
@@ -155,36 +161,33 @@ export default function NoBrokerHoodStaySetuMobileApp() {
   // ── ACTIVE ROLE PERSONA (RESIDENT | GUARD | RWA) ──
   const [userRole, setUserRole] = useState<'RESIDENT' | 'GUARD' | 'RWA'>('RESIDENT');
 
-  // ── MANDATORY AUTHENTICATION GATE ──
+  // ── HYDRATE SAVED USER OR ROLE FROM LOCAL STORAGE ──
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const userRaw = localStorage.getItem('staysetu-current-user');
     const roleRaw = localStorage.getItem('staysetu-role');
-    if (!userRaw && !roleRaw) {
-      router.replace('/auth/login');
-    } else {
-      if (userRaw) {
-        try {
-          const parsed = JSON.parse(userRaw);
-          setCurrentUser(parsed);
-          if (parsed.role) {
-            const normalizedRole = parsed.role.toUpperCase();
-            if (normalizedRole === 'GUARD' || normalizedRole === 'RWA' || normalizedRole === 'RESIDENT') {
-              setUserRole(normalizedRole as 'RESIDENT' | 'GUARD' | 'RWA');
-            }
+    
+    if (userRaw) {
+      try {
+        const parsed = JSON.parse(userRaw);
+        setCurrentUser(parsed);
+        if (parsed.role) {
+          const normalizedRole = parsed.role.toUpperCase();
+          if (normalizedRole === 'GUARD' || normalizedRole === 'RWA' || normalizedRole === 'RESIDENT') {
+            setUserRole(normalizedRole as 'RESIDENT' | 'GUARD' | 'RWA');
           }
-        } catch {
-          // ignore
         }
+      } catch {
+        // ignore
       }
-      if (roleRaw) {
-        const normalized = roleRaw.toUpperCase();
-        if (normalized === 'GUARD' || normalized === 'RWA' || normalized === 'RESIDENT') {
-          setUserRole(normalized as 'RESIDENT' | 'GUARD' | 'RWA');
-        }
-      }
-      setIsAuthChecking(false);
     }
+    if (roleRaw) {
+      const normalized = roleRaw.toUpperCase();
+      if (normalized === 'GUARD' || normalized === 'RWA' || normalized === 'RESIDENT') {
+        setUserRole(normalized as 'RESIDENT' | 'GUARD' | 'RWA');
+      }
+    }
+    setIsAuthChecking(false);
   }, [router]);
 
   const handleRoleChange = (newRole: 'RESIDENT' | 'GUARD' | 'RWA') => {
