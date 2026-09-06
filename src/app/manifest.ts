@@ -38,9 +38,18 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ['lifestyle', 'business', 'utilities', 'productivity'],
     screenshots: [
       {
-        src: '/images/society-hero.jpg',
-        sizes: '1200x630',
-        type: 'image/jpeg',
+        src: '/screenshots/mobile-screen.png',
+        sizes: '1080x1920',
+        type: 'image/png',
+        form_factor: 'narrow',
+        label: 'StaySetu Mobile Dashboard',
+      },
+      {
+        src: '/screenshots/desktop-screen.png',
+        sizes: '1920x1080',
+        type: 'image/png',
+        form_factor: 'wide',
+        label: 'StaySetu Society Portal',
       },
     ],
   };
