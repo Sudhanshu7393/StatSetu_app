@@ -63,6 +63,7 @@ import {
 } from 'lucide-react';
 import { InAppChatModal } from '@/components/chat/InAppChatModal';
 import { StaySetuLogo } from '@/components/brand/StaySetuLogo';
+import { PaymentCheckoutModal, PaymentSuccessData, PaymentPurpose } from '@/components/payments/PaymentCheckoutModal';
 import { SocietyStore, HelperStaff, AmenityBooking, HelpdeskTicket, ParkingAlert, GateLog, AGMPoll } from '@/lib/societyStore';
 
 type AppTab = 'HOME' | 'GATE' | 'PAYMENTS' | 'BAZAAR' | 'MY_FLAT';
@@ -217,6 +218,21 @@ export default function NoBrokerHoodStaySetuMobileApp() {
   });
   const [meterBalance, setMeterBalance] = useState(1450);
   const [maintenancePaid, setMaintenancePaid] = useState(false);
+
+  // ── 💳 DYNAMIC PAYMENT GATEWAY STATE (RAZORPAY & UPI) ──
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [paymentConfig, setPaymentConfig] = useState<{
+    amount: number;
+    purpose: PaymentPurpose;
+    title: string;
+    description: string;
+  }>({
+    amount: 3000,
+    purpose: 'MAINTENANCE',
+    title: 'September 2026 Society Maintenance Dues',
+    description: 'Flat A-102 (1,770 Sq Ft) • 18% GST Included',
+  });
+  const [lastPaymentReceipt, setLastPaymentReceipt] = useState<PaymentSuccessData | null>(null);
 
   // ── 1. WRONG PARKING RESOLVER WITH LIVE CAMERA PHOTO ──
   const [parkingCarNo, setParkingCarNo] = useState('UP14 EX 9988');
@@ -612,9 +628,38 @@ export default function NoBrokerHoodStaySetuMobileApp() {
   };
 
   const handlePayMaintenance = () => {
-    SocietyStore.payMaintenance('102');
-    setMaintenancePaid(true);
-    setInvoiceModalOpen(true);
+    setPaymentConfig({
+      amount: 3000,
+      purpose: 'MAINTENANCE',
+      title: 'September 2026 Society Maintenance Dues',
+      description: `Flat ${currentUser?.flat || 'A-102'} (1,770 Sq Ft) • 18% GST Included`,
+    });
+    setPaymentModalOpen(true);
+  };
+
+  const handleRechargeSmartMeter = (amount: number = 500) => {
+    setPaymentConfig({
+      amount,
+      purpose: 'METER_RECHARGE',
+      title: 'Prepaid Smart Electricity Meter Recharge',
+      description: `Instant UPI Fast Recharge for Flat ${currentUser?.flat || 'A-102'}`,
+    });
+    setPaymentModalOpen(true);
+  };
+
+  const handlePaymentSuccess = (data: PaymentSuccessData) => {
+    setLastPaymentReceipt(data);
+    if (data.purpose === 'MAINTENANCE') {
+      SocietyStore.payMaintenance('102');
+      setMaintenancePaid(true);
+      setInvoiceModalOpen(true);
+    } else if (data.purpose === 'METER_RECHARGE') {
+      const updated = SocietyStore.rechargeSmartMeter(data.amount);
+      setMeterBalance(updated);
+      alert(`⚡ Smart Meter recharged successfully with ₹${data.amount} via ${data.paymentMethod}! Current Balance: ₹${updated.toLocaleString('en-IN')}.00`);
+    } else if (data.purpose === 'AMENITY_BOOKING') {
+      alert(`🎉 Amenity booking fees of ₹${data.amount} confirmed via ${data.paymentMethod}! Pass code generated.`);
+    }
   };
 
   const handlePreApproveDelivery = () => {
@@ -938,11 +983,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   {/* Top Up Meter */}
                   <button
                     type="button"
-                    onClick={() => {
-                      const updated = SocietyStore.rechargeSmartMeter(500);
-                      setMeterBalance(updated);
-                      alert('⚡ Smart Meter recharged with ₹500 via UPI!');
-                    }}
+                    onClick={() => handleRechargeSmartMeter(500)}
                     className="flex flex-col items-center gap-1 group cursor-pointer"
                   >
                     <div className="w-10 h-10 rounded-full bg-white shadow-[0_3px_10px_rgba(0,0,0,0.05)] border border-emerald-200 flex items-center justify-center text-[#0F172A] group-hover:scale-110 group-hover:bg-[#0F172A] group-hover:text-white transition-all">
@@ -1029,11 +1070,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     sub: 'Recharge UPI',
                     icon: Zap,
                     bgColor: 'bg-yellow-50 text-amber-600',
-                    onClick: () => {
-                      const updated = SocietyStore.rechargeSmartMeter(500);
-                      setMeterBalance(updated);
-                      alert('⚡ Smart Meter recharged with ₹500 via UPI!');
-                    },
+                    onClick: () => handleRechargeSmartMeter(500),
                   },
                   {
                     id: 'club',
@@ -2500,11 +2537,15 @@ export default function NoBrokerHoodStaySetuMobileApp() {
             <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
               <div className="flex justify-between">
                 <span className="text-[#64748B]">Invoice Number:</span>
-                <span className="font-mono font-bold text-[#0F172A]">#GST-2026-9921</span>
+                <span className="font-mono font-bold text-[#0F172A]">{lastPaymentReceipt?.receiptNumber || '#GST-2026-9921'}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#64748B]">Transaction ID:</span>
+                <span className="font-mono font-bold text-[11px] text-[#2563EB]">{lastPaymentReceipt?.transactionId || 'TXN_99218841'}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[#64748B]">Billed To:</span>
-                <span className="font-bold text-[#0F172A]">Sudhanshu Pandey ({currentUser?.flat || 'A-102'})</span>
+                <span className="font-bold text-[#0F172A]">{currentUser?.name || 'Sudhanshu Pandey'} ({currentUser?.flat || 'A-102'})</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[#64748B]">Society GSTIN:</span>
@@ -2520,7 +2561,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               </div>
               <div className="flex justify-between font-bold text-sm pt-1.5 border-t border-slate-200 text-[#0F172A]">
                 <span>Total Paid:</span>
-                <span className="text-emerald-700">₹3,540.00 (UPI)</span>
+                <span className="text-emerald-700">₹{(lastPaymentReceipt?.amount || 3540).toLocaleString('en-IN')}.00 ({lastPaymentReceipt?.paymentMethod || 'UPI'})</span>
               </div>
             </div>
 
@@ -2921,6 +2962,19 @@ export default function NoBrokerHoodStaySetuMobileApp() {
           propertyName={`${selectedSeller.name} (${selectedSeller.price})`}
         />
       )}
+
+      {/* 💳 Dynamic Razorpay & UPI Payment Gateway Modal */}
+      <PaymentCheckoutModal
+        isOpen={paymentModalOpen}
+        onClose={() => setPaymentModalOpen(false)}
+        amount={paymentConfig.amount}
+        purpose={paymentConfig.purpose}
+        title={paymentConfig.title}
+        description={paymentConfig.description}
+        flatNo={currentUser?.flat || 'Tower A - Flat 102'}
+        residentName={currentUser?.name || 'Sudhanshu Pandey'}
+        onPaymentSuccess={handlePaymentSuccess}
+      />
 
     </div>
   );
