@@ -234,6 +234,9 @@ export default function NoBrokerHoodStaySetuMobileApp() {
   });
   const [lastPaymentReceipt, setLastPaymentReceipt] = useState<PaymentSuccessData | null>(null);
 
+  // ── 🔍 INSTANT SMART SEARCH STATE ──
+  const [homeSearchQuery, setHomeSearchQuery] = useState('');
+
   // ── 1. WRONG PARKING RESOLVER WITH LIVE CAMERA PHOTO ──
   const [parkingCarNo, setParkingCarNo] = useState('UP14 EX 9988');
   const [parkingSlot, setParkingSlot] = useState('Basement B1 - Slot #42');
@@ -926,16 +929,347 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                 </div>
               </div>
 
-              {/* Floating Pill Search Bar Overlay */}
-              <div className="p-3 bg-white border-t border-slate-100">
+              {/* Floating Pill Search Bar Overlay with Live Interactive Dropdown */}
+              <div className="p-3 bg-white border-t border-slate-100 relative">
                 <div className="relative flex items-center">
                   <Search className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
                   <input
                     type="text"
+                    value={homeSearchQuery}
+                    onChange={e => setHomeSearchQuery(e.target.value)}
                     placeholder="Find services, passes, domestic helpers, & flats..."
-                    className="w-full bg-slate-50 hover:bg-slate-100/80 focus:bg-white text-xs font-semibold text-[#0F172A] placeholder:text-slate-400 rounded-full pl-9 pr-4 py-2.5 border border-slate-200/80 shadow-2xs focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 transition-all"
+                    className="w-full bg-slate-50 hover:bg-slate-100/80 focus:bg-white text-xs font-semibold text-[#0F172A] placeholder:text-slate-400 rounded-full pl-9 pr-9 py-2.5 border border-slate-200/80 shadow-2xs focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 transition-all"
                   />
+                  {homeSearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setHomeSearchQuery('')}
+                      className="absolute right-3 p-1 rounded-full text-slate-400 hover:text-slate-600 cursor-pointer"
+                      title="Clear Search"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
+
+                {/* 🔍 Dynamic Live Search Results Dropdown */}
+                {homeSearchQuery.trim().length > 0 && (
+                  <div className="absolute left-3 right-3 top-full mt-1.5 bg-white/95 backdrop-blur-xl rounded-2xl border border-slate-200/90 shadow-2xl p-2 z-50 space-y-1 max-h-72 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150">
+                    <div className="flex items-center justify-between px-2 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                      <span>Quick Results for &quot;{homeSearchQuery}&quot;</span>
+                      <button
+                        type="button"
+                        onClick={() => setHomeSearchQuery('')}
+                        className="text-[10px] text-[#2563EB] hover:underline cursor-pointer"
+                      >
+                        Close
+                      </button>
+                    </div>
+
+                    {[
+                      {
+                        id: 'delivery',
+                        title: 'Delivery Pass (Swiggy / Zomato)',
+                        category: 'GATE PASS',
+                        keywords: ['delivery', 'zomato', 'swiggy', 'amazon', 'flipkart', 'parcel', 'courier', 'food', 'order'],
+                        icon: PackageCheck,
+                        color: 'bg-amber-50 text-amber-600',
+                        action: () => setDeliveryModalOpen(true),
+                      },
+                      {
+                        id: 'cab',
+                        title: 'Allow Cab Entry (Uber / Ola)',
+                        category: 'GATE PASS',
+                        keywords: ['cab', 'uber', 'ola', 'taxi', 'ride', 'driver', 'auto', 'car entry'],
+                        icon: Car,
+                        color: 'bg-blue-50 text-blue-600',
+                        action: () => setCabModalOpen(true),
+                      },
+                      {
+                        id: 'guest',
+                        title: 'Invite Guest (WhatsApp Pass)',
+                        category: 'GATE PASS',
+                        keywords: ['guest', 'visitor', 'invite', 'whatsapp', 'friend', 'relative', 'family', 'qr pass', 'entry'],
+                        icon: QrCode,
+                        color: 'bg-emerald-50 text-emerald-600',
+                        action: () => setGuestModalOpen(true),
+                      },
+                      {
+                        id: 'maid',
+                        title: 'Helper Radar & Backup Maid',
+                        category: 'STAFF',
+                        keywords: ['maid', 'cook', 'helper', 'staff', 'cleaner', 'driver', 'attendance', 'sunita', 'rajesh', 'anita', 'nanny'],
+                        icon: Users,
+                        color: 'bg-purple-50 text-purple-600',
+                        action: () => setMaidModalOpen(true),
+                      },
+                      {
+                        id: 'parking',
+                        title: 'Wrong Parking Photo Alert',
+                        category: 'PARKING',
+                        keywords: ['wrong park', 'parking', 'slot', 'car', 'vehicle', 'basement', 'blocked', 'up14', 'dl8c', 'slot 42'],
+                        icon: Camera,
+                        color: 'bg-rose-50 text-rose-600',
+                        action: () => {
+                          setActiveTab('GATE');
+                          setTimeout(() => {
+                            document.getElementById('wrong-parking-card')?.scrollIntoView({ behavior: 'smooth' });
+                          }, 100);
+                        },
+                      },
+                      {
+                        id: 'meter',
+                        title: 'Smart Electricity Meter Recharge',
+                        category: 'PAYMENTS',
+                        keywords: ['smart meter', 'meter', 'electricity', 'power', 'recharge', 'top up', 'bill', 'units', 'kwh', 'eb'],
+                        icon: Zap,
+                        color: 'bg-yellow-50 text-amber-600',
+                        action: () => handleRechargeSmartMeter(500),
+                      },
+                      {
+                        id: 'maintenance',
+                        title: 'Pay Society Monthly Maintenance Dues',
+                        category: 'PAYMENTS',
+                        keywords: ['maintenance', 'dues', 'pay', 'bill', 'gst', 'sinking fund', 'rwa dues', 'invoice', '3540'],
+                        icon: CreditCard,
+                        color: 'bg-emerald-50 text-emerald-600',
+                        action: () => handlePayMaintenance(),
+                      },
+                      {
+                        id: 'clubhouse',
+                        title: 'Clubhouse & Sports Amenity Booking',
+                        category: 'AMENITY',
+                        keywords: ['clubhouse', 'badminton', 'tennis', 'swimming pool', 'gym', 'court', 'banquet', 'party hall', 'pool'],
+                        icon: CalendarDays,
+                        color: 'bg-teal-50 text-teal-600',
+                        action: () => setAmenityModalOpen(true),
+                      },
+                      {
+                        id: 'helpdesk',
+                        title: '2-Hour SLA Helpdesk (Plumber / Electrician)',
+                        category: 'SERVICE',
+                        keywords: ['helpdesk', 'plumber', 'electrician', 'carpenter', 'leakage', 'repair', 'ticket', 'sla', 'ac repair', 'water'],
+                        icon: Wrench,
+                        color: 'bg-slate-100 text-slate-700',
+                        action: () => setHelpdeskModalOpen(true),
+                      },
+                      {
+                        id: 'moving',
+                        title: 'Move-In / Move-Out Shifting Pass',
+                        category: 'GATE PASS',
+                        keywords: ['moving', 'shifting', 'packers', 'movers', 'truck', 'service lift', 'relocation', 'furniture'],
+                        icon: Truck,
+                        color: 'bg-orange-50 text-orange-600',
+                        action: () => setMovingPassModalOpen(true),
+                      },
+                      {
+                        id: 'notices',
+                        title: 'Society Circulars & Notices',
+                        category: 'COMMUNITY',
+                        keywords: ['notice', 'circular', 'announcement', 'dg backup', 'water', 'meeting', 'agm', 'news'],
+                        icon: Bell,
+                        color: 'bg-blue-50 text-blue-600',
+                        action: () => setNoticeModalOpen(true),
+                      },
+                      {
+                        id: 'bazaar',
+                        title: 'Resident Marketplace & AGM Polls',
+                        category: 'COMMUNITY',
+                        keywords: ['bazaar', 'market', 'buy', 'sell', 'table', 'cycle', 'gym', 'poll', 'vote', 'agm'],
+                        icon: ShoppingBag,
+                        color: 'bg-purple-50 text-purple-600',
+                        action: () => setActiveTab('BAZAAR'),
+                      },
+                      {
+                        id: 'flat-directory',
+                        title: 'Flat Profile & Emergency Contacts',
+                        category: 'DIRECTORY',
+                        keywords: ['flat', 'tower a', 'tower b', 'tower c', 'sudhanshu', 'profile', 'contacts', 'intercom', '102'],
+                        icon: Home,
+                        color: 'bg-slate-100 text-slate-700',
+                        action: () => setActiveTab('MY_FLAT'),
+                      },
+                    ]
+                      .filter(item => {
+                        const q = homeSearchQuery.toLowerCase().trim();
+                        return (
+                          item.title.toLowerCase().includes(q) ||
+                          item.category.toLowerCase().includes(q) ||
+                          item.keywords.some(k => k.toLowerCase().includes(q))
+                        );
+                      })
+                      .map(item => {
+                        const Icon = item.icon;
+                        return (
+                          <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => {
+                              item.action();
+                              setHomeSearchQuery('');
+                            }}
+                            className="w-full p-2.5 rounded-xl hover:bg-slate-50 transition-colors flex items-center justify-between text-left cursor-pointer group"
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div className={`w-8 h-8 rounded-xl ${item.color} flex items-center justify-center shrink-0`}>
+                                <Icon className="w-4 h-4" />
+                              </div>
+                              <div className="min-w-0">
+                                <p className="font-bold text-xs text-[#0F172A] group-hover:text-[#2563EB] transition-colors truncate">
+                                  {item.title}
+                                </p>
+                                <span className="text-[9px] font-bold text-slate-400 uppercase">
+                                  {item.category}
+                                </span>
+                              </div>
+                            </div>
+                            <span className="text-[10px] font-bold text-[#2563EB] bg-blue-50 px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                              Open →
+                            </span>
+                          </button>
+                        );
+                      })}
+
+                    {[
+                      {
+                        id: 'delivery',
+                        title: 'Delivery Pass (Swiggy / Zomato)',
+                        category: 'GATE PASS',
+                        keywords: ['delivery', 'zomato', 'swiggy', 'amazon', 'flipkart', 'parcel', 'courier', 'food', 'order'],
+                        icon: PackageCheck,
+                        color: 'bg-amber-50 text-amber-600',
+                        action: () => setDeliveryModalOpen(true),
+                      },
+                      {
+                        id: 'cab',
+                        title: 'Allow Cab Entry (Uber / Ola)',
+                        category: 'GATE PASS',
+                        keywords: ['cab', 'uber', 'ola', 'taxi', 'ride', 'driver', 'auto', 'car entry'],
+                        icon: Car,
+                        color: 'bg-blue-50 text-blue-600',
+                        action: () => setCabModalOpen(true),
+                      },
+                      {
+                        id: 'guest',
+                        title: 'Invite Guest (WhatsApp Pass)',
+                        category: 'GATE PASS',
+                        keywords: ['guest', 'visitor', 'invite', 'whatsapp', 'friend', 'relative', 'family', 'qr pass', 'entry'],
+                        icon: QrCode,
+                        color: 'bg-emerald-50 text-emerald-600',
+                        action: () => setGuestModalOpen(true),
+                      },
+                      {
+                        id: 'maid',
+                        title: 'Helper Radar & Backup Maid',
+                        category: 'STAFF',
+                        keywords: ['maid', 'cook', 'helper', 'staff', 'cleaner', 'driver', 'attendance', 'sunita', 'rajesh', 'anita', 'nanny'],
+                        icon: Users,
+                        color: 'bg-purple-50 text-purple-600',
+                        action: () => setMaidModalOpen(true),
+                      },
+                      {
+                        id: 'parking',
+                        title: 'Wrong Parking Photo Alert',
+                        category: 'PARKING',
+                        keywords: ['wrong park', 'parking', 'slot', 'car', 'vehicle', 'basement', 'blocked', 'up14', 'dl8c', 'slot 42'],
+                        icon: Camera,
+                        color: 'bg-rose-50 text-rose-600',
+                        action: () => {
+                          setActiveTab('GATE');
+                          setTimeout(() => {
+                            document.getElementById('wrong-parking-card')?.scrollIntoView({ behavior: 'smooth' });
+                          }, 100);
+                        },
+                      },
+                      {
+                        id: 'meter',
+                        title: 'Smart Electricity Meter Recharge',
+                        category: 'PAYMENTS',
+                        keywords: ['smart meter', 'meter', 'electricity', 'power', 'recharge', 'top up', 'bill', 'units', 'kwh', 'eb'],
+                        icon: Zap,
+                        color: 'bg-yellow-50 text-amber-600',
+                        action: () => handleRechargeSmartMeter(500),
+                      },
+                      {
+                        id: 'maintenance',
+                        title: 'Pay Society Monthly Maintenance Dues',
+                        category: 'PAYMENTS',
+                        keywords: ['maintenance', 'dues', 'pay', 'bill', 'gst', 'sinking fund', 'rwa dues', 'invoice', '3540'],
+                        icon: CreditCard,
+                        color: 'bg-emerald-50 text-emerald-600',
+                        action: () => handlePayMaintenance(),
+                      },
+                      {
+                        id: 'clubhouse',
+                        title: 'Clubhouse & Sports Amenity Booking',
+                        category: 'AMENITY',
+                        keywords: ['clubhouse', 'badminton', 'tennis', 'swimming pool', 'gym', 'court', 'banquet', 'party hall', 'pool'],
+                        icon: CalendarDays,
+                        color: 'bg-teal-50 text-teal-600',
+                        action: () => setAmenityModalOpen(true),
+                      },
+                      {
+                        id: 'helpdesk',
+                        title: '2-Hour SLA Helpdesk (Plumber / Electrician)',
+                        category: 'SERVICE',
+                        keywords: ['helpdesk', 'plumber', 'electrician', 'carpenter', 'leakage', 'repair', 'ticket', 'sla', 'ac repair', 'water'],
+                        icon: Wrench,
+                        color: 'bg-slate-100 text-slate-700',
+                        action: () => setHelpdeskModalOpen(true),
+                      },
+                      {
+                        id: 'moving',
+                        title: 'Move-In / Move-Out Shifting Pass',
+                        category: 'GATE PASS',
+                        keywords: ['moving', 'shifting', 'packers', 'movers', 'truck', 'service lift', 'relocation', 'furniture'],
+                        icon: Truck,
+                        color: 'bg-orange-50 text-orange-600',
+                        action: () => setMovingPassModalOpen(true),
+                      },
+                      {
+                        id: 'notices',
+                        title: 'Society Circulars & Notices',
+                        category: 'COMMUNITY',
+                        keywords: ['notice', 'circular', 'announcement', 'dg backup', 'water', 'meeting', 'agm', 'news'],
+                        icon: Bell,
+                        color: 'bg-blue-50 text-blue-600',
+                        action: () => setNoticeModalOpen(true),
+                      },
+                      {
+                        id: 'bazaar',
+                        title: 'Resident Marketplace & AGM Polls',
+                        category: 'COMMUNITY',
+                        keywords: ['bazaar', 'market', 'buy', 'sell', 'table', 'cycle', 'gym', 'poll', 'vote', 'agm'],
+                        icon: ShoppingBag,
+                        color: 'bg-purple-50 text-purple-600',
+                        action: () => setActiveTab('BAZAAR'),
+                      },
+                      {
+                        id: 'flat-directory',
+                        title: 'Flat Profile & Emergency Contacts',
+                        category: 'DIRECTORY',
+                        keywords: ['flat', 'tower a', 'tower b', 'tower c', 'sudhanshu', 'profile', 'contacts', 'intercom', '102'],
+                        icon: Home,
+                        color: 'bg-slate-100 text-slate-700',
+                        action: () => setActiveTab('MY_FLAT'),
+                      },
+                    ].filter(item => {
+                      const q = homeSearchQuery.toLowerCase().trim();
+                      return (
+                        item.title.toLowerCase().includes(q) ||
+                        item.category.toLowerCase().includes(q) ||
+                        item.keywords.some(k => k.toLowerCase().includes(q))
+                      );
+                    }).length === 0 && (
+                      <div className="p-4 text-center text-xs text-slate-500 space-y-1">
+                        <p className="font-bold text-slate-700">No matching service found for &quot;{homeSearchQuery}&quot;</p>
+                        <p className="text-[10px] text-slate-400">
+                          Try searching: <span className="text-[#2563EB] font-semibold">Delivery, Maid, Cab, Meter, Parking, Plumber</span>
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
