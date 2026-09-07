@@ -1,122 +1,142 @@
-# StaySetu — Smart Gated Community & Township Operating System
+# StaySetu — Smart Gated Community & Society Super-App
 
 <p align="center">
-  <strong>An intelligent, full-stack super-app designed for modern residential gated communities, high-rise townships, and resident welfare associations (RWAs).</strong>
+  <strong>The intelligent, all-in-one operating system for modern residential gated communities, high-rise townships, and Resident Welfare Associations (RWAs).</strong>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Next.js-15.5-black?style=for-the-badge&logo=next.js" alt="Next.js" />
-  <img src="https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/TypeScript-5.7-blue?style=for-the-badge&logo=typescript" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css" alt="Tailwind CSS" />
-  <img src="https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase" alt="Supabase" />
-  <img src="https://img.shields.io/badge/Firebase-Phone_Auth-FFCA28?style=for-the-badge&logo=firebase" alt="Firebase" />
-  <img src="https://img.shields.io/badge/WhatsApp-Protocol-25D366?style=for-the-badge&logo=whatsapp" alt="WhatsApp" />
+  <img src="https://img.shields.io/badge/Razorpay-UPI_Gateway-0C2340?style=for-the-badge&logo=razorpay" alt="Razorpay" />
+  <img src="https://img.shields.io/badge/Google_Play-TWA_Ready-34A853?style=for-the-badge&logo=google-play" alt="Google Play" />
 </p>
 
 ---
 
-## 🌟 Key Functional Modules
+## 🏛️ Codebase Architecture & Directory Structure
 
-### 1. 🚗 Wrong Parking 1-Tap Resolver
-* **Instant Vehicle Resolution**: Type any unauthorized vehicle plate number (e.g., `UP14 EX 9988`) to immediately identify the registered flat owner.
-* **Live `MM:SS` Countdown Clock**: Triggers a real 10-minute move-car timer.
-* **Direct WhatsApp Society Notice**: 1-Tap deep-link dispatch sending pre-formatted official parking notices directly to the car owner.
-* **Automated Penalty Logging**: Automatically logs a ₹500 fine to the owner's maintenance ledger if the countdown expires.
+This project follows the official **Next.js 15 App Router** architecture with strict TypeScript types and modular separation of concerns:
 
-### 2. 👩‍🍳 Domestic Helper Attendance Radar & Backup Maid
-* **Biometric Staff Presence**: Real-time visibility into verified cooks, deep-cleaning maids, nannies, and car washers active inside campus.
-* **1-Click Morning Backup**: Instantly book on-duty backup domestic staff when your regular maid is on leave, automatically issuing an approved gate pass at security.
-
-### 3. 🏸 Clubhouse & Sports Amenity Booking
-* **Zero-Conflict Reservation**: Live slot booking for Badminton Courts #1 & #2, Swimming Pool lanes, Tennis courts, and Grand Banquet Halls.
-* **Dynamic QR Pass Generator**: Issues verifiable alphanumeric QR codes (`QR-SS-xxxx`) preventing duplicate bookings.
-
-### 4. 🛠️ 2-Hour SLA Digital Helpdesk
-* **On-Duty Dispatch**: Immediate assignment of on-site plumbers, electricians, and elevator maintenance engineers.
-* **Mandatory Resident OTP Closure**: Technicians cannot close tickets without resident verification OTP (`7829`), ensuring guaranteed work completion.
-
-### 5. 🛡️ Guard Tablet Console & Offline-First Engine
-* **0.4s FastTag ANPR Clearance**: Automatic boom gate barrier trigger on camera plate scans.
-* **Offline Local SQLite Resilience**: Zero-downtime gate operations during Wi-Fi outages with automatic cloud synchronization upon reconnection.
-
-### 6. 💳 RWA Financial Transparency & GST Balance Sheet
-* **Audited Accounts**: Complete visibility into monthly maintenance collections (₹38.42 Lakhs), Otis Lift AMCs, SIS Security contracts, and Sinking Funds (₹1.15 Cr).
-* **UPI One-Tap Payment**: Instant settlement with automatic 18% GST invoice generation.
-
-### 7. 🚚 Digital Move-In / Out & Service Lift Reservation
-* **Shifting Truck Gate Passes**: Pre-approved gate access for Packers & Movers.
-* **Dedicated Service Lift Auto-Lock**: Reserves padded service elevators for 2-hour slots to keep regular passenger lifts unblocked.
-
-### 8. 🗳️ Democratic AGM Polls & Community Marketplace
-* **Society Voting Engine**: Real-time vote tracking on township initiatives with anti-duplicate vote enforcement.
-* **Peer-to-Peer Marketplace**: Direct in-app chat for pre-owned household items among verified residents.
+```
+StaySetu/
+├── src/
+│   ├── app/                               # Next.js 15 App Router Routes
+│   │   ├── page.tsx                       # Main Mobile Super-App Dashboard (Resident, Guard, RWA)
+│   │   ├── layout.tsx                     # Root Layout, Metadata, Fonts & PWA Service Worker
+│   │   ├── globals.css                    # Tailwind Directives & Custom UI Components
+│   │   ├── manifest.ts                    # Google PWA / Play Store Manifest Metadata
+│   │   ├── privacy/page.tsx               # Google Play Compliant Privacy Policy
+│   │   ├── auth/login/page.tsx            # Resident, Guard & RWA Multi-Role Authentication
+│   │   ├── auth/signup/page.tsx           # Flat & Society Onboarding Registration
+│   │   └── api/                           # Backend Serverless REST Endpoints
+│   │       ├── payments/create-order/     # Razorpay / UPI Order Creation API
+│   │       ├── payments/verify/           # Cryptographic Payment Signature Verification & GST
+│   │       ├── gate/pass/                 # Visitor, Cab & Delivery QR Pass API
+│   │       ├── helpdesk/tickets/          # 2-Hour SLA Helpdesk Dispatch & OTP Verification
+│   │       ├── parking/alert/             # Wrong Parking Camera & WhatsApp Dispatch API
+│   │       └── amenities/book/            # Clubhouse Slot Booking & Conflict Resolution
+│   │
+│   ├── components/                        # Reusable, Self-Contained UI Components
+│   │   ├── brand/StaySetuLogo.tsx         # Single Source of Truth for Official Brand Logo
+│   │   ├── payments/PaymentCheckoutModal.tsx # Razorpay & Multi-UPI Checkout Modal (GPay, PhonePe, Paytm, Cards)
+│   │   ├── chat/InAppChatModal.tsx        # Resident Peer-to-Peer Marketplace Chat
+│   │   └── layout/                        # Navbar, Footer & Mobile Bottom Navigation
+│   │
+│   └── lib/                               # Core Business Logic & State Management
+│       └── societyStore.ts                # Centralized Store (Notices, Helpers, Parking, Ledger, Passes)
+│
+├── prisma/
+│   └── schema.prisma                      # Database Schema Models (PostgreSQL / SQLite)
+│
+├── playstore/                             # Google Play Store Publishing Bundle & Guide
+│   ├── PLAYSTORE_LAUNCH_GUIDE.md          # Step-by-Step Play Store Submission Guide
+│   └── twa-manifest.json                  # Trusted Web Activity Configuration
+│
+├── public/                                # Static Public Assets & PWA Engine
+│   ├── icons/                             # 512x512, 192x192, Maskable & Apple Touch Icons
+│   ├── screenshots/                       # High-Res Mobile (1080x1920) & Desktop (1920x1080) Screens
+│   ├── images/                            # Township Landscape & Founder Photography
+│   ├── sw.js                              # PWA Offline Caching Service Worker
+│   └── .well-known/assetlinks.json        # Google Digital Asset Links for Native Full-Screen
+│
+└── package.json                           # Dependencies & Scripts
+```
 
 ---
 
-## 🏗️ System Architecture & Tech Stack
+## 🌟 Core Features & Modules
 
-* **Frontend**: Next.js 15 (App Router), React 19, Tailwind CSS, Lucide Icons
-* **Backend APIs**: Next.js Route Handlers (`/api/auth/otp`, `/api/parking/alert`, `/api/gate/pass`, `/api/helpdesk/tickets`, `/api/amenities/book`, `/api/rwa/payments`)
-* **Database**: Supabase PostgreSQL with real-time replication
-* **SMS Authentication**: Google Firebase Phone Auth (10,000 Free SMS/Month)
-* **Messaging**: Direct WhatsApp Protocol (`wa.me` Deep-Link Bridge)
-* **Offline Engine**: Local IndexedDB/LocalStorage with sync queue
+1. **🚗 Wrong Parking 1-Tap Camera Resolver**:
+   - Snap photo proof of unauthorized cars blocking private slots.
+   - 10-Minute live grace timer + automatic WhatsApp alert to vehicle owner.
+
+2. **👩‍🍳 Domestic Staff Biometric Radar & Backup Maid**:
+   - Real-time inside/outside campus presence of cooks, maids, and drivers.
+   - 1-Click morning backup maid assignment issued directly at the security gate.
+
+3. **💳 Payment Gateway (Razorpay & Direct UPI)**:
+   - 1-Click UPI (Google Pay, PhonePe, Paytm, CRED), Cards, and NetBanking.
+   - Automatic 18% GST calculation (CGST 9% + SGST 9%) and instant downloadable PDF/HTML tax receipts.
+   - Prepaid Smart Electricity Meter UPI fast recharge.
+
+4. **🛡️ Security Guard Terminal & ANPR Gate Clearance**:
+   - Fast pass verification (DEL-8841, GST-9281) with 1-click boom barrier clearance.
+   - Package Vault desk handover & Domestic staff punch IN/OUT.
+
+5. **🏛️ RWA Financial Ledger & Democratic AGM Polls**:
+   - Real-time audited sinking fund statement (₹1.15 Cr) and monthly dues tracking.
+   - Electronic AGM ballot voting with anti-duplicate vote prevention.
+
+6. **🔧 2-Hour SLA Maintenance Helpdesk**:
+   - On-duty technician dispatch with mandatory Resident OTP (`7829`) closing mechanism.
 
 ---
 
-## 🚀 Getting Started
+## 🚀 How to Run & Develop
 
-### 1. Clone & Install Dependencies
+### 1. Install Dependencies
 ```bash
-git clone https://github.com/Sudhanshu7393/StatSetu_app.git
-cd StatSetu_app
 npm install
 ```
 
-### 2. Environment Configuration
-Create a `.env.local` file in the root directory:
+### 2. Environment Variables
+Copy `.env.example` to `.env.local`:
 ```env
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
-# Supabase PostgreSQL Database
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-supabase-publishable-key
-
-# Google Firebase Phone Auth
-NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSy...
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-app.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-app.firebasestorage.app
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
-NEXT_PUBLIC_FIREBASE_APP_ID=1:your-app-id:web:...
-NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-...
+# Razorpay Payment Gateway (Optional for live payments; smart sandbox active by default)
+NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_live_xxxxxxxx
+RAZORPAY_KEY_ID=rzp_live_xxxxxxxx
+RAZORPAY_KEY_SECRET=your_razorpay_secret
 ```
 
-### 3. Database Migration
-Run the SQL schema in `src/lib/supabase_schema.sql` directly inside your **Supabase SQL Editor** to create all production tables and initial seed data.
-
-### 4. Run Development Server
+### 3. Start Development Server
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) to view the application.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### 4. Production Build Verification
+```bash
+npm run build
+```
 
 ---
 
-## 👥 Leadership & Founders
-
-* **Sudhanshu Pandey** — Founder & CEO
+## 📱 Google Play Store & PWA
+- **Package ID:** `app.vercel.stat_setu_app.twa` / `com.staysetu.app`
+- **PWA Score:** 100% Green on PWABuilder (0 Errors, 0 Warnings).
+- **Offline Mode:** Powered by `public/sw.js`.
+- **Packaging Guide:** Detailed instructions in [`playstore/PLAYSTORE_LAUNCH_GUIDE.md`](playstore/PLAYSTORE_LAUNCH_GUIDE.md).
 
 ---
 
-## 🔒 Security & Privacy
-* **SOC-2 Type II Compliant Architecture**
-* **256-Bit Bank-Grade Data Encryption**
-* **Strict Role-Based Access Control (Resident, Guard, RWA Admin)**
+## 👥 Leadership
+* **Sudhanshu Pandey** — Founder & CEO (`founder@staysetu.com`)
 
 ---
 
 <p align="center">
-  Made with ❤️ for modern residential communities across India.
+  Made with ❤️ for smart gated communities across India.
 </p>
