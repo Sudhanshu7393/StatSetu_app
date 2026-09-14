@@ -12,30 +12,27 @@ type SocietyRole = 'resident' | 'rwa' | 'guard';
 
 const DEFAULT_USERS = [
   {
-    email: 'staysetu26@gmail.com',
+    email: 'resident.demo@staysetu.com',
     phone: '7393011350',
-    password: 'Staysetu@255',
     name: 'Sudhanshu Pandey',
     role: 'RESIDENT',
     flat: 'Tower A - Flat 102',
     society: 'Greenwood Grand Township, Gurugram',
   },
   {
-    email: 'sudhanshupandey7393@gmail.com',
-    phone: '7393011350',
-    password: 'Staysetu@255',
-    name: 'Sudhanshu Pandey',
-    role: 'RESIDENT',
-    flat: 'Tower A - Flat 102',
-    society: 'Greenwood Grand Township, Gurugram',
-  },
-  {
-    email: 'ankit.sharma@staysetu.com',
+    email: 'guard.demo@staysetu.com',
     phone: '9871100222',
-    password: 'Staysetu@255',
-    name: 'Ankit Sharma',
-    role: 'RESIDENT',
-    flat: 'Tower C - Flat 402',
+    name: 'Main Gate Guard Post',
+    role: 'GUARD',
+    flat: 'Gate 01',
+    society: 'Greenwood Grand Township, Gurugram',
+  },
+  {
+    email: 'rwa.demo@staysetu.com',
+    phone: '9871100333',
+    name: 'RWA Management Desk',
+    role: 'RWA',
+    flat: 'Clubhouse Office',
     society: 'Greenwood Grand Township, Gurugram',
   },
 ];

@@ -25,6 +25,13 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
+
+# android & signing keys (security)
+*.keystore
+*.jks
+signing-key-info.txt
+StaySetu Google Play/signing*
 
 # vercel
 .vercel

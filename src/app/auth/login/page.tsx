@@ -23,30 +23,27 @@ type SocietyRole = 'resident' | 'guard' | 'rwa';
 
 const DEFAULT_USERS = [
   {
-    email: 'staysetu26@gmail.com',
+    email: 'resident.demo@staysetu.com',
     phone: '7393011350',
-    password: 'Staysetu@255',
     name: 'Sudhanshu Pandey',
     role: 'RESIDENT',
     flat: 'Tower A - Flat 102',
     society: 'Greenwood Grand Township, Gurugram',
   },
   {
-    email: 'sudhanshupandey7393@gmail.com',
-    phone: '7393011350',
-    password: 'Staysetu@255',
-    name: 'Sudhanshu Pandey',
-    role: 'RESIDENT',
-    flat: 'Tower A - Flat 102',
-    society: 'Greenwood Grand Township, Gurugram',
-  },
-  {
-    email: 'ankit.sharma@staysetu.com',
+    email: 'guard.demo@staysetu.com',
     phone: '9871100222',
-    password: 'Staysetu@255',
-    name: 'Ankit Sharma',
-    role: 'RESIDENT',
-    flat: 'Tower C - Flat 402',
+    name: 'Main Gate Guard Post',
+    role: 'GUARD',
+    flat: 'Gate 01',
+    society: 'Greenwood Grand Township, Gurugram',
+  },
+  {
+    email: 'rwa.demo@staysetu.com',
+    phone: '9871100333',
+    name: 'RWA Management Desk',
+    role: 'RWA',
+    flat: 'Clubhouse Office',
     society: 'Greenwood Grand Township, Gurugram',
   },
 ];
@@ -155,7 +152,7 @@ export default function SocietyLoginPage() {
         localStorage.setItem('staysetu_registered_users', JSON.stringify(registeredList));
       } else {
         // If existing user has password, ensure it matches or update with new password entered
-        if (user.password && user.password !== password && password !== 'Staysetu@255') {
+        if (user.password && user.password !== password) {
           user.password = password;
           localStorage.setItem('staysetu_registered_users', JSON.stringify(registeredList));
         }
