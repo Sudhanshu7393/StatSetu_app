@@ -156,16 +156,7 @@ export default function NoBrokerHoodStaySetuMobileApp() {
   };
 
   // ── 🎫 ACTIVE PRE-APPROVED PASSES ON HOME ──
-  const [activePasses, setActivePasses] = useState<ActivePass[]>([
-    {
-      id: 'pass-del-1',
-      type: 'DELIVERY',
-      title: 'Zomato Food Delivery',
-      detail: 'Rider: Aman Kumar • Leave at Gate Desk',
-      code: 'DEL-8841',
-      time: 'Valid next 45 mins',
-    },
-  ]);
+  const [activePasses, setActivePasses] = useState<ActivePass[]>([]);
 
   // ── ACTIVE ROLE PERSONA (RESIDENT | GUARD | RWA) ──
   const [userRole, setUserRole] = useState<'RESIDENT' | 'GUARD' | 'RWA'>('RESIDENT');
