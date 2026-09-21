@@ -26,7 +26,7 @@ declare global {
   }
 }
 
-export type PaymentPurpose = 'MAINTENANCE' | 'METER_RECHARGE' | 'AMENITY_BOOKING';
+export type PaymentPurpose = 'MAINTENANCE' | 'METER_RECHARGE' | 'AMENITY_BOOKING' | 'EV_CHARGING' | 'STAFF_SALARY';
 
 export interface PaymentSuccessData {
   transactionId: string;

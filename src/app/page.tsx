@@ -60,10 +60,18 @@ import {
   ArrowUp,
   Plus,
   MoreHorizontal,
+  Droplets,
 } from 'lucide-react';
 import { InAppChatModal } from '@/components/chat/InAppChatModal';
 import { StaySetuLogo } from '@/components/brand/StaySetuLogo';
 import { PaymentCheckoutModal, PaymentSuccessData, PaymentPurpose } from '@/components/payments/PaymentCheckoutModal';
+import { EVChargingModal } from '@/components/ev/EVChargingModal';
+import { ParcelLockerModal } from '@/components/delivery/ParcelLockerModal';
+import { DomesticStaffModal } from '@/components/staff/DomesticStaffModal';
+import { SocietyPollsModal } from '@/components/polls/SocietyPollsModal';
+import { WhatsAppPassModal } from '@/components/gate/WhatsAppPassModal';
+import { SocietyIoTTrackerModal } from '@/components/iot/SocietyIoTTrackerModal';
+import { EmergencySOSModal } from '@/components/sos/EmergencySOSModal';
 import { SocietyStore, HelperStaff, AmenityBooking, HelpdeskTicket, ParkingAlert, GateLog, AGMPoll } from '@/lib/societyStore';
 
 type AppTab = 'HOME' | 'GATE' | 'PAYMENTS' | 'BAZAAR' | 'MY_FLAT';
@@ -294,6 +302,15 @@ export default function NoBrokerHoodStaySetuMobileApp() {
   const [amenityModalOpen, setAmenityModalOpen] = useState(false);
   const [selectedAmenity, setSelectedAmenity] = useState('Badminton Court #2');
   const [amenitySlot, setAmenitySlot] = useState('06:00 PM - 07:00 PM');
+
+  // ── ⚡ NEXT-GEN COMPETITOR UPGRADES (2025/2026 SUITE) ──
+  const [evModalOpen, setEVModalOpen] = useState(false);
+  const [parcelModalOpen, setParcelModalOpen] = useState(false);
+  const [staffModalOpen, setStaffModalOpen] = useState(false);
+  const [pollsModalOpen, setPollsModalOpen] = useState(false);
+  const [whatsappPassModalOpen, setWhatsappPassModalOpen] = useState(false);
+  const [iotModalOpen, setIoTModalOpen] = useState(false);
+  const [emergencySOSModalOpen, setEmergencySOSModalOpen] = useState(false);
 
   // ── 6. HELPDESK & 2-HOUR SLA TICKET ──
   const [helpdeskModalOpen, setHelpdeskModalOpen] = useState(false);
@@ -966,139 +983,205 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                       </button>
                     </div>
 
-                    {[
-                      {
-                        id: 'delivery',
-                        title: 'Delivery Pass (Swiggy / Zomato)',
-                        category: 'GATE PASS',
-                        keywords: ['delivery', 'zomato', 'swiggy', 'amazon', 'flipkart', 'parcel', 'courier', 'food', 'order'],
-                        icon: PackageCheck,
-                        color: 'bg-amber-50 text-amber-600',
-                        action: () => setDeliveryModalOpen(true),
-                      },
-                      {
-                        id: 'cab',
-                        title: 'Allow Cab Entry (Uber / Ola)',
-                        category: 'GATE PASS',
-                        keywords: ['cab', 'uber', 'ola', 'taxi', 'ride', 'driver', 'auto', 'car entry'],
-                        icon: Car,
-                        color: 'bg-blue-50 text-blue-600',
-                        action: () => setCabModalOpen(true),
-                      },
-                      {
-                        id: 'guest',
-                        title: 'Invite Guest (WhatsApp Pass)',
-                        category: 'GATE PASS',
-                        keywords: ['guest', 'visitor', 'invite', 'whatsapp', 'friend', 'relative', 'family', 'qr pass', 'entry'],
-                        icon: QrCode,
-                        color: 'bg-emerald-50 text-emerald-600',
-                        action: () => setGuestModalOpen(true),
-                      },
-                      {
-                        id: 'maid',
-                        title: 'Helper Radar & Backup Maid',
-                        category: 'STAFF',
-                        keywords: ['maid', 'cook', 'helper', 'staff', 'cleaner', 'driver', 'attendance', 'sunita', 'rajesh', 'anita', 'nanny'],
-                        icon: Users,
-                        color: 'bg-purple-50 text-purple-600',
-                        action: () => setMaidModalOpen(true),
-                      },
-                      {
-                        id: 'parking',
-                        title: 'Wrong Parking Photo Alert',
-                        category: 'PARKING',
-                        keywords: ['wrong park', 'parking', 'slot', 'car', 'vehicle', 'basement', 'blocked', 'up14', 'dl8c', 'slot 42'],
-                        icon: Camera,
-                        color: 'bg-rose-50 text-rose-600',
-                        action: () => {
-                          setActiveTab('GATE');
-                          setTimeout(() => {
-                            document.getElementById('wrong-parking-card')?.scrollIntoView({ behavior: 'smooth' });
-                          }, 100);
+                    {(() => {
+                      const allActions = [
+                        {
+                          id: 'ev-hub',
+                          title: '⚡ Smart EV Charging Hub (Live Status & Slots)',
+                          category: 'IOT & SMART LIVING',
+                          keywords: ['ev', 'electric', 'vehicle', 'charger', 'charging', 'kwh', 'nexon', 'battery', 'slot', 'power'],
+                          icon: Zap,
+                          color: 'bg-emerald-50 text-emerald-600',
+                          action: () => setEVModalOpen(true),
                         },
-                      },
-                      {
-                        id: 'meter',
-                        title: 'Smart Electricity Meter Recharge',
-                        category: 'PAYMENTS',
-                        keywords: ['smart meter', 'meter', 'electricity', 'power', 'recharge', 'top up', 'bill', 'units', 'kwh', 'eb'],
-                        icon: Zap,
-                        color: 'bg-yellow-50 text-amber-600',
-                        action: () => handleRechargeSmartMeter(500),
-                      },
-                      {
-                        id: 'maintenance',
-                        title: 'Pay Society Monthly Maintenance Dues',
-                        category: 'PAYMENTS',
-                        keywords: ['maintenance', 'dues', 'pay', 'bill', 'gst', 'sinking fund', 'rwa dues', 'invoice', '3540'],
-                        icon: CreditCard,
-                        color: 'bg-emerald-50 text-emerald-600',
-                        action: () => handlePayMaintenance(),
-                      },
-                      {
-                        id: 'clubhouse',
-                        title: 'Clubhouse & Sports Amenity Booking',
-                        category: 'AMENITY',
-                        keywords: ['clubhouse', 'badminton', 'tennis', 'swimming pool', 'gym', 'court', 'banquet', 'party hall', 'pool'],
-                        icon: CalendarDays,
-                        color: 'bg-teal-50 text-teal-600',
-                        action: () => setAmenityModalOpen(true),
-                      },
-                      {
-                        id: 'helpdesk',
-                        title: '2-Hour SLA Helpdesk (Plumber / Electrician)',
-                        category: 'SERVICE',
-                        keywords: ['helpdesk', 'plumber', 'electrician', 'carpenter', 'leakage', 'repair', 'ticket', 'sla', 'ac repair', 'water'],
-                        icon: Wrench,
-                        color: 'bg-slate-100 text-slate-700',
-                        action: () => setHelpdeskModalOpen(true),
-                      },
-                      {
-                        id: 'moving',
-                        title: 'Move-In / Move-Out Shifting Pass',
-                        category: 'GATE PASS',
-                        keywords: ['moving', 'shifting', 'packers', 'movers', 'truck', 'service lift', 'relocation', 'furniture'],
-                        icon: Truck,
-                        color: 'bg-orange-50 text-orange-600',
-                        action: () => setMovingPassModalOpen(true),
-                      },
-                      {
-                        id: 'notices',
-                        title: 'Society Circulars & Notices',
-                        category: 'COMMUNITY',
-                        keywords: ['notice', 'circular', 'announcement', 'dg backup', 'water', 'meeting', 'agm', 'news'],
-                        icon: Bell,
-                        color: 'bg-blue-50 text-blue-600',
-                        action: () => setNoticeModalOpen(true),
-                      },
-                      {
-                        id: 'bazaar',
-                        title: 'Resident Marketplace & AGM Polls',
-                        category: 'COMMUNITY',
-                        keywords: ['bazaar', 'market', 'buy', 'sell', 'table', 'cycle', 'gym', 'poll', 'vote', 'agm'],
-                        icon: ShoppingBag,
-                        color: 'bg-purple-50 text-purple-600',
-                        action: () => setActiveTab('BAZAAR'),
-                      },
-                      {
-                        id: 'flat-directory',
-                        title: 'Flat Profile & Emergency Contacts',
-                        category: 'DIRECTORY',
-                        keywords: ['flat', 'tower a', 'tower b', 'tower c', 'sudhanshu', 'profile', 'contacts', 'intercom', '102'],
-                        icon: Home,
-                        color: 'bg-slate-100 text-slate-700',
-                        action: () => setActiveTab('MY_FLAT'),
-                      },
-                    ]
-                      .filter(item => {
-                        const q = homeSearchQuery.toLowerCase().trim();
+                        {
+                          id: 'parcel-hub',
+                          title: '📦 Smart Parcel Photo Locker & OTP Pickup',
+                          category: 'SECURITY & DELIVERY',
+                          keywords: ['parcel', 'locker', 'amazon', 'flipkart', 'delivery photo', 'otp', 'package', 'courier', 'box', 'gate camera'],
+                          icon: PackageCheck,
+                          color: 'bg-amber-50 text-amber-600',
+                          action: () => setParcelModalOpen(true),
+                        },
+                        {
+                          id: 'staff-hub',
+                          title: '👩‍🍳 Daily Help & Maid 360 (Attendance & Live Radar)',
+                          category: 'STAFF & MAID',
+                          keywords: ['maid', 'cook', 'helper', 'staff', 'cleaner', 'driver', 'attendance', 'salary', 'hire', 'sunita', 'ramesh', 'nanny'],
+                          icon: Users,
+                          color: 'bg-teal-50 text-teal-600',
+                          action: () => setStaffModalOpen(true),
+                        },
+                        {
+                          id: 'polls-hub',
+                          title: '🗳️ Society Digital Polling & AGM E-Voting',
+                          category: 'COMMUNITY & AGM',
+                          keywords: ['vote', 'voting', 'poll', 'polls', 'agm', 'election', 'resolution', 'quorum', 'decision', 'rwa'],
+                          icon: Vote,
+                          color: 'bg-indigo-50 text-indigo-600',
+                          action: () => setPollsModalOpen(true),
+                        },
+                        {
+                          id: 'whatsapp-pass',
+                          title: '📲 WhatsApp 1-Click Guest & Delivery Pass',
+                          category: 'GATE PASS',
+                          keywords: ['whatsapp', 'pass', 'qr pass', 'share pass', 'guest link', 'invite', 'cab pass', 'maps', 'fasttag'],
+                          icon: MessageCircle,
+                          color: 'bg-green-50 text-green-600',
+                          action: () => setWhatsappPassModalOpen(true),
+                        },
+                        {
+                          id: 'iot-hub',
+                          title: '💧 Smart Water Tanker & DG Genset Live IoT',
+                          category: 'IOT & SMART LIVING',
+                          keywords: ['water', 'tanker', 'dg', 'generator', 'backup', 'iot', 'tank', 'level', 'power cut', 'diesel'],
+                          icon: Droplets,
+                          color: 'bg-cyan-50 text-cyan-600',
+                          action: () => setIoTModalOpen(true),
+                        },
+                        {
+                          id: 'sos-hub',
+                          title: '🚨 Instant Emergency SOS (Guard Terminal Siren)',
+                          category: 'EMERGENCY',
+                          keywords: ['sos', 'emergency', 'siren', 'medical', 'lift stuck', 'fire', 'panic', 'alarm', 'ambulance', 'guard siren'],
+                          icon: ShieldAlert,
+                          color: 'bg-rose-50 text-rose-600',
+                          action: () => setEmergencySOSModalOpen(true),
+                        },
+                        {
+                          id: 'delivery',
+                          title: 'Delivery Pre-Approval (Swiggy / Zomato)',
+                          category: 'GATE PASS',
+                          keywords: ['delivery', 'zomato', 'swiggy', 'amazon', 'flipkart', 'parcel', 'courier', 'food', 'order'],
+                          icon: PackageCheck,
+                          color: 'bg-amber-50 text-amber-600',
+                          action: () => setDeliveryModalOpen(true),
+                        },
+                        {
+                          id: 'cab',
+                          title: 'Allow Cab Entry (Uber / Ola)',
+                          category: 'GATE PASS',
+                          keywords: ['cab', 'uber', 'ola', 'taxi', 'ride', 'driver', 'auto', 'car entry'],
+                          icon: Car,
+                          color: 'bg-blue-50 text-blue-600',
+                          action: () => setCabModalOpen(true),
+                        },
+                        {
+                          id: 'guest',
+                          title: 'Invite Guest (WhatsApp Pass)',
+                          category: 'GATE PASS',
+                          keywords: ['guest', 'visitor', 'invite', 'whatsapp', 'friend', 'relative', 'family', 'qr pass', 'entry'],
+                          icon: QrCode,
+                          color: 'bg-emerald-50 text-emerald-600',
+                          action: () => setGuestModalOpen(true),
+                        },
+                        {
+                          id: 'parking',
+                          title: 'Wrong Parking Photo Alert',
+                          category: 'PARKING',
+                          keywords: ['wrong park', 'parking', 'slot', 'car', 'vehicle', 'basement', 'blocked', 'up14', 'dl8c', 'slot 42'],
+                          icon: Camera,
+                          color: 'bg-rose-50 text-rose-600',
+                          action: () => {
+                            setActiveTab('GATE');
+                            setTimeout(() => {
+                              document.getElementById('wrong-parking-card')?.scrollIntoView({ behavior: 'smooth' });
+                            }, 100);
+                          },
+                        },
+                        {
+                          id: 'meter',
+                          title: 'Smart Electricity Meter Recharge',
+                          category: 'PAYMENTS',
+                          keywords: ['smart meter', 'meter', 'electricity', 'power', 'recharge', 'top up', 'bill', 'units', 'kwh', 'eb'],
+                          icon: Zap,
+                          color: 'bg-yellow-50 text-amber-600',
+                          action: () => handleRechargeSmartMeter(500),
+                        },
+                        {
+                          id: 'maintenance',
+                          title: 'Pay Society Monthly Maintenance Dues',
+                          category: 'PAYMENTS',
+                          keywords: ['maintenance', 'dues', 'pay', 'bill', 'gst', 'sinking fund', 'rwa dues', 'invoice', '3540'],
+                          icon: CreditCard,
+                          color: 'bg-emerald-50 text-emerald-600',
+                          action: () => handlePayMaintenance(),
+                        },
+                        {
+                          id: 'clubhouse',
+                          title: 'Clubhouse & Sports Amenity Booking',
+                          category: 'AMENITY',
+                          keywords: ['clubhouse', 'badminton', 'tennis', 'swimming pool', 'gym', 'court', 'banquet', 'party hall', 'pool'],
+                          icon: CalendarDays,
+                          color: 'bg-teal-50 text-teal-600',
+                          action: () => setAmenityModalOpen(true),
+                        },
+                        {
+                          id: 'helpdesk',
+                          title: '2-Hour SLA Helpdesk (Plumber / Electrician)',
+                          category: 'SERVICE',
+                          keywords: ['helpdesk', 'plumber', 'electrician', 'carpenter', 'leakage', 'repair', 'ticket', 'sla', 'ac repair', 'water'],
+                          icon: Wrench,
+                          color: 'bg-slate-100 text-slate-700',
+                          action: () => setHelpdeskModalOpen(true),
+                        },
+                        {
+                          id: 'moving',
+                          title: 'Move-In / Move-Out Shifting Pass',
+                          category: 'GATE PASS',
+                          keywords: ['moving', 'shifting', 'packers', 'movers', 'truck', 'service lift', 'relocation', 'furniture'],
+                          icon: Truck,
+                          color: 'bg-orange-50 text-orange-600',
+                          action: () => setMovingPassModalOpen(true),
+                        },
+                        {
+                          id: 'notices',
+                          title: 'Society Circulars & Notices',
+                          category: 'COMMUNITY',
+                          keywords: ['notice', 'circular', 'announcement', 'dg backup', 'water', 'meeting', 'agm', 'news'],
+                          icon: Bell,
+                          color: 'bg-blue-50 text-blue-600',
+                          action: () => setNoticeModalOpen(true),
+                        },
+                        {
+                          id: 'bazaar',
+                          title: 'Resident Marketplace & AGM Polls',
+                          category: 'COMMUNITY',
+                          keywords: ['bazaar', 'market', 'buy', 'sell', 'table', 'cycle', 'gym', 'poll', 'vote', 'agm'],
+                          icon: ShoppingBag,
+                          color: 'bg-purple-50 text-purple-600',
+                          action: () => setActiveTab('BAZAAR'),
+                        },
+                        {
+                          id: 'flat-directory',
+                          title: 'Flat Profile & Emergency Contacts',
+                          category: 'DIRECTORY',
+                          keywords: ['flat', 'tower a', 'tower b', 'tower c', 'sudhanshu', 'profile', 'contacts', 'intercom', '102'],
+                          icon: Home,
+                          color: 'bg-slate-100 text-slate-700',
+                          action: () => setActiveTab('MY_FLAT'),
+                        },
+                      ];
+
+                      const q = homeSearchQuery.toLowerCase().trim();
+                      const filtered = allActions.filter(item =>
+                        item.title.toLowerCase().includes(q) ||
+                        item.category.toLowerCase().includes(q) ||
+                        item.keywords.some(k => k.toLowerCase().includes(q))
+                      );
+
+                      if (filtered.length === 0) {
                         return (
-                          item.title.toLowerCase().includes(q) ||
-                          item.category.toLowerCase().includes(q) ||
-                          item.keywords.some(k => k.toLowerCase().includes(q))
+                          <div className="p-4 text-center text-xs text-slate-500 space-y-1">
+                            <p className="font-bold text-slate-700">No matching service found for &quot;{homeSearchQuery}&quot;</p>
+                            <p className="text-[10px] text-slate-400">
+                              Try searching: <span className="text-[#2563EB] font-semibold">EV, Parcel, Maid, WhatsApp Pass, Water, Polls, Delivery</span>
+                            </p>
+                          </div>
                         );
-                      })
-                      .map(item => {
+                      }
+
+                      return filtered.map(item => {
                         const Icon = item.icon;
                         return (
                           <button
@@ -1128,146 +1211,8 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                             </span>
                           </button>
                         );
-                      })}
-
-                    {[
-                      {
-                        id: 'delivery',
-                        title: 'Delivery Pass (Swiggy / Zomato)',
-                        category: 'GATE PASS',
-                        keywords: ['delivery', 'zomato', 'swiggy', 'amazon', 'flipkart', 'parcel', 'courier', 'food', 'order'],
-                        icon: PackageCheck,
-                        color: 'bg-amber-50 text-amber-600',
-                        action: () => setDeliveryModalOpen(true),
-                      },
-                      {
-                        id: 'cab',
-                        title: 'Allow Cab Entry (Uber / Ola)',
-                        category: 'GATE PASS',
-                        keywords: ['cab', 'uber', 'ola', 'taxi', 'ride', 'driver', 'auto', 'car entry'],
-                        icon: Car,
-                        color: 'bg-blue-50 text-blue-600',
-                        action: () => setCabModalOpen(true),
-                      },
-                      {
-                        id: 'guest',
-                        title: 'Invite Guest (WhatsApp Pass)',
-                        category: 'GATE PASS',
-                        keywords: ['guest', 'visitor', 'invite', 'whatsapp', 'friend', 'relative', 'family', 'qr pass', 'entry'],
-                        icon: QrCode,
-                        color: 'bg-emerald-50 text-emerald-600',
-                        action: () => setGuestModalOpen(true),
-                      },
-                      {
-                        id: 'maid',
-                        title: 'Helper Radar & Backup Maid',
-                        category: 'STAFF',
-                        keywords: ['maid', 'cook', 'helper', 'staff', 'cleaner', 'driver', 'attendance', 'sunita', 'rajesh', 'anita', 'nanny'],
-                        icon: Users,
-                        color: 'bg-purple-50 text-purple-600',
-                        action: () => setMaidModalOpen(true),
-                      },
-                      {
-                        id: 'parking',
-                        title: 'Wrong Parking Photo Alert',
-                        category: 'PARKING',
-                        keywords: ['wrong park', 'parking', 'slot', 'car', 'vehicle', 'basement', 'blocked', 'up14', 'dl8c', 'slot 42'],
-                        icon: Camera,
-                        color: 'bg-rose-50 text-rose-600',
-                        action: () => {
-                          setActiveTab('GATE');
-                          setTimeout(() => {
-                            document.getElementById('wrong-parking-card')?.scrollIntoView({ behavior: 'smooth' });
-                          }, 100);
-                        },
-                      },
-                      {
-                        id: 'meter',
-                        title: 'Smart Electricity Meter Recharge',
-                        category: 'PAYMENTS',
-                        keywords: ['smart meter', 'meter', 'electricity', 'power', 'recharge', 'top up', 'bill', 'units', 'kwh', 'eb'],
-                        icon: Zap,
-                        color: 'bg-yellow-50 text-amber-600',
-                        action: () => handleRechargeSmartMeter(500),
-                      },
-                      {
-                        id: 'maintenance',
-                        title: 'Pay Society Monthly Maintenance Dues',
-                        category: 'PAYMENTS',
-                        keywords: ['maintenance', 'dues', 'pay', 'bill', 'gst', 'sinking fund', 'rwa dues', 'invoice', '3540'],
-                        icon: CreditCard,
-                        color: 'bg-emerald-50 text-emerald-600',
-                        action: () => handlePayMaintenance(),
-                      },
-                      {
-                        id: 'clubhouse',
-                        title: 'Clubhouse & Sports Amenity Booking',
-                        category: 'AMENITY',
-                        keywords: ['clubhouse', 'badminton', 'tennis', 'swimming pool', 'gym', 'court', 'banquet', 'party hall', 'pool'],
-                        icon: CalendarDays,
-                        color: 'bg-teal-50 text-teal-600',
-                        action: () => setAmenityModalOpen(true),
-                      },
-                      {
-                        id: 'helpdesk',
-                        title: '2-Hour SLA Helpdesk (Plumber / Electrician)',
-                        category: 'SERVICE',
-                        keywords: ['helpdesk', 'plumber', 'electrician', 'carpenter', 'leakage', 'repair', 'ticket', 'sla', 'ac repair', 'water'],
-                        icon: Wrench,
-                        color: 'bg-slate-100 text-slate-700',
-                        action: () => setHelpdeskModalOpen(true),
-                      },
-                      {
-                        id: 'moving',
-                        title: 'Move-In / Move-Out Shifting Pass',
-                        category: 'GATE PASS',
-                        keywords: ['moving', 'shifting', 'packers', 'movers', 'truck', 'service lift', 'relocation', 'furniture'],
-                        icon: Truck,
-                        color: 'bg-orange-50 text-orange-600',
-                        action: () => setMovingPassModalOpen(true),
-                      },
-                      {
-                        id: 'notices',
-                        title: 'Society Circulars & Notices',
-                        category: 'COMMUNITY',
-                        keywords: ['notice', 'circular', 'announcement', 'dg backup', 'water', 'meeting', 'agm', 'news'],
-                        icon: Bell,
-                        color: 'bg-blue-50 text-blue-600',
-                        action: () => setNoticeModalOpen(true),
-                      },
-                      {
-                        id: 'bazaar',
-                        title: 'Resident Marketplace & AGM Polls',
-                        category: 'COMMUNITY',
-                        keywords: ['bazaar', 'market', 'buy', 'sell', 'table', 'cycle', 'gym', 'poll', 'vote', 'agm'],
-                        icon: ShoppingBag,
-                        color: 'bg-purple-50 text-purple-600',
-                        action: () => setActiveTab('BAZAAR'),
-                      },
-                      {
-                        id: 'flat-directory',
-                        title: 'Flat Profile & Emergency Contacts',
-                        category: 'DIRECTORY',
-                        keywords: ['flat', 'tower a', 'tower b', 'tower c', 'sudhanshu', 'profile', 'contacts', 'intercom', '102'],
-                        icon: Home,
-                        color: 'bg-slate-100 text-slate-700',
-                        action: () => setActiveTab('MY_FLAT'),
-                      },
-                    ].filter(item => {
-                      const q = homeSearchQuery.toLowerCase().trim();
-                      return (
-                        item.title.toLowerCase().includes(q) ||
-                        item.category.toLowerCase().includes(q) ||
-                        item.keywords.some(k => k.toLowerCase().includes(q))
-                      );
-                    }).length === 0 && (
-                      <div className="p-4 text-center text-xs text-slate-500 space-y-1">
-                        <p className="font-bold text-slate-700">No matching service found for &quot;{homeSearchQuery}&quot;</p>
-                        <p className="text-[10px] text-slate-400">
-                          Try searching: <span className="text-[#2563EB] font-semibold">Delivery, Maid, Cab, Meter, Parking, Plumber</span>
-                        </p>
-                      </div>
-                    )}
+                      });
+                    })()}
                   </div>
                 )}
               </div>
@@ -1329,20 +1274,83 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                   {/* Quick SOS / Intercom */}
                   <button
                     type="button"
-                    onClick={() => setSosModalOpen(true)}
+                    onClick={() => setEmergencySOSModalOpen(true)}
                     className="flex flex-col items-center gap-1 group cursor-pointer"
                   >
-                    <div className="w-10 h-10 rounded-full bg-white shadow-[0_3px_10px_rgba(0,0,0,0.05)] border border-emerald-200 flex items-center justify-center text-rose-600 group-hover:scale-110 group-hover:bg-rose-600 group-hover:text-white transition-all">
-                      <ShieldAlert className="w-4 h-4" />
+                    <div className="w-10 h-10 rounded-full bg-white shadow-[0_3px_10px_rgba(0,0,0,0.05)] border border-rose-200 flex items-center justify-center text-rose-600 group-hover:scale-110 group-hover:bg-rose-600 group-hover:text-white transition-all">
+                      <ShieldAlert className="w-4 h-4 animate-bounce" />
                     </div>
-                    <span className="text-[10px] font-bold text-[#0F172A]">SOS</span>
+                    <span className="text-[10px] font-bold text-rose-700">SOS Siren</span>
                   </button>
                 </div>
 
               </div>
             </div>
 
-            {/* ── 📱 8 SUPER-APP SERVICE TILES (CLEAN WHITE CARDS & ISOMETRIC GRAPHICS) ── */}
+            {/* ── 🚀 2026 NEXT-GEN TELEMETRY MINI DOCK (EV, PARCEL LOCKER, IOT WATER) ── */}
+            <div className="grid grid-cols-3 gap-2">
+              {/* ⚡ EV Quick Card */}
+              <button
+                type="button"
+                onClick={() => setEVModalOpen(true)}
+                className="bg-gradient-to-br from-slate-900 to-emerald-950 p-3 rounded-2xl text-left border border-emerald-500/30 text-white shadow-sm hover:shadow-md transition-all group cursor-pointer"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <div className="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center">
+                    <Zap className="w-3.5 h-3.5 animate-pulse" />
+                  </div>
+                  <span className="text-[9px] font-black text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded-full uppercase">
+                    Live
+                  </span>
+                </div>
+                <div className="text-[11px] font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  EV Hub
+                </div>
+                <p className="text-[9px] text-slate-300">Bay A1 • 74% Chg</p>
+              </button>
+
+              {/* 📦 Parcel Locker Quick Card */}
+              <button
+                type="button"
+                onClick={() => setParcelModalOpen(true)}
+                className="bg-gradient-to-br from-slate-900 to-amber-950 p-3 rounded-2xl text-left border border-amber-500/30 text-white shadow-sm hover:shadow-md transition-all group cursor-pointer"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <div className="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center">
+                    <PackageCheck className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="text-[9px] font-black text-amber-400 bg-amber-500/20 px-1.5 py-0.5 rounded-full uppercase">
+                    1 At Gate
+                  </span>
+                </div>
+                <div className="text-[11px] font-bold text-white group-hover:text-amber-300 transition-colors">
+                  Parcel Locker
+                </div>
+                <p className="text-[9px] text-slate-300">OTP: 4829 Stored</p>
+              </button>
+
+              {/* 💧 IoT Water & DG Quick Card */}
+              <button
+                type="button"
+                onClick={() => setIoTModalOpen(true)}
+                className="bg-gradient-to-br from-slate-900 to-cyan-950 p-3 rounded-2xl text-left border border-cyan-500/30 text-white shadow-sm hover:shadow-md transition-all group cursor-pointer"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <div className="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center">
+                    <Droplets className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="text-[9px] font-black text-cyan-400 bg-cyan-500/20 px-1.5 py-0.5 rounded-full uppercase">
+                    82% Full
+                  </span>
+                </div>
+                <div className="text-[11px] font-bold text-white group-hover:text-cyan-300 transition-colors">
+                  Water &amp; DG
+                </div>
+                <p className="text-[9px] text-slate-300">82,000 L Reserve</p>
+              </button>
+            </div>
+
+            {/* ── 📱 12 SUPER-APP SERVICE TILES (CLEAN WHITE CARDS & ISOMETRIC GRAPHICS) ── */}
             <div>
               <div className="flex items-center justify-between mb-2.5 px-1">
                 <p className="text-[11px] font-bold text-[#475569] uppercase tracking-wider">
@@ -1354,11 +1362,43 @@ export default function NoBrokerHoodStaySetuMobileApp() {
               <div className="grid grid-cols-4 gap-2.5">
                 {[
                   {
+                    id: 'ev',
+                    label: 'EV Charging',
+                    sub: 'Basement Slots',
+                    icon: Zap,
+                    bgColor: 'bg-emerald-50 text-emerald-600',
+                    onClick: () => setEVModalOpen(true),
+                  },
+                  {
+                    id: 'parcel',
+                    label: 'Parcel Locker',
+                    sub: 'Gate CCTV & OTP',
+                    icon: PackageCheck,
+                    bgColor: 'bg-amber-50 text-amber-600',
+                    onClick: () => setParcelModalOpen(true),
+                  },
+                  {
+                    id: 'maid',
+                    label: 'Helper Radar',
+                    sub: 'Maid/Cook/Driver',
+                    icon: Users,
+                    bgColor: 'bg-teal-50 text-teal-600',
+                    onClick: () => setStaffModalOpen(true),
+                  },
+                  {
+                    id: 'whatsapp',
+                    label: 'WhatsApp Pass',
+                    sub: 'Maps & QR Link',
+                    icon: MessageCircle,
+                    bgColor: 'bg-green-50 text-green-600',
+                    onClick: () => setWhatsappPassModalOpen(true),
+                  },
+                  {
                     id: 'delivery',
                     label: 'Delivery',
                     sub: 'Swiggy/Zomato',
                     icon: PackageCheck,
-                    bgColor: 'bg-amber-50 text-amber-600',
+                    bgColor: 'bg-orange-50 text-orange-600',
                     onClick: () => setDeliveryModalOpen(true),
                   },
                   {
@@ -1370,20 +1410,20 @@ export default function NoBrokerHoodStaySetuMobileApp() {
                     onClick: () => setCabModalOpen(true),
                   },
                   {
-                    id: 'guest',
-                    label: 'Invite Guest',
-                    sub: 'WhatsApp Pass',
-                    icon: QrCode,
-                    bgColor: 'bg-emerald-50 text-emerald-600',
-                    onClick: () => setGuestModalOpen(true),
+                    id: 'polls',
+                    label: 'E-Voting AGM',
+                    sub: 'Digital Ballots',
+                    icon: Vote,
+                    bgColor: 'bg-indigo-50 text-indigo-600',
+                    onClick: () => setPollsModalOpen(true),
                   },
                   {
-                    id: 'maid',
-                    label: 'Helper Radar',
-                    sub: 'Maid/Cook',
-                    icon: Users,
-                    bgColor: 'bg-purple-50 text-purple-600',
-                    onClick: () => setMaidModalOpen(true),
+                    id: 'iot',
+                    label: 'Water & DG',
+                    sub: 'Live IoT Telemetry',
+                    icon: Droplets,
+                    bgColor: 'bg-cyan-50 text-cyan-600',
+                    onClick: () => setIoTModalOpen(true),
                   },
                   {
                     id: 'parking',
@@ -3308,6 +3348,74 @@ export default function NoBrokerHoodStaySetuMobileApp() {
         flatNo={currentUser?.flat || 'Tower A - Flat 102'}
         residentName={currentUser?.name || 'Sudhanshu Pandey'}
         onPaymentSuccess={handlePaymentSuccess}
+      />
+
+      {/* ⚡ Smart EV Charging Hub Modal */}
+      <EVChargingModal
+        isOpen={evModalOpen}
+        onClose={() => setEVModalOpen(false)}
+        flatNo={currentUser?.flat || 'Tower A - Flat 102'}
+        onOpenPayment={(amount, purposeTitle) => {
+          setPaymentConfig({
+            amount,
+            purpose: 'EV_CHARGING',
+            title: purposeTitle,
+            description: `Payment for EV Charging Session (${currentUser?.flat || 'A-102'})`,
+          });
+          setPaymentModalOpen(true);
+        }}
+      />
+
+      {/* 📦 Smart Parcel Photo Locker Modal */}
+      <ParcelLockerModal
+        isOpen={parcelModalOpen}
+        onClose={() => setParcelModalOpen(false)}
+        flatNo={currentUser?.flat || 'Tower A - Flat 102'}
+      />
+
+      {/* 👩‍🍳 Domestic Staff 360 Hub Modal */}
+      <DomesticStaffModal
+        isOpen={staffModalOpen}
+        onClose={() => setStaffModalOpen(false)}
+        flatNo={currentUser?.flat || 'Tower A - Flat 102'}
+        onOpenPayment={(amount, purposeTitle) => {
+          setPaymentConfig({
+            amount,
+            purpose: 'STAFF_SALARY',
+            title: purposeTitle,
+            description: `Salary Payout (${currentUser?.flat || 'A-102'})`,
+          });
+          setPaymentModalOpen(true);
+        }}
+      />
+
+      {/* 🗳️ Society Digital Polling & E-Voting Modal */}
+      <SocietyPollsModal
+        isOpen={pollsModalOpen}
+        onClose={() => setPollsModalOpen(false)}
+        flatNo={currentUser?.flat || 'Tower A - Flat 102'}
+      />
+
+      {/* 📲 WhatsApp 1-Click Pass Generator Modal */}
+      <WhatsAppPassModal
+        isOpen={whatsappPassModalOpen}
+        onClose={() => setWhatsappPassModalOpen(false)}
+        flatNo={currentUser?.flat || 'Tower A - Flat 102'}
+      />
+
+      {/* 💧 Smart Water & DG Genset Live IoT Modal */}
+      <SocietyIoTTrackerModal
+        isOpen={iotModalOpen}
+        onClose={() => setIoTModalOpen(false)}
+      />
+
+      {/* 🚨 Emergency SOS Modal with Guard Siren */}
+      <EmergencySOSModal
+        isOpen={emergencySOSModalOpen}
+        onClose={() => setEmergencySOSModalOpen(false)}
+        flatNo={currentUser?.flat || 'Tower A - Flat 102'}
+        residentName={currentUser?.name || 'Sudhanshu Pandey'}
+        phone={currentUser?.phone || '73930 11350'}
       />
 
     </div>
